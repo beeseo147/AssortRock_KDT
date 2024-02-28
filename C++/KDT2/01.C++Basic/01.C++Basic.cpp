@@ -31,34 +31,35 @@ include 뒤에 나오는 파일을 포함하겠다.
 */
 
 #include <iostream>
+#include<format>
 int Gint{ 10 };
 int main()
 {
-    //브레이크 포인트(Break point) : F5로 실행 (디버거를 붙혀서)하는 경우 해당위치에 도달하면
-    //자동으로 멈춰준다
-    //-원하는 라인에 캐럿을 두고 F9 으로 실행
-    // -또는 원하는 라인 가장 왼쪽에 마우스를 올리기
-    //이후 F10으로 한줄씩 실행
-    //F5 : 처음에 프로그램을 디버거를 붙혀서 킬 때
-    //  켜고난 다음에 F5누르면 다음 Break Point를 만날때 까지 실행
+	//브레이크 포인트(Break point) : F5로 실행 (디버거를 붙혀서)하는 경우 해당위치에 도달하면
+	//자동으로 멈춰준다
+	//-원하는 라인에 캐럿을 두고 F9 으로 실행
+	// -또는 원하는 라인 가장 왼쪽에 마우스를 올리기
+	//이후 F10으로 한줄씩 실행
+	//F5 : 처음에 프로그램을 디버거를 붙혀서 킬 때
+	//  켜고난 다음에 F5누르면 다음 Break Point를 만날때 까지 실행
 
 #pragma region 01.cout,cin
-    {
-        //namesapce : 여러 단체,기업에 코드를 수정
-        //이름이 중복될 가능성이 크기 때문에 추가적인 구분을 위해 namespace라는걸 추가
+	{
+		////namesapce : 여러 단체,기업에 코드를 수정
+		////이름이 중복될 가능성이 크기 때문에 추가적인 구분을 위해 namespace라는걸 추가
 
-        //변수
-        //타입 변수의 이름
-        int A =0;
-        int B{ 0 };
+		////변수
+		////타입 변수의 이름
+		//int A =0;
+		//int B{ 0 };
 
-        std::cin >> A;
-        std::cout << "당신이 지정한 숫자 B :" << B <<"  " << A;
-    }
+		//std::cin >> A;
+		//std::cout << "당신이 지정한 숫자 B :" << B <<"A: ?" << A;
+	}
 #pragma endregion
 
 #pragma region 02.리터럴(Literal)
-    {
+	{
 		// 리터럴은 코드에 표시한 숫자나 문자열과 같은 값을 의미
 		 // 십진수 : 100
 		int B{ 100 };
@@ -78,7 +79,7 @@ int main()
 		char C{ 'a' };
 		// 문자열: "Hello"
 
-    }
+	}
 #pragma endregion
 
 #pragma region 03.변수(Variable)*
@@ -263,13 +264,390 @@ int main()
 			e = 5;
 			f = 6;
 			g = 7;
-
 		}
+		//연산자
+		{
+			// 단항(unary; 유너리) 연산자: 표현식(expression) 하나를 계산
+			// 이항(binary; 바이너리) 연산자: 표현식 2개를 계산
+			// 삼항(temary; 텀메리) 연산자: 표현식 3개를 계산
+
+			// 대입 연산자[이항]: 오른쪽 값을 왼쪽의 표현식에 대입하는 연산자
+			{
+				int i;
+				i = 0;	// 대입; i = 0
+				int k;
+				k = i;	// 대입; k = 0
+			}
+
+			// [단항]표현식의 참/거짓 (참: 보통은1, 0이아닌값, 0이면 거짓)
+			{
+				bool b1{ true };	// 참
+				bool b2{ 1 };		// 참
+				bool b3{ false };	// 거짓
+				bool b4{ 0 };		// 거짓
+
+				bool b5{ !true };	// true의 not(true가 아니다): 거짓
+				bool b6{ !false };	// false의 not(false가 아니다): 참
+
+				bool b7{ true };	// true
+				bool b8{ !b7 };		// b7(true)의 not: 거짓(false)
+			}
+
+			// [이항]사칙연산
+			{
+				int a{ 1 + 2 };	// 1+2 = 3 = a
+				int b{ a + 3 };	// a + 3 = 3 + 3 = 6
+
+				int c{ 1 - 2 }; // 1-2 = -1 = c
+				//unsigned int c2{ unsigned int(1 - 2) };
+
+				int d{ c * 3 }; // -1 * 3 = -3 = d
+
+				int e{ 10 / 3 }; // 3
+				float f{ 10 / 3 };	// int(10) / int(3) = 3 -> float f = 3;
+				float f2{ int(10) / int(3) };
+				float f3{ 10.0f / 3.f };
+			}
+
+			// [이항]mod, 나머지 연산자
+			{
+				int m{ 10 % 3 };	// 몫 3, 나머지 1
+				int m2{ 5 % 2 };	// 몫 2, 나머지 1
+				int m3{ 6 % 2 };	// 몫 3, 나머지 0
+			}
+
+			// [단항]후행 / 선행 연산자
+			{
+				// 후행 증가
+				{
+					int i{ 0 };
+					//i++;
+					int k{ i++ }; // k = 0
+					// 그리고 나서 i가 ++되어 1이 됩니다
+					// k = 0
+					// i = 1
+
+					// 식 내부에 후행 연산자를 쓰지 마라
+					// 실수 여지가 많다
+				}
+				// 선행 증가
+				{
+					int i{ 0 };
+					// ++i;
+					int k{ ++i }; // k = 1
+					// i = 1
+
+					// 이런 선행 수행 연산을 식 내부에 쓰지 마라
+					/*++i;
+					int k{ i };*/
+				}
+				// 후행 감소
+				{
+					int i{ 0 };
+					//i--;	// i = -1;
+					int k{ i-- }; // k = 0, i = -1
+				}
+				// 선행 감소
+				{
+					int i{ 0 };
+					//--i;	// i = -1;
+					int k{ --i }; // k = -1, i = -1
+				}
+			}
+
+			// 사칙연산 축약 표현
+			{
+				int i{ 1 };
+				int k{ 2 };
+
+				// i = i + k; // i = {1 + 2} = 3
+				i += k; // i = 3
+				i += 2;	// i = 5
+
+				i -= 3; // i = i - 3 = 5 - 3 = 2
+
+				i *= 2; // 2 * 2 = 4
+				i /= 2; // 4 / 2 = 2
+				i %= 2;	// 2 % 2 = 0
+			}
+
+			// 비트 단위 연산
+			{
+				// AND 연산
+				{
+					// 둘다 1이면 1이고, 하나라도 0이면 0이다
+					// 0010
+					// 1111
+					// ------ AND
+					// 0010
+					char c = 2;
+					char c2 = 15;
+					char c3 = c & c2;	// 2
+				}
+				// OR 연산
+				{
+					// 둘중에 하나라도 1이면 1이고, 둘다 0이면 0
+					// 0010
+					// 1111
+					// ------ OR
+					// 1111
+					char c = 2;
+					char c2 = 15;
+					char c3 = c | c2; // 15
+				}
+				// XOR 연산(exclusive or)
+				{
+					// 서로 다르면 1, 같으면 0
+					// 0010
+					// 1111
+					// ------ XOR
+					// 1101		-> 1(2^0) + x(2^1) + 4(2^2) + 8(2^3) = 13
+					char c = 2;
+					char c2 = 15;
+					char c3 = c ^ c2;	// 13
+				}
+			}
+		}
+
 	}
 #pragma endregion
 
-}
+#pragma region 04.열거형(enumerated type, enum)*
+	{
+		{
+			// const: 상수(constant), 초기화 이후 해당 값을 변경할 수 없다
+			const int Iron = 0; //Iron = 10;
+			const int Bronze = 1;
+			const int Silver = 2;
+			const int Gold = 3;
 
+			int MyTier = Gold;
+		}
+		{
+			enum /*class*/ ETier : unsigned char
+			{
+				Iron /*= 10*/
+				, Bronze
+				, Silver /*= 20*/
+				, Gold
+			};
+
+			// class키워드를 enum에 붙혀두면 cast를 해야 다른 type에 값을 넣을 수 있다
+			unsigned char MyTier = (unsigned char)ETier::Gold;
+			ETier MyTier2 = ETier::Bronze;
+			ETier MyTier3 = (ETier)0;	// ETier::Iron
+
+			if (MyTier2 == ETier::Bronze)
+			{
+				std::cout << "Bronze\n";
+			}
+
+			if (MyTier == ETier::Gold)
+			{
+				std::cout << "Gold\n";
+			}
+		}
+	}
+#pragma endregion
+#pragma region 05.구조체(struct)***
+	{
+		enum class ETier : unsigned char
+		{
+			None,
+			Iron,
+			Bronze,
+			Silver,
+			Gold,
+		};
+
+		/*int HP = 10;
+		int MP = 0;*/
+		// 구조체를 사용하면 데이터를 묶어서 들고 있을수 있게 한다
+		struct FPlayer
+		{
+			int HP;// = 10;
+			int MP = 0;
+			ETier Tier = ETier::None;
+			// 3Byte
+		};
+
+		// FPlayer: 구조체 타입
+		// Player: 인스턴스(instance; 실체화된 사례) (메모리에 만들어진 것)
+		FPlayer Player{ .HP = 100, .MP = 20 };
+		Player.HP = 100;
+		Player.MP = 30;
+		Player.Tier = ETier::Gold;
+
+		// 컴파일 타임에 size를 계산해서 변수에 저장한다
+		int Size = sizeof(FPlayer);
+		int Size2 = sizeof(Player);
+		//int Size3 = sizeof(long long);
+		std::cout << "[Player Info]\n";
+		//std::cout << "HP: " << Player.HP << "MP: " << Player.MP << std::endl;
+		std::cout << std::format("HP: {}, MP: {}\n", Player.HP, Player.MP);
+		//std::cout << Player.Tier;
+		std::cout << std::format("Tier: {}\n", (int)Player.Tier);
+
+		struct FPadding
+		{
+			char C;
+			// Padding에 의해 3Byte 가 숨겨져 있다
+			// 지금 가장 큰 기본 자료형 크기가 4Byte라서 4Byte 기준으로 4Byte보다 작은 경우 
+			// padding이 생긴다
+
+			char C2;
+			char C3;
+			char C4;
+			// 4byte ----------
+
+			char C5;
+			// padding 3Byte
+			// 8Byte-----------
+
+			// padding은 바꿀 수 있다(padding이 생기지 않도록 처리할 수 있습니다)
+			int I;
+			// 12Byte ---------
+		};
+
+		struct FPadding2
+		{
+			char c;	// 1Byte
+			// 7Byte padding
+
+			double b;	// 8Byte
+		};
+		// 64bit(8Byte) 환경에서 한번에 접근해서 연산할수 있는 최대 단위가 8byte
+		// padding을 비활성화 해서 다음과 같이
+		// char / double (9)
+		// [00] / [00 00 00 00 00 00 00 00]
+		// [00] / [00 00 00 00 00 00 00]    // [00]
+		// double에 값을 쓰거나 읽으려고 했을때 padding이 잡혀있지 않으면
+		// 2번 접근해야 하는 상황이 발생할 수 있다.
+		// 그렇기 때문에 읽고 쓰는 속도가 느려질 수 있다.
+	}
+#pragma endregion
+
+#pragma region 06.조건문(if / switch)***
+	{
+		// if
+		{
+			//int Value = 0;
+			//std::cin >> Value;
+
+			//// if 조건이 true if내부로 실행
+			//// if 조건이 false else 실행
+			//// else는 없을 수 있다
+			//// 조건문을 사용하면 어떤 값이 참 또는 거짓인지에 따라 원하는 코드를 실행하는 문법
+			//if (Value == 100)
+			//{
+			//	std::cout << "Value가 100입니다\n";
+			//}
+			//else
+			//{
+			//	std::cout << std::format("Value: {} 입니다\n", Value);
+			//}
+
+			// if(<초기자>;<조건문>)
+			// if 조건이 true이면 if 내부로 실행
+			// if 조건이 false이고, else if 조건이 만족하면, else if가 실행이 됩니다.
+			// 전부 만족하지 않는 경우 else 가 실행 됩니다.
+			if (int i = 10; i < 10)
+			{
+				std::cout << "1\n";
+			}
+			else if (i == 13)
+			{
+				std::cout << "2\n";
+			}
+			else if (i == 12)
+			{
+				std::cout << "3\n";
+			}
+			else if (i == 10)
+			{
+				std::cout << "4\n";
+			}
+			else
+			{
+				//i = 10000;
+				std::cout << "5\n";
+			}
+		}
+
+		// switch
+		{
+			enum class ETier : unsigned char
+			{
+				None,
+				Iron,
+				Bronze,
+				Silver,
+				Gold,
+			};
+
+			struct FPlayer
+			{
+				int HP = 100;
+				int MP{ 10 };
+				ETier Tier = ETier::None;
+			};
+			FPlayer Player;
+			Player.Tier = ETier::Gold;
+			std::cout << "[Player Info]\n";
+			std::cout << std::format("HP: {}, MP: {}\n", Player.HP, Player.MP);
+			//std::cout << std::format("Tier: {}\n", (int)Player.Tier);
+			switch (Player.Tier)
+			{
+			case ETier::None:
+				std::cout << "Tier: None\n";
+				break;
+			case ETier::Iron:
+				std::cout << "Tier: Iron\n";
+				break;
+			case ETier::Bronze:
+				std::cout << "Tier: Bronze\n";
+				break;
+			case ETier::Silver:
+				std::cout << "Tier: Silver\n";
+				break;
+			case ETier::Gold:
+				std::cout << "Tier: Gold\n";
+				break;
+			default:
+				std::cout << "default\n";
+				break;
+			}
+
+			if (Player.Tier == ETier::None)
+			{
+				std::cout << "Tier: None\n";
+			}
+			else if (Player.Tier == ETier::Iron)
+			{
+				std::cout << "Tier: Iron\n";
+			}
+			else if (Player.Tier == ETier::Bronze)
+			{
+				std::cout << "Tier: Bronze\n";
+			}
+			else if (Player.Tier == ETier::Silver)
+			{
+				std::cout << "Tier: Silver\n";
+			}
+			else if (Player.Tier == ETier::Gold)
+			{
+				std::cout << "Tier: Gold\n";
+			}
+			else
+			{
+				std::cout << "defaultn";
+			}
+		}
+	}
+#pragma endregion
+	/*
+	*/
+}
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
 // 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
