@@ -150,7 +150,7 @@ int main()
 
 		{
 			// 1Byte 정수형
-			char C = 255;
+			//char C = 255;
 			char C0 = 'A'; // ASCII코드 표에 대응되는 수치로 변환해서 저장
 			int I = 'A';
 			int I2 = 65;
@@ -167,7 +167,7 @@ int main()
 			bool b1 = false;
 			bool b2 = 0;
 			bool b3 = 1;
-			bool b4 = 100; // true
+			//bool b4 = 100; // true
 
 		}
 		//부동 소수점 오차
@@ -202,7 +202,7 @@ int main()
 		// 형변환 Cast : 서로 다른 타입으로 변환
 		{
 			float Float{ 3.14f };
-			int Int = Float; // 묵시적형변환
+			//int Int = Float; // 묵시적형변환
 			int Int2 = (int)Float; // 명시적 casting,C스타일 cast
 			int Int3 = int(Float); // 명시적 casting,C스타일 cast
 			int Int4 = static_cast<int>(Float); // C++ 버젼의 명시적 CAST
@@ -642,11 +642,48 @@ int main()
 			{
 				std::cout << "defaultn";
 			}
+
+			Player.Tier = ETier::Iron;
+			switch (Player.Tier)
+			{
+			case ETier::None:
+				std::cout << "분발하세요";
+				[[fallthrough]];//에트리뷰트
+			case ETier::Iron:
+			case ETier::Bronze:
+			case ETier::Silver:
+				std::cout << "[Silver]";
+				break;
+			case ETier::Gold:
+				std::cout << "[Gold]";
+				break;
+			default:
+				break;
+			}
+
+			Player.Tier = ETier::Silver;
+			//Tier 가 Iron 도는 Bronze인가요?
+			if (Player.Tier == ETier::Iron 
+				|| Player.Tier == ETier::Bronze
+				|| Player.Tier == ETier::Silver)
+				//(
+				// // 나는 Silver
+				// Player.Tier == ETier::Iron  -> 거짓 (0)
+				// || Player.Tier == ETier::Bronze -> 거짓 (0)
+				// || Player.Tier == ETier::Silver -> 참 (1)
+				//	)
+				// 0 || 0 || 1
+				// 0 || 1
+				// 1
+			{
+				if (Player.Tier == ETier::Iron) {
+					std::cout << "분발하세요";
+				}
+				std::cout << "Iron,Bronze,Silver\n";
+			}
 		}
 	}
 #pragma endregion
-	/*
-	*/
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
