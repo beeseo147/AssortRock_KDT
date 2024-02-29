@@ -835,7 +835,24 @@ int main()
 		// 콜링컨벤션(Calling Conventions)
 		// 함수를 호출하는 방법에 대한 종류
 		// __cdecl, __stdcall, __thiscall, __fastcall
+		
+		// 파라미터를 던지는 경우 특정 레지스터(메모리)에 값을 backup했다가
+		// 함수 내부로 진입해서 그 레지스터(메모리)에서 다른 메모리로 값을 복원한다.
+		// 이런것을 함수 호출의 오버해드라고 한다.
 		FunctionName(a);
+
+		int Result = AddFunction(10, 20);
+		int Result2 = AddFunction(11, 30);
+		int Result3 = AddFunction(15, 40);
+		int Result4 = AddFunction(3, 2);
+		int Result5 = AddFunction(1, 3);
+		AddFunction(10, 20);
+
+		double Result6 = AddFunction(3., 2.45);
+
+		unsigned long long Ret = Factorial(4);
+		std::cout << std::format("{}\n", Ret);
+
 	}
 #pragma endregion
 }
