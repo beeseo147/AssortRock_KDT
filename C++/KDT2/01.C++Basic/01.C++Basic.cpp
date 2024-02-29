@@ -32,6 +32,8 @@ include 뒤에 나오는 파일을 포함하겠다.
 
 #include <iostream>
 #include<format>
+#include "Function.h"
+
 int Gint{ 10 };
 bool First()
 {
@@ -801,6 +803,39 @@ int main()
 		{
 			std::cout << "First || Second !\n";
 		}
+	}
+#pragma endregion
+
+#pragma region 08.함수(function)***
+	{
+		// 규모가 큰 프로그램에서 모든 코드를 main함수 안에 담게 되면 관리가 힘들 것 같습니다.
+		// 코드 가독성(읽기 쉬운 정도)을 높이려면 코드를 간결하고 명확한 함수 단위로 나누는 것이 좋겠습니다.
+
+		// C++에서 함수를 사용하려면 먼저 선언을 해야 합니다.
+		// 반환타입		함수이름	(입력 파라미터(옵션))
+		// void			FunctionName(int a, int b, ...)
+
+		// 선언만 하고 구체적인 동작을 구현(정의)하지 않은 채 함수를 호출한 문장이 담긴 코드를 컴파일하면
+		// 존재하지 않는 함수를 호출하기 때문에 링크 과정에서 에러가 발생합니다.
+
+		// 디버거가 붙어있는 상황에서 F11을 눌러서 함수 내부로 진입할 수 있다
+		FunctionName();
+
+		// 이 함수를 호출하는 위치 기준으로 이 라인보다 위에 함수가 있다는 것을 
+		// 알려주지 않으면 함수를 찾을수 없습니다.
+
+		// 함수도 주소가 있고
+		// 함수를 호출한다는건
+		// >>> 돌아올 다음주소를 Backup해두고
+		// >>> 함수의 주소로 이동했다가
+		// >>> 그 함수를 수행하고
+		// >>> ret을 만나면 Backup해둔 주소로 이동한다
+		FunctionName();
+		int a = 10;
+		// 콜링컨벤션(Calling Conventions)
+		// 함수를 호출하는 방법에 대한 종류
+		// __cdecl, __stdcall, __thiscall, __fastcall
+		FunctionName(a);
 	}
 #pragma endregion
 }
