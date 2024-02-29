@@ -33,6 +33,18 @@ include 뒤에 나오는 파일을 포함하겠다.
 #include <iostream>
 #include<format>
 int Gint{ 10 };
+bool First()
+{
+	std::cout << "[First]\n";
+	return true;
+}
+
+bool Second()
+{
+	std::cout << "[Second]\n";
+	return false;
+}
+
 int main()
 {
 	//브레이크 포인트(Break point) : F5로 실행 (디버거를 붙혀서)하는 경우 해당위치에 도달하면
@@ -663,7 +675,7 @@ int main()
 
 			Player.Tier = ETier::Silver;
 			//Tier 가 Iron 도는 Bronze인가요?
-			if (Player.Tier == ETier::Iron 
+			if (Player.Tier == ETier::Iron
 				|| Player.Tier == ETier::Bronze
 				|| Player.Tier == ETier::Silver)
 				//(
@@ -681,6 +693,113 @@ int main()
 				}
 				std::cout << "Iron,Bronze,Silver\n";
 			}
+		}
+	}
+#pragma endregion
+#pragma region 07.논리연산자*
+	{
+		// 논리 부정
+		if (!false) // true
+		{
+			std::cout << "!false";
+		}
+
+		// 논리곱(AND)
+		// && : AND양쪽 조건이 모두 참인경우 true / 하나라도 거짓인 경우 false
+		int a = 10;
+		int b = 20;
+		// 1. a == 10 ? true
+		// 2. b == 10 ? false
+		// 3. true && false => false
+		//if (a == 10 && b == 10)
+
+		// 1. a == 10 ? true
+		// 2. b == 20 ? true
+		// 3. true && true => true
+		if (a == 10 && b == 20)
+			// if ((a == 10 || a == 15) && b == 20)
+		{
+			std::cout << "a && b\n";
+		}
+		else
+		{
+			std::cout << "not a && b\n";
+		}
+
+		// 논리합(OR)
+		// 1. a == 10 ? true
+		// 2. 내부로 진입
+		// b를 판단할 필요 없어 a가 이미 참이므로 내부로 진입한다
+		if (a == 10 || b == 10)
+		{
+			std::cout << "a || b\n";
+		}
+
+		// 1. b == 10 ? false
+		// 2. a == 10 ? true
+		// 3. false || true => true
+		if (b == 10 || a == 10)
+		{
+			std::cout << "a || b\n";
+		}
+
+		// 1. b == 500 ? false
+		// 2. a == 2000? false
+		// 3. false || false => false
+		if (b == 500 || a == 2000)
+		{
+			std::cout << "a || b\n";
+		}
+		else
+		{
+			std::cout << "not a || b\n";
+		}
+
+		a = 10;
+		b = 20;
+		int c = 100;
+		// 1. a == 10 ? true
+		// 2. b == 20 ? true
+		// 3. c == 100? true
+		// true && true && true => true
+		if (a == 10 && b == 20 && c == 100)
+		{
+			std::cout << "a && b && c\n";
+		}
+
+		// 1. a == 10 ? true
+		// 2. (b == 50 || c == 100) ? true
+		//	   b == 50 ? false
+		//	   c == 100? true
+		//	   false || true => true
+		// 3. true(a==10) && (false || true)
+		//    true && true => true
+		if (a == 10 && (b == 50 || c == 100))
+		{
+			std::cout << "a && (b || c)\n";
+		}
+
+		if (First())
+		{
+			std::cout << "First!\n";
+		}
+
+		if (First() || Second())
+		{
+			std::cout << "First || Second\n";
+		}
+
+		if (Second() || First())
+		{
+			std::cout << "Second || First\n";
+		}
+
+		const bool bFirst = First();
+		const bool bSecond = Second();
+		//bSecond = false;
+		if (bFirst || bSecond)
+		{
+			std::cout << "First || Second !\n";
 		}
 	}
 #pragma endregion
