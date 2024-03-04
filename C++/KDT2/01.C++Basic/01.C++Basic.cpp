@@ -914,7 +914,7 @@ int main()
 		// 1차원 배열
 		{
 			// 3개가 있다
-			int Array[4]{ 56,4,03,42 };
+			int Array[4]{ 56,4,03};
 			int d = -1;
 			// 0번 index(또는 원소)에 1을 넣겠다
 			Array[0] = 1;
@@ -954,6 +954,73 @@ int main()
 			//typedef unsigned __int64 hi;
 			size_t Size = Array.size();
 			size_t TotalSize = sizeof(Array);
+		}
+	}
+#pragma endregion
+
+#pragma region 11.반복문(Loop) ***
+	{
+		{
+			int i = 0;
+			while (i < 5)
+			{
+				std::cout << std::format("i값은: {}\n", i);
+				++i; // i = i + 1;
+
+				if (i == 3)
+				{
+					std::cout << std::format("i가 3일때 탈출!\n");
+					break;
+				}
+			}
+		}
+		{
+			int i{ 30 };
+			do
+			{
+				std::cout << std::format("i값은: {}\n", i);
+				++i;
+			} while (i < 5);	// false일때 탈출
+			// 31 < 5 => false
+		}
+		{
+			int length = 5;
+			for (int i = 0; i < length; ++i)//, First())
+			{
+				std::cout << std::format("i값은: {}\n", i);
+			}
+
+			const int Size = 6;
+			int Array[Size]{};
+			for (int i = 0; i < Size; ++i)
+			{
+				Array[i] = i;
+			}
+
+			// 범위기반 for(range based for)
+			for (int i : Array)
+			{
+				//i = 10000;
+				std::cout << std::format("i 값은: {}\n", i);
+			}
+
+			std::array<int, Size> StdArray{};
+			for (size_t i = 0; i < Size; ++i)
+			{
+				StdArray[i] = i;
+			}
+
+			for (int i : StdArray)
+			{
+				std::cout << std::format("i 값은: {}\n", i);
+			}
+
+			// C++20
+			// CTAD(class template argument deduction; 클래스 템플릿 인수 추론)
+			for (std::array Array2{ 1,2,3 }; int i : Array2)
+			{
+				std::cout << std::format("i 값은: {}\n", i);
+			}
 		}
 	}
 #pragma endregion
