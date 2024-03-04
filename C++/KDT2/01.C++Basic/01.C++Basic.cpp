@@ -34,7 +34,8 @@ include 뒤에 나오는 파일을 포함하겠다.
 #include <iostream>
 #include<format>
 #include "Function.h"
-
+#include <array>
+//#pragma warning(disable:4789)
 int Gint{ 10 };
 
 int main()
@@ -901,6 +902,59 @@ int main()
 		Value = Value ^ EproertyFlags::Eproperty4;		//꺼짐
 		Value = Value ^ EproertyFlags::Eproperty4;		//켜짐
 
+	}
+#pragma endregion
+#pragma region 10.배열(array)
+	{
+		int a{}, b{}, c{};
+		a = 1;
+		b = 2;
+		c = 3;
+
+		// 1차원 배열
+		{
+			// 3개가 있다
+			int Array[4]{ 56,4,03,42 };
+			int d = -1;
+			// 0번 index(또는 원소)에 1을 넣겠다
+			Array[0] = 1;
+			Array[1] = 2;
+			Array[2] = 3;
+			// Array의 시작 주소에서 Size * index
+			// 메모리에 접근하겠다
+			Array[3] = 4;
+			//Array[4] = 5; // ?
+
+			int Size = sizeof(int);	// 4byte
+			int ArraySize = sizeof(Array);
+			int ArrayElemSize = sizeof(Array[0]);
+			// 하나의size = 총size / 하나의 size
+			int ArrayElemCount = ArraySize / ArrayElemSize;
+		}
+		// 2차원 배열
+		{
+			// Array[0][0] Array[0][1] Array[0][2] ...
+			int Array[2][3]{};
+			Array[0][0] = 1;
+			Array[0][1] = 2;
+			Array[0][2] = 3;
+			Array[1][0] = 4;
+			Array[1][1] = 5;
+			Array[1][2] = 6;
+		}
+		// std::array (컨테이너)
+		{
+			// int Array[3];
+			std::array<int, 3> Array{ 1,3,6 };
+			Array[0] = 1;
+			Array[1] = 2;
+			Array[2] = 3;
+			// typedef는 왼쪽에 있는 타입을 오른쪽에 있는
+			// 것으로 바꿔서 쓸 수 있게 해준다
+			//typedef unsigned __int64 hi;
+			size_t Size = Array.size();
+			size_t TotalSize = sizeof(Array);
+		}
 	}
 #pragma endregion
 }
