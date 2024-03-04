@@ -1,4 +1,5 @@
 ﻿/*24-02-26
+* KIM
 솔루션 탐색기 - > 모든 파일 표시로 변경
 프로젝트 우클릭 ->속성 -> 중간 디렉토리를 변경
 프로젝트 우클릭 ->속성 ->c++20
@@ -35,17 +36,6 @@ include 뒤에 나오는 파일을 포함하겠다.
 #include "Function.h"
 
 int Gint{ 10 };
-bool First()
-{
-	std::cout << "[First]\n";
-	return true;
-}
-
-bool Second()
-{
-	std::cout << "[Second]\n";
-	return false;
-}
 
 int main()
 {
@@ -852,6 +842,64 @@ int main()
 
 		unsigned long long Ret = Factorial(4);
 		std::cout << std::format("{}\n", Ret);
+
+	}
+#pragma endregion
+
+#pragma region 09.Bit Flag
+	{
+		unsigned char Property1 = EproertyFlags::Eproperty1;
+		HasFlag(Property1);
+		unsigned char Property3 = EproertyFlags::Eproperty3;
+		HasFlag(Property3);
+		unsigned char Property13 = EproertyFlags::Eproperty1 |EproertyFlags::Eproperty3;
+		HasFlag(Property13);
+
+		//신규 속성을 추가하기 위해 OR(|) 연산 사용
+		Property13 |= EproertyFlags::Eproperty7;
+		HasFlag(Property13);
+		unsigned char NotProperty7 = ~EproertyFlags::Eproperty7;
+		//0100 0000		: EproertyFlags::Eproperty7;
+		//1011 1111		: ~EproertyFlags::Eproperty7;
+		//---------AND
+		//0000 0101
+		//특정 속성을 뺀다
+
+		Property13 = Property13 & ~EproertyFlags::Eproperty7;
+		HasFlag(Property13);
+
+		//XOR : 서로 다르면 1, 같으면 0
+		//0000 1010
+		//0000 1000
+		//------XOR
+		//0000 0001
+		//0000 1000
+		//------XOR
+		//0000 1001
+
+		unsigned char Togle = Eproperty2 | Eproperty4;
+		HasFlag(Togle);
+		Togle = Togle ^ Eproperty4;
+		HasFlag(Togle);
+		Togle = Togle ^ Eproperty4;
+		HasFlag(Togle);
+		Togle = Togle ^ Eproperty4;
+		HasFlag(Togle);
+
+		unsigned char Value = EproertyFlags::ENone;
+		//지정
+		Value = EproertyFlags::Eproperty1;
+
+		//켜기
+		Value = Value | EproertyFlags::Eproperty2;
+
+		//끄기
+		Value = Value & ~EproertyFlags::Eproperty2;
+
+		//토글(껏다 켯다)
+		Value = Value ^ EproertyFlags::Eproperty4;		//켜짐
+		Value = Value ^ EproertyFlags::Eproperty4;		//꺼짐
+		Value = Value ^ EproertyFlags::Eproperty4;		//켜짐
 
 	}
 #pragma endregion

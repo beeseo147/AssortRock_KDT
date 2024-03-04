@@ -36,3 +36,37 @@ unsigned long long Factorial(unsigned char f)
 		return f * Factorial(f - 1);
 	}
 }
+void HasFlag(unsigned char Inproperty) {
+	// 1번 속성이 활성화 되어 있나요?
+	// 0000 0001
+	// 0000 0001
+	// -------And (둘다 1이면 1,하나라도 0이면 0)
+	// 0000 0001
+	// 참
+	// if는 0이면 flase , 0이 아니면 true
+
+	if (Inproperty & EproertyFlags::Eproperty1) {
+		std::cout << "EproertyFlags::Eproperty1\n";
+	}
+	if (Inproperty & EproertyFlags::Eproperty2) {
+		std::cout << "EproertyFlags::Eproperty2\n";
+	}
+	if (Inproperty & EproertyFlags::Eproperty3) {
+		std::cout << "EproertyFlags::Eproperty3\n";
+	}
+	if (Inproperty & EproertyFlags::Eproperty4) {
+		std::cout << "EproertyFlags::Eproperty4\n";
+	}
+	if (Inproperty & EproertyFlags::Eproperty5) {
+		std::cout << "EproertyFlags::Eproperty5\n";
+	}
+	if (Inproperty & EproertyFlags::Eproperty6) {
+		std::cout << "EproertyFlags::Eproperty6\n";
+	}
+	if (Inproperty & EproertyFlags::Eproperty7) {
+		std::cout << "EproertyFlags::Eproperty7\n";
+	}
+	if (Inproperty & EproertyFlags::Eproperty8) {
+		std::cout << "EproertyFlags::Eproperty8\n";
+	}
+}
