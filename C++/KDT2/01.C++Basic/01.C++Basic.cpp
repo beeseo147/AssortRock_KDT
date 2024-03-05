@@ -1119,7 +1119,7 @@ int main()
 			// [Stack]										// [Heap]
 			// [0xfff] Pointer(8Byte; 64bit) = 0x100		0x100 int[4byte] = 10000
 			*Pointer = 10000;
-			std::cout << *Pointer << a<<std::endl;
+			std::cout << *Pointer << a << std::endl;
 			//Pointer = (int*)10000;	// 잠재적인 문제가 발생할 가능성이 아주 높다
 			//*Pointer = 500;
 			// 이렇게 동작할당을 하고 Memory를 해제하기 전에 다른 주소로 바꾸는 경우
@@ -1189,6 +1189,8 @@ int main()
 			}
 			delete[] Array;
 		}
+		// 2차원이상 배열도 동적할당으로 구현이 가능합니다.
+			// 저는 실무에서 쓴 기억이 없습니다.
 		{
 			// [Stack]										// [Heap]
 			// [0xfff] Array(8Byte; 64bit) = 0x100			0x100 [int][int][int][int][int][int]
@@ -1220,8 +1222,63 @@ int main()
 			int* Pointer = nullptr;
 			Pointer = &a;
 			*Pointer = 100;
-			std::cout << "*Pointer : " << *Pointer << "Pointer : " << Pointer << "a : " << a;
+			std::cout << "*Pointer : " << *Pointer << " Pointer : " << Pointer << " &Pointer : " << &Pointer << "a : " << a;
 		}
+		{
+			struct Fstruct
+			{
+				//생성자 : 인스턴스가 만들어질 때 호출되는 함수
+				//자동 생성
+				//thiscall : 자기자신의 주소를 파라미터로 던져준다.
+				Fstruct(/*Fstruct*This*/) {
+					std::cout << std::format("V1 : {} V2 : {}", this->Value, this->Value2);
+				}
+
+				int Value = 10;
+				int Value2 = 100;
+
+				void Print() {
+					std::cout << std::format("V1 : {} V2 : {}", Value, Value2);
+				}
+				//자동 생성
+				~Fstruct() {
+					std::cout << "소멸 했어요";
+				}
+
+			};
+			int V0 = 20;
+			// int[Value = 10]
+			// int[Value2 = 100]
+			Fstruct Struct;
+			Fstruct Struct2;
+
+			Struct.Value = 1000;
+			Struct.Print();
+			Struct2.Print();
+			int V1 = 200;
+
+			Fstruct* Pointer = new Fstruct;
+			Pointer->Value = 1000;
+			(*Pointer).Value2 = 10000;
+			
+			int* Pointer1 = (int*)Pointer;
+			*Pointer1 = 444;
+			int* Pointer2 = Pointer1 + 1;
+			*Pointer2 = 555;
+
+			
+			delete Pointer;
+			{
+				//malloc은 요청한 size만큼 메모리 블록만 할당
+				//new는 요청한 size만큼 메모리 블록할당 후 초기화(struct같은 경우 생성자까지 호출)
+				Fstruct* Struct2 = (Fstruct*)malloc(sizeof(Fstruct));
+				free(Struct2);
+			}
+
+			// 저소준의 동적할당은 사용빈도가 줄었다
+			// 포인터는 사용하지 않은날이 없는 수준
+		}
+
 	}
 #pragma endregion
 }
