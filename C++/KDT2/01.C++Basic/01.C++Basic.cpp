@@ -1119,7 +1119,7 @@ int main()
 			// [Stack]										// [Heap]
 			// [0xfff] Pointer(8Byte; 64bit) = 0x100		0x100 int[4byte] = 10000
 			*Pointer = 10000;
-			std::cout << *Pointer << std::endl;
+			std::cout << *Pointer << a<<std::endl;
 			//Pointer = (int*)10000;	// 잠재적인 문제가 발생할 가능성이 아주 높다
 			//*Pointer = 500;
 			// 이렇게 동작할당을 하고 Memory를 해제하기 전에 다른 주소로 바꾸는 경우
@@ -1148,6 +1148,7 @@ int main()
 			*Pointer = 1000;
 			free(Pointer);
 		}
+
 		{
 			// 메모리 할당이 실패할 수도 있습니다.
 			// 컴퓨터에 메모리가 부족한 경우 동적 할당은 실패할 수 있습니다.
@@ -1155,6 +1156,38 @@ int main()
 			//while (true) {
 			//	new int;
 			//}
+		}
+		{
+			// [Stack]										// [Heap]
+			// [0xfff] Array(8Byte; 64bit) = 0x100			0x100 [int][int][int][int][int][int]
+			// 
+			// 배열 동적 할당
+			int* Array = nullptr;
+			Array = new int[6] {0, 1, 2, 3, 4, 5};
+			Array[0] = 100;
+			*Array = 10;
+			//Array가 들고 있던 주소로부터 1칸을 이동하는데 1칸이 지금 타입이 int*
+			//이기때문에 4byte만큼 건너뛴 위치의 값을 20으로 int만큼 바꾼다
+
+			*(Array + 1) = 20;
+			//Array가 들고 있던 주소로부터 1칸을 이동하는데 1칸이 지금 타입이 __int64*
+			//이기때문에 8byte만큼 건너뛴 위치의 값을 100으로 __int64만큼 바꾼다
+			//*((__int64)Array +1) =10;
+
+			for (int i = 0; i < 6; ++i)
+			{
+				Array[i] = i + 1;
+
+				// Array + n
+				// Array(Heap에 있는 주소) + n
+				// Array + 1 = Array주소에 + 4byte(int)의 주소
+
+				// Array(int*)	Array + 1    Array + 2    Array + 3 ...
+				// [00 00 00 01][00 00 00 02][00 00 00 03][00 00 00 04]
+
+				*(Array + i) = i + 2;
+			}
+			delete[] Array;
 		}
 		{
 			// [Stack]										// [Heap]
@@ -1181,6 +1214,13 @@ int main()
 				//*(Test + 1) = 5;
 			}
 			delete[] Array;
+		}
+		{
+			int a = 10;
+			int* Pointer = nullptr;
+			Pointer = &a;
+			*Pointer = 100;
+			std::cout << "*Pointer : " << *Pointer << "Pointer : " << Pointer << "a : " << a;
 		}
 	}
 #pragma endregion
