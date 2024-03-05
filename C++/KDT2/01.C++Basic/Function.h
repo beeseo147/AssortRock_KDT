@@ -41,3 +41,67 @@ enum EproertyFlags : unsigned char
 };
 
 void HasFlag(unsigned char Inproperty);
+
+struct FParam
+{
+	FParam()
+	{
+		std::cout << "FPram\n";
+	}
+
+	FParam(int a)
+	{
+		std::cout << "FPram int a\n";
+		Value[0] = a;
+	}
+
+	// 복사 생성자: 선언하지 않으면 자동으로 만들어 줍니다.
+	// InParam 데이터를 기반으로 나(인스턴스)를 만드는데 그 데이터를
+	// 가지고 와서 채울 목적으로 보통 사용하기 위해 복사생성자를 
+	// 만듭니다.
+
+	// 원본을 수정하지 않을 목적으로 const를 붙힘
+	// 선언하지 않으면 자동으로 만들어주는 복사 생성자 같은 경우
+	// 자동으로 InParam에 있는 모든 데이터를 복사해온다
+
+	// 생성자류는 새로운 인스턴스가 만들어질때만 호출됩니다. (초기화 되는 시점)
+	FParam(const FParam& InParam)
+	{
+		std::cout << "FPram 복사 생성자\n";
+		for (int i = 0; i < 1000; ++i)
+		{
+			this->Value[i] = InParam.Value[i];
+		}
+	}
+
+	// 대입 연산자
+	// 예도 자동으로 만들어줌: 복사생성자랑 비슷하게 값을 복제
+	// 연산자 오버로딩
+	FParam& operator = (const FParam& InParam)
+	{
+		std::cout << "FPram 대입 연산자\n";
+		for (int i = 0; i < 1000; ++i)
+		{
+			this->Value[i] = InParam.Value[i];
+		}
+		return *this;
+	}
+
+	~FParam()
+	{
+		std::cout << "~FPram\n";
+	}
+
+	int Value[1000]{};
+};
+
+// CallByValue
+int Function(int a);
+FParam Function(FParam InParam);
+// CallByPointer
+void Function(FParam* InParam);
+
+void FunctionCallByPointer(int* InParam);
+// CallByReference
+void FunctionCallByReference(int& InParam);
+void FunctionCallByReference(FParam& InParam);

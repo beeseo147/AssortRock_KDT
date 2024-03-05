@@ -70,3 +70,45 @@ void HasFlag(unsigned char Inproperty) {
 		std::cout << "EproertyFlags::Eproperty8\n";
 	}
 }
+
+// int a = Value;
+int Function(int a)
+{
+	a = 10;
+	return a;
+}
+
+FParam Function(FParam InParam)
+{
+	for (int i = 0; i < 1000; ++i)
+	{
+		InParam.Value[i] = i;
+	}
+	return InParam;
+}
+
+void Function(FParam* InParam)
+{
+	for (int i = 0; i < 1000; ++i)
+	{
+		InParam->Value[i] = i;
+	}
+}
+
+void FunctionCallByPointer(int* InParam)
+{
+	*InParam += 1;
+}
+
+void FunctionCallByReference(int& InParam)
+{
+	InParam += 1;
+}
+
+void FunctionCallByReference(FParam& InParam)
+{
+	for (int i = 0; i < 1000; ++i)
+	{
+		InParam.Value[i] = i;
+	}
+}

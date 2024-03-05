@@ -1277,8 +1277,96 @@ int main()
 
 			// 저소준의 동적할당은 사용빈도가 줄었다
 			// 포인터는 사용하지 않은날이 없는 수준
+
+			// 포인터를 사용하는 이유?
+			{
+				// int Value 초기화							FParam Value 초기화 (생성자)
+				int Value = 0;								// FParam Value = FParam();
+				// Function call, 인자 복사
+				// int a = Value (a 초기화)					// FParam a = Value (a 초기화; 복사 생성자)
+				// Function ret, 레지스터(eax, a값을 backup)// ret 할때 임시 변수에 복사 발생! (복사생성자 호출)
+					// return 할때 eax = a;						// return 할때 비슷하게 레지스터에 = a;
+				// Value = eax; (대입)						// Value = 레지스터; (대입 연산자 호출)
+				Value = Function(Value);
+
+				//FParam Param{10};
+				FParam Param = FParam(10);
+				Param.Value[3] = 999;
+
+				// Value[0]에는 10이 들어있길 원하고
+				// Value[3]에는 999가 들어있길 원한다
+				//FParam InParam = FParam(Param);
+				//FParam Param = FParam(10);
+				Param = Function(Param);
+
+				int Value2 = 10; // 초기화
+				Value2 = 100; // 대입
+			}
+
+			{
+				FParam Param = FParam();
+				Param.Value[0] = 444;
+				FParam* InParam = &Param;
+				InParam->Value[0] = 222;
+				(*InParam).Value[0] = 333;
+				Function(&Param);
+			}
+
+			{
+				// 레퍼런스, 참조
+
+				// 포인터와 레퍼런스의 차이
+
+				int a = 5;
+				int* InParamPointer = &a;
+				*InParamPointer = 100;
+
+				// Pointer는 가리키던 대상을 바꿀 수 있다.
+				int bb = 1000;
+				InParamPointer = &bb;
+				*InParamPointer = 222;
+
+				// const가 *보다 오른쪽에 있으면 마치 Reference처럼
+				// 가리키고 있는 주소를 바꿀 수 없다
+				int* const InPointerLikeReference = &a;
+				//InPointerLikeReference = &bb;
+				const int Con = 100;
+				//Con = 1000;
+
+				// const가 * 보다 왼쪽에 있으면 가리키던 대상의 값을
+				// 수정할 수 없다
+				const int* InPointerValueIsConst = &a;
+				//*InPointerValueIsConst = 2222;
+				// 주소는 바꿀 수 있다.
+				InPointerValueIsConst = &bb;
+
+				// 주소도 바꿀 수 없고, 가리키던 주소에 있는 값도 바꿀 수 없다
+				const int* const InPointerValueIsConstAndLikeReference = &a;
+				// int const* const InPointerValueIsConstAndLikeReference = &a;
+				//InPointerValueIsConstAndLikeReference = &bb;
+				//*InPointerValueIsConstAndLikeReference = 100000;
+
+				// Reference에 const를 붙히면 가리키던 값을 변경할 수 없다
+				const int& ConstReference = a;
+				//ConstReference = 10000;
+
+				// 레퍼런스는 초기화에서만 다르게 동작. 
+				// InParam이 곧 a가 된다
+				// 초기화 할때 한번 정해둔 주소를 나중에 바꿀수 없는 문법이다
+				int& InParamReference = a;
+				int b = 10;
+				InParamReference = 1000; // 한번 바인딩된 주소가 변경되지 않고, 값만 바뀐다
+				InParamReference = b;	 // 한번 바인딩된 주소가 변경되지 않고, 값만 바뀐다
+
+				FunctionCallByPointer(&a);
+				FunctionCallByReference(a);
+
+				FParam Param = FParam(1000);
+				FunctionCallByReference(Param);
+			}
 		}
 
+	
 	}
 #pragma endregion
 }
