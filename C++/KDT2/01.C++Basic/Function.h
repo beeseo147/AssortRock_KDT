@@ -119,6 +119,11 @@ void Swap(int* InOutFirst, int* InOutSecond);
 void SeperateOddsAndEvens(const std::array<int, 10>* InNumbers,
 	std::vector<int>* OutOdds,
 	std::vector<int>* OutEvens);
+
 void SeperateOddsAndEvens(const std::array<int, 10>& InNumbers,
 	std::vector<int>& OutOdds,
 	std::vector<int>& OutEvens);
+
+void Test(int aa);
+void TestReference(int &aa);
+void TestPointer(int* aa);

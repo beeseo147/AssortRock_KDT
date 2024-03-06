@@ -173,4 +173,16 @@ void SeperateOddsAndEvens(const std::array<int, 10>& InNumbers, std::vector<int>
 		}
 	}
 }
+void Test(int aa) {
+	aa = 100;
+}
 
+void TestReference(int &aa)
+{
+	aa = 100;
+}
+
+void TestPointer(int* aa)
+{
+	*aa = 100;
+}

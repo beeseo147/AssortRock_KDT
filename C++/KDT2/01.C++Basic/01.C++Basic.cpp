@@ -1271,13 +1271,13 @@ int main()
 			Pointer = new FStruct;
 			Pointer->Value = 1000;
 			(*Pointer).Value2 = 10000;
-			
+
 			int* Pointer1 = (int*)Pointer;
 			*Pointer1 = 444;
 			int* Pointer2 = Pointer1 + 1;
 			*Pointer2 = 555;
 
-			
+
 			delete Pointer;
 			{
 				//malloc은 요청한 size만큼 메모리 블록만 할당
@@ -1374,51 +1374,82 @@ int main()
 				FunctionCallByReference(Param);
 			}
 			{
-				int* A = nullptr;
+				//int* A = nullptr;
 
-				FunctionWithPointer(A);
+				//FunctionWithPointer(A);
 
-				if (A == nullptr) {
-					A = new int{ 5 };
-					FunctionWithPointer(A);
+				//if (A == nullptr) {
+				//	A = new int{ 5 };
+				//	FunctionWithPointer(A);
 
-					int* B = A;
-					//delete A; //B에 들어있는 주소는 유효한 주소가 아니다.
-					//A = nullptr;
+				//	int* B = A;
+				//	//delete A; //B에 들어있는 주소는 유효한 주소가 아니다.
+				//	//A = nullptr;
 
-					SAFE_DELETE(A);
-					Hi; //이렇게 사용하지 않기를 권장
+				//	SAFE_DELETE(A);
+				//	Hi; //이렇게 사용하지 않기를 권장
 
-					FunctionWithPointer(B);
-					//댕글링 포인터 : 이미 delete 된 메모리 주소를 들고 있는 상황
-					//이때 해당 memory에 write 하는 경우 프로그램에 잠재적인 위험이 생긴다.
-					//가끔식 잘 돌다가 죽는 버그의 원인으로 댕글링 포인터인 경우들이 발견된다.
+				//	FunctionWithPointer(B);
+				//	//댕글링 포인터 : 이미 delete 된 메모리 주소를 들고 있는 상황
+				//	//이때 해당 memory에 write 하는 경우 프로그램에 잠재적인 위험이 생긴다.
+				//	//가끔식 잘 돌다가 죽는 버그의 원인으로 댕글링 포인터인 경우들이 발견된다.
 
-				}
-				if (A == nullptr) {
-					A = new int{ 5 };
-					int& B = *A;
-					int* C = A;
-					B = 1000;
-					*C = 2000;
-					SAFE_DELETE(A);
-					B = 500;
-					*C = 5000;
-				}
+				//}
+				//if (A == nullptr) {
+				//	A = new int{ 5 };
+				//	int& B = *A;
+				//	int* C = A;
+				//	B = 1000;
+				//	*C = 2000;
+				//	SAFE_DELETE(A);
+				//	B = 500;
+				//	*C = 5000;
 			}
 		}
 		{
 			int A = 10;
 			int B = 100;
+			//CallByReference
 			Swap(A, B);
+			std::cout << std::format(" A : {} , B : {} \n", A, B);
 
+			//CallByPointer
+			Swap(&A, &B);
 			std::cout << std::format(" A : {} , B : {} \n", A, B);
 		}
 		{
 			std::array Numbers{ 1,2,3,4,5,6,7 ,8,9,10 };
-			std::vector <int> Odds,Evens = {};
+			std::vector <int> Odds, Evens = {};
+			//CallByPointer
+			SeperateOddsAndEvens(&Numbers, &Odds, &Evens);
+			for (auto a : Odds) {
+				std::cout << a << "\n";
+			}
+
+			//Clear를 통해 vector 내부의 할당된 Memory를 날린다.
+			//다시 사용하기 위하여
+			Odds.clear();
+			Evens.clear();
+			SeperateOddsAndEvens(Numbers, Odds, Evens);
+
+			std::array Numbers2{ 1,2,3,4,5,6,7 ,8,9,10 };
+			std::vector <int> Odds2, Evens2 = {};
+			//CallByReference
+			SeperateOddsAndEvens(Numbers2, Odds2, Evens2);
+			for (auto a : Odds2) {
+				std::cout << a << "\n";
+			}
+			
+			//함수 인자에 래퍼런스(&) 또는 포인터(*)없는건
+			//안에서 그녀석을 바꾸면 밖에 영향을 미치지 않는다.
+			int a = 10;
+			Test(a);
+			
+			//안에서 aa를 바꾸면 밖의 a가 바뀐다
+			TestReference(a);
+			TestPointer(&a);
+
 		}
-	
 	}
 #pragma endregion
 }
