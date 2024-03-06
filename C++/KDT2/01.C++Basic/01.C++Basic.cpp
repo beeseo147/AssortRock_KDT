@@ -34,9 +34,11 @@ include 뒤에 나오는 파일을 포함하겠다.
 #include <iostream>
 #include<format>
 #include "Function.h"
-#include <array>
+#include <array> // 고정 사이즈 배열
+#include <vector> //가변 사이즈 배열
 //#pragma warning(disable:4789)
 int Gint{ 10 };
+FParam GParam;
 
 int main()
 {
@@ -535,7 +537,6 @@ int main()
 		// 그렇기 때문에 읽고 쓰는 속도가 느려질 수 있다.
 	}
 #pragma endregion
-
 #pragma region 06.조건문(if / switch)***
 	{
 		// if
@@ -800,7 +801,6 @@ int main()
 		}
 	}
 #pragma endregion
-
 #pragma region 08.함수(function)***
 	{
 		// 규모가 큰 프로그램에서 모든 코드를 main함수 안에 담게 되면 관리가 힘들 것 같습니다.
@@ -850,7 +850,6 @@ int main()
 
 	}
 #pragma endregion
-
 #pragma region 09.Bit Flag
 	{
 		unsigned char Property1 = EproertyFlags::Eproperty1;
@@ -961,7 +960,6 @@ int main()
 		}
 	}
 #pragma endregion
-
 #pragma region 11.반복문(Loop) ***
 	{
 		{
@@ -1028,7 +1026,6 @@ int main()
 		}
 	}
 #pragma endregion
-
 #pragma region 12.포인터와 동적 메모리(Pointer***,dynamic memory)+ 레퍼런스***(Reference : 참조)
 	{
 		// 메모리 할당과 관리하는 것은 C++프로그래밍에서 문제가 발생하기 쉬운 영역입니다.
@@ -1222,42 +1219,56 @@ int main()
 			int* Pointer = nullptr;
 			Pointer = &a;
 			*Pointer = 100;
-			std::cout << "*Pointer : " << *Pointer << " Pointer : " << Pointer << " &Pointer : " << &Pointer << "a : " << a;
+			std::cout << "*Pointer : " << *Pointer << " Pointer : " << Pointer << " &Pointer : " << &Pointer << " a : " << a;
 		}
 		{
-			struct Fstruct
+			struct FStruct
 			{
-				//생성자 : 인스턴스가 만들어질 때 호출되는 함수
-				//자동 생성
-				//thiscall : 자기자신의 주소를 파라미터로 던져준다.
-				Fstruct(/*Fstruct*This*/) {
-					std::cout << std::format("V1 : {} V2 : {}", this->Value, this->Value2);
+				// 생성자: 인스턴스가 만들어질때 호출되는 함수 
+				// (예외적으로 리턴타입이 없습니다)
+				// 선언하지 않으면 자동으로 만들어준다
+				// thiscall: 자기자신의 주소를 파라미터로 던져준다
+				FStruct(/*FStruct* This*/) // this pointer가 숨겨져 있다
+				{
+					std::cout << std::format("V: {}, V2: {}\n", Value, this->Value2);
+					//int* V0 = (int*)this;
+					//*V0 = 100; // Value의 주소와 동일
+					//
+					////int* V2 = V0 + 1;
+					//int* V2 = ((int*)this) + 1;
+					//*V2 = 100000;
 				}
 
+				// 소멸자: 인스턴스가 소멸되는 시점에 호출되는 함수 
+				// 생략가능
+				~FStruct()
+				{
+					std::cout << std::format("~FStruct V: {}, V2: {}\n", Value, this->Value2);
+				}
+
+				void Print()
+				{
+					std::cout << std::format("V: {}, V2: {}\n", this->Value, this->Value2);
+				}
 				int Value = 10;
 				int Value2 = 100;
-
-				void Print() {
-					std::cout << std::format("V1 : {} V2 : {}", Value, Value2);
-				}
-				//자동 생성
-				~Fstruct() {
-					std::cout << "소멸 했어요";
-				}
-
 			};
+
 			int V0 = 20;
 			// int[Value = 10]
 			// int[Value2 = 100]
-			Fstruct Struct;
-			Fstruct Struct2;
+			{
+				FStruct Struct;
+				//FStruct Struct2;
 
-			Struct.Value = 1000;
-			Struct.Print();
-			Struct2.Print();
+				Struct.Value = 1000;
+			}
+			//Struct.Print();
+			//Struct2.Print();
 			int V1 = 200;
 
-			Fstruct* Pointer = new Fstruct;
+			FStruct* Pointer = nullptr;
+			Pointer = new FStruct;
 			Pointer->Value = 1000;
 			(*Pointer).Value2 = 10000;
 			
@@ -1271,10 +1282,9 @@ int main()
 			{
 				//malloc은 요청한 size만큼 메모리 블록만 할당
 				//new는 요청한 size만큼 메모리 블록할당 후 초기화(struct같은 경우 생성자까지 호출)
-				Fstruct* Struct2 = (Fstruct*)malloc(sizeof(Fstruct));
+				FStruct* Struct2 = (FStruct*)malloc(sizeof(FStruct));
 				free(Struct2);
 			}
-
 			// 저소준의 동적할당은 사용빈도가 줄었다
 			// 포인터는 사용하지 않은날이 없는 수준
 
@@ -1302,7 +1312,6 @@ int main()
 				int Value2 = 10; // 초기화
 				Value2 = 100; // 대입
 			}
-
 			{
 				FParam Param = FParam();
 				Param.Value[0] = 444;
@@ -1364,8 +1373,51 @@ int main()
 				FParam Param = FParam(1000);
 				FunctionCallByReference(Param);
 			}
-		}
+			{
+				int* A = nullptr;
 
+				FunctionWithPointer(A);
+
+				if (A == nullptr) {
+					A = new int{ 5 };
+					FunctionWithPointer(A);
+
+					int* B = A;
+					//delete A; //B에 들어있는 주소는 유효한 주소가 아니다.
+					//A = nullptr;
+
+					SAFE_DELETE(A);
+					Hi; //이렇게 사용하지 않기를 권장
+
+					FunctionWithPointer(B);
+					//댕글링 포인터 : 이미 delete 된 메모리 주소를 들고 있는 상황
+					//이때 해당 memory에 write 하는 경우 프로그램에 잠재적인 위험이 생긴다.
+					//가끔식 잘 돌다가 죽는 버그의 원인으로 댕글링 포인터인 경우들이 발견된다.
+
+				}
+				if (A == nullptr) {
+					A = new int{ 5 };
+					int& B = *A;
+					int* C = A;
+					B = 1000;
+					*C = 2000;
+					SAFE_DELETE(A);
+					B = 500;
+					*C = 5000;
+				}
+			}
+		}
+		{
+			int A = 10;
+			int B = 100;
+			Swap(A, B);
+
+			std::cout << std::format(" A : {} , B : {} \n", A, B);
+		}
+		{
+			std::array Numbers{ 1,2,3,4,5,6,7 ,8,9,10 };
+			std::vector <int> Odds,Evens = {};
+		}
 	
 	}
 #pragma endregion

@@ -1,7 +1,8 @@
 // #pragma once: 한번만 이 파일이 포함되게 해주세요
 #pragma once
 #include <iostream>
-
+#include <vector>
+#include <array>
 void /*__cdecl*/ FunctionName();
 // 이름이 같고, 파라미터가 다른 함수를
 // 함수를 오버로딩 했다고 표현합니다.
@@ -105,3 +106,19 @@ void FunctionCallByPointer(int* InParam);
 // CallByReference
 void FunctionCallByReference(int& InParam);
 void FunctionCallByReference(FParam& InParam);
+void FunctionWithPointer(int* InPointer);
+
+//#define(매크로 선언)	매크로이름(파라미터)	대체할구문 \ : 매크로는 한줄에 내용이 다 와야하는데 다음라인도 매크로에 포함하겠다.
+//#define					SAFE_DELETE(Var)		delete Var;\
+//Var = nullptr;
+#define	SAFE_DELETE(Var)delete Var;Var = nullptr;
+#define Hi std::cout <<"Hi\n";
+
+void Swap(int& InFirst, int& InSecond);
+void Swap(int* InOutFirst, int* InOutSecond);
+void SeperateOddsAndEvens(const std::array<int, 10>* InNumbers,
+	std::vector<int>* OutOdds,
+	std::vector<int>* OutEvens);
+void SeperateOddsAndEvens(const std::array<int, 10>& InNumbers,
+	std::vector<int>& OutOdds,
+	std::vector<int>& OutEvens);

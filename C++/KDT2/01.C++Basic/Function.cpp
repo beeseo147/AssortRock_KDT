@@ -112,3 +112,65 @@ void FunctionCallByReference(FParam& InParam)
 		InParam.Value[i] = i;
 	}
 }
+#include <cassert>
+void FunctionWithPointer(int* InPointer)
+{
+	//debug 모드일때 동작하는 assert는
+	//프로그래머의 명백한 실수를 탐지하기 위해 사용
+	
+	//_ASSERT(InPointer != nullptr);
+	//if (!InPointer)	return;
+	if (InPointer == nullptr) {
+		_ASSERT(false);
+		return;
+	}
+		
+
+	*InPointer += 100;
+}
+//In : 밖에서 값을 채워서 준다
+//Out : 값이 함수 내부에서 바뀌어서 나온다.
+void Swap(int& InOutFirst, int& InOutSecond)
+{
+	//Temp = A(10)
+	const int Temp = InOutFirst;
+
+	InOutFirst = InOutSecond;
+	InOutSecond = Temp;
+}
+
+void Swap(int* InOutFirst, int* InOutSecond)
+{
+	//Temp = A(10)
+	const int Temp = *InOutFirst;
+
+	*InOutFirst = *InOutSecond;
+	*InOutSecond = Temp;
+}
+
+void SeperateOddsAndEvens(const std::array<int, 10>* InNumbers, std::vector<int>* OutOdds, std::vector<int>* OutEvens)
+{
+	for (int Value : *InNumbers) {
+		if (Value % 2 == 0) {
+			OutEvens->push_back(Value);
+		}
+		else
+		{
+			OutOdds->push_back(Value);
+		}
+	}
+}
+
+void SeperateOddsAndEvens(const std::array<int, 10>& InNumbers, std::vector<int>& OutOdds, std::vector<int>& OutEvens)
+{
+	for (int Value : InNumbers) {
+		if (Value % 2 == 0) {
+			OutEvens.push_back(Value);
+		}
+		else
+		{
+			OutOdds.push_back(Value);
+		}
+	}
+}
+
