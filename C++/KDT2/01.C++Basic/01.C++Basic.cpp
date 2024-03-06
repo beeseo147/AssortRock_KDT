@@ -1434,12 +1434,16 @@ int main()
 
 			std::array Numbers2{ 1,2,3,4,5,6,7 ,8,9,10 };
 			std::vector <int> Odds2, Evens2 = {};
+
 			//CallByReference
 			SeperateOddsAndEvens(Numbers2, Odds2, Evens2);
-			for (auto a : Odds2) {
-				std::cout << a << "\n";
-			}
-			
+			//for (auto a : Odds2) {
+			//	std::cout << a << "\n";
+			//}
+
+			FOddsAndEvens Result = SeperateOddsAndEvens(Numbers);
+			Result.Evens;
+			Result.Odds;
 			//함수 인자에 래퍼런스(&) 또는 포인터(*)없는건
 			//안에서 그녀석을 바꾸면 밖에 영향을 미치지 않는다.
 			int a = 10;
@@ -1448,7 +1452,16 @@ int main()
 			//안에서 aa를 바꾸면 밖의 a가 바뀐다
 			TestReference(a);
 			TestPointer(&a);
+		}
+		{
+			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
+			_crtBreakAlloc = 338;
+			int* Pointer = new int{ 10 };
+			
 
+		}
+		{
+			double* Hello = new double{ 0 };
 		}
 	}
 #pragma endregion

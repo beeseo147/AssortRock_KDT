@@ -173,6 +173,21 @@ void SeperateOddsAndEvens(const std::array<int, 10>& InNumbers, std::vector<int>
 		}
 	}
 }
+FOddsAndEvens SeperateOddsAndEvens(const std::array<int, 10>& InNumbers)
+{
+	std::vector<int> Odds, Evens;
+	for (int Value : InNumbers) {
+		if (Value % 2 == 0) {
+			Evens.push_back(Value);
+		}
+		else
+		{
+			Odds.push_back(Value);
+		}
+	}
+	//
+	return FOddsAndEvens(Odds, Evens);
+}
 void Test(int aa) {
 	aa = 100;
 }

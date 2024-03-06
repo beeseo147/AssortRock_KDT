@@ -124,6 +124,23 @@ void SeperateOddsAndEvens(const std::array<int, 10>& InNumbers,
 	std::vector<int>& OutOdds,
 	std::vector<int>& OutEvens);
 
+struct FOddsAndEvens
+{
+	FOddsAndEvens(std::vector<int>& InOdds, std::vector<int>& InEvens)
+		//:a(100)//아래에서 a=10처럼 생성자 내부에서 : 이후에 변수(값)으로 초기화를 할 수있다
+		//아래에 a=10해둔 것보다 우선순위가 더 높다
+		:Odds(InOdds),Evens(InEvens)
+	{
+		std::cout << __FUNCTION__ << std::endl;
+	}
+
+	//int a = 10;
+	std::vector<int> Odds;
+	std::vector<int> Evens;
+};
+
+FOddsAndEvens SeperateOddsAndEvens(const std::array<int, 10>& InNumbers);
 void Test(int aa);
 void TestReference(int &aa);
 void TestPointer(int* aa);
+
