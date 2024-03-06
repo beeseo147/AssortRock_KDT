@@ -1455,14 +1455,116 @@ int main()
 		}
 		{
 			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
-			_crtBreakAlloc = 338;
+			//_crtBreakAlloc = 338;
 			int* Pointer = new int{ 10 };
-			
+			//만능은 아니다..싱글스레드 환경에서는 잘 되는데,
+			//멀티 스레드 환경에서는 추적이 힘들 수도 있다.
 
 		}
 		{
 			double* Hello = new double{ 0 };
 		}
+
+		// 스마트 포인터
+		std::shared_ptr<int> Shared;
+		{
+			// 레퍼런스 카운트 기반
+			// 참조 횟수를 내부에 보관하고 있다가
+			// 참조 횟수가 0이되면 메모리를 delete한다
+			std::shared_ptr<int> A = std::make_shared<int>(10);
+			Shared = A;
+
+			*A = 1000;
+		}
+		std::cout << std::format("Shared: {}\n", *Shared);
+
+		struct FStruct
+		{
+			FStruct()
+			{
+				std::cout << __FUNCTION__ << std::endl;
+			}
+			FStruct(int a)
+			{
+				std::cout << __FUNCTION__ << std::endl;
+			}
+			FStruct(int a, int b)
+			{
+				std::cout << __FUNCTION__ << std::endl;
+			}
+			~FStruct()
+			{
+				std::cout << __FUNCTION__ << std::endl;
+			}
+
+			int Value = 0;
+		};
+		std::shared_ptr<FStruct> SharedStruct;
+		// 강한 참조 횟수에 영향을 끼치지 않는다
+		std::weak_ptr<FStruct> WeakStruct;
+		{
+			std::shared_ptr<FStruct> A = std::make_shared<FStruct>(10, 20);
+			SharedStruct = A;
+			WeakStruct = A;
+
+			A->Value = 10;
+			SharedStruct->Value = 100;
+
+			WeakStruct.lock()->Value = 1000;
+
+			std::cout << std::format("Value: {}\n", SharedStruct->Value);
+
+			A = nullptr;
+			//WeakStruct.reset();
+			//A.reset();
+		}
+		FStruct* Pointer = SharedStruct.get();
+		SharedStruct = nullptr;
+
+		/*if (SharedStruct)
+		{
+			std::cout << std::format("SharedStruct\n");
+		}*/
+		// SharedStruct = nullptr;
+		//SharedStruct.reset();	// 이 인스턴스의 reference를 깔 수 있다.
+
+		if (Pointer)
+		{
+			// 그냥 pointer는 생존 여부를 알 수 없다
+			std::cout << "생존?? 정말?\n";
+		}
+		else
+		{
+			std::cout << "소멸?? 정말??\n";
+		}
+
+		if (WeakStruct.expired())
+		{
+			std::cout << "소멸됨!\n";
+		}
+		else
+		{
+			std::cout << "생존!\n";
+		}
+
+		std::unique_ptr<FStruct> Unique5;
+		{
+			// 단 하나만 존재
+			std::unique_ptr<FStruct> Unique = std::make_unique<FStruct>();
+			/*std::shared_ptr<FStruct> Shared2 = Unique;
+			std::weak_ptr<FStruct> Weak2 = Unique;
+			std::unique_ptr<FStruct> Unique2 = Unique;*/
+			Unique->Value;
+			std::cout << std::format("Value: {}\n", Unique->Value);
+			Unique5 = std::move(Unique);
+
+			if (Unique)
+			{
+				std::cout << std::format("Value: {}\n", Unique->Value);
+			}
+			std::cout << std::format("Value: {}\n", Unique5->Value);
+		}
+
 	}
 #pragma endregion
 }
