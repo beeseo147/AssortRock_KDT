@@ -1694,6 +1694,107 @@ Shared = A;
 	}
 
 #pragma endregion
+#pragma region 17.Class(클래스)****
+	{
+		//구조체 : 함수랑 변수를 묶어서 관리
+		struct FStruct
+		{
+			//기본 접근 지정자 : public
+		//public: 
+			//생성자 : 인스턴스가 만들어질때 생성자가 호출
+			//		-지역변수(Stack)	: FStruct Instance; 와 같은상황
+			//		-동적할당(Heap)		: new를 호출하는 경우
+			//		-전역변수(Data영역)	: 프로그램이 시작할때
+			FStruct() 
+			{
+
+			}
+			//소멸자 : 인스턴스의 수명이 끝날때
+			//		-지역변수(Stack)	: 스코프를{} 빠져나가는경우
+			//		-동적할당(Heap)		: delete를 호출하는 경우
+			//		-전역변수(Data영역)	: 프로그램이 종료되기전
+			~FStruct() 
+			{
+
+			}
+			int a = 0;
+		//private:
+			int b = 10;
+
+		};
+		//Code area(memory) (맴버 함수,Method)
+		//생성자() 코드
+		//소멸자() 코드
+
+		//memory
+		//[int a = 0]
+		//[int b = 10]
+
+		//멤버 함수가 호출될때 해당 인스턴스의 시작 주소가 this라는 이름으로 전달된다.
+		FStruct StructureInstance;
+		StructureInstance.a = 100;
+		//StructureInstance.b = 1000;
+		
+		class FClass
+		{
+			// 접근 지정자
+			// public 외부에서 접근 가능(호출)
+			// class의 경우 기본 접근 지정자가: private
+
+		public:
+			FClass()
+			{
+				a = 100;
+				// 맴버 함수 내부에서는 private에 접근 가능
+				b = 1000;
+				SetB(10000);
+			}
+
+			~FClass()
+			{
+
+			}
+
+			void SetB(const int InB)
+			{
+				b = InB;
+			}
+
+			int GetB() const
+			{
+				// 함수 선언 뒤에 const를 붙히면
+				// this pointer가 const this* 로 된다
+				// 즉 맴버 변수를 수정할 수 없고,
+				// const키워드가 붙은 맴버 함수만 호출 가능하다
+				this;
+				//SetB(1000); // SetB 함수는 const가 붙어있지 않아서
+				//				const 함수 내부에서는 호출할 수 없다
+				// 
+				//a = 100;
+				int c = 10;
+				c = 100000;
+				return b;
+			}
+
+
+			void SetA(const int InA) { a = InA; }
+			[[nodiscard]] int GetA() const { return a; }
+
+			int a = 0;
+
+		private:
+			int b = 10;
+		};
+		FClass ClassInstance;
+		ClassInstance.a = 200;
+		ClassInstance.SetA(200000);
+		ClassInstance.GetA();
+		//ClassInstance.b = 1000;
+		ClassInstance.SetB(2000);
+		int B = ClassInstance.GetB();
+
+	}
+#pragma endregion
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
