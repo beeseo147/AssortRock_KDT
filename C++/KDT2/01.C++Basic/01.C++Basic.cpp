@@ -1466,15 +1466,16 @@ int main()
 		}
 
 		// 스마트 포인터
+		// RAII
 		std::shared_ptr<int> Shared;
 		{
 			// 레퍼런스 카운트 기반
 			// 참조 횟수를 내부에 보관하고 있다가
 			// 참조 횟수가 0이되면 메모리를 delete한다
-			std::shared_ptr<int> A = std::make_shared<int>(10);
-			Shared = A;
+std::shared_ptr<int> A = std::make_shared<int>(10);
+Shared = A;
 
-			*A = 1000;
+*A = 1000;
 		}
 		std::cout << std::format("Shared: {}\n", *Shared);
 
@@ -1499,9 +1500,11 @@ int main()
 
 			int Value = 0;
 		};
+
 		std::shared_ptr<FStruct> SharedStruct;
 		// 강한 참조 횟수에 영향을 끼치지 않는다
 		std::weak_ptr<FStruct> WeakStruct;
+
 		{
 			std::shared_ptr<FStruct> A = std::make_shared<FStruct>(10, 20);
 			SharedStruct = A;
@@ -1555,16 +1558,92 @@ int main()
 			std::weak_ptr<FStruct> Weak2 = Unique;
 			std::unique_ptr<FStruct> Unique2 = Unique;*/
 			Unique->Value;
-			std::cout << std::format("Value: {}\n", Unique->Value);
+			std::cout << std::format("Unique_Value: {}\n", Unique->Value);
 			Unique5 = std::move(Unique);
 
 			if (Unique)
 			{
 				std::cout << std::format("Value: {}\n", Unique->Value);
 			}
-			std::cout << std::format("Value: {}\n", Unique5->Value);
+			std::cout << std::format("Unique5_Value: {}\n", Unique5->Value);
 		}
 
+	}
+#pragma endregion
+#pragma region 13.초기자 리스트(initializer list)
+	{
+		int Result = sum({ 10,20,30 });
+		int Result2 = sum({ 1,2 });
+		int Result3 = sum({ 1,2,3,4,5,6,7,8,9 });
+		int result4 = sum2(std::vector<int>{1, 2, 3, 4, 5, 6, 7, 8, 9});
+		int result4 = sum2({1, 2, 3, 4, 5, 6, 7, 8, 9});
+	}
+#pragma endregion
+#pragma region 14.구조적 바인드(structured binding)
+	{
+		struct FStruct
+		{
+			int a = 0;
+			int b{ 10 };
+			int c = 20;
+
+		};
+		FStruct Instance{ .b = 50, .c = 100 };
+		FStruct Instance2{ .a = 50, .c = 50 };
+		//FStruct	Instance3{ .c = 50,.b = 50 };
+	}
+#pragma endregion
+#pragma region 15.타입 앨리어스(type alias)
+	{
+		typedef int Hello;
+		int a = 5;
+		Hello b = 10;
+
+		typedef int* IntPtr;
+		IntPtr aa = nullptr;
+		aa = &a;
+
+		// 타입 앨리어스
+		using Hello2 = int;
+		Hello2 cc = 100;
+
+		using V = std::vector<int>;
+		V vvv = V{0,1,2,3,4};
+		vvv.push_back(100);
+		std::vector<int> vv2 = std::vector<int>{ 5,4,3,2 };
+
+		{
+			struct FStruct
+			{
+				FStruct() 
+				{
+					a = 1000;
+				}
+				FStruct(int InA)
+					: a(InA) 
+				{
+
+				}
+
+				int a = 100;
+
+				FStruct(const FStruct& InOther)
+					:a(InOther.a) 
+				{
+					std::cout << __FUNCTION__ <<"FStruct(const FStruct& InOther)" << std::endl;
+				}
+
+				FStruct(const FStruct&& InOther)
+					:a(InOther.a)
+				{
+					std::cout << __FUNCTION__ <<"FStruct(const FStruct&& InOther)" << std::endl;
+				}
+			};
+
+			std::vector<FStruct> Vector;
+			Vector.push_back(1000);
+			Vector.emplace_back(10000);
+		}
 	}
 #pragma endregion
 }

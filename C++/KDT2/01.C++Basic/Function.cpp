@@ -201,3 +201,21 @@ void TestPointer(int* aa)
 {
 	*aa = 100;
 }
+
+int sum(std::initializer_list<int> InValues)
+{
+	int Total = {};
+	for (int i : InValues) {
+		Total += i;
+	}
+	return Total;
+}
+
+int sum2(std::vector<int> InValues)
+{
+	int Total = {};
+	for (int i : InValues) {
+		Total += i;
+	}
+	return Total;
+}

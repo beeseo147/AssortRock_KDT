@@ -143,4 +143,5 @@ FOddsAndEvens SeperateOddsAndEvens(const std::array<int, 10>& InNumbers);
 void Test(int aa);
 void TestReference(int &aa);
 void TestPointer(int* aa);
-
+int sum(std::initializer_list<int> InValues);
+int sum2(std::vector<int> InValues);
