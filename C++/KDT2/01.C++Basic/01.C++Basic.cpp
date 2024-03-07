@@ -36,6 +36,9 @@ include 뒤에 나오는 파일을 포함하겠다.
 #include "Function.h"
 #include <array> // 고정 사이즈 배열
 #include <vector> //가변 사이즈 배열
+
+#include <Windows.h>
+#include<string>
 //#pragma warning(disable:4789)
 int Gint{ 10 };
 FParam GParam;
@@ -1576,7 +1579,7 @@ Shared = A;
 		int Result2 = sum({ 1,2 });
 		int Result3 = sum({ 1,2,3,4,5,6,7,8,9 });
 		int result4 = sum2(std::vector<int>{1, 2, 3, 4, 5, 6, 7, 8, 9});
-		int result4 = sum2({1, 2, 3, 4, 5, 6, 7, 8, 9});
+		int result5 = sum2({1, 2, 3, 4, 5, 6, 7, 8, 9});
 	}
 #pragma endregion
 #pragma region 14.구조적 바인드(structured binding)
@@ -1645,6 +1648,51 @@ Shared = A;
 			Vector.emplace_back(10000);
 		}
 	}
+#pragma endregion
+#pragma region 16.문자열(string)**
+	{
+		std::cout << "Hello World!" << std::endl;
+		const char* Text = "Hello World!";
+		std::string String = std::string("Hello World");
+
+		std::cout << String << std::endl;
+		String += " Wow!";
+		std::cout << String << std::endl;
+
+		String[0] = 'W';
+		std::cout << String << std::endl;
+	}
+	{
+		std::string String = "Hello";
+		if (String == "Hello") {
+			std::cout << "동일합니다\n";
+		}
+		else
+			std::cout << "불 일치합니다\n";
+	}
+	{
+		int Value = 5000;
+		float Float = 3.14f;
+		std::string ValueToString = "정수 : ";
+		ValueToString += std::to_string(Value) + ". " + std::to_string(Float);
+
+		//UTF-8 인코딩 방식을 사용해서 다국어 표현중
+		std::string ValueToStringFormat = std::format("정수 : {}, Float : {}", Value, Float);
+	}
+	{
+		std::string MultipleLanguage = "Hello 한글 こんにちは 哈罗 صباح الخير\n";
+		std::cout << MultipleLanguage;
+		MultipleLanguage[6] = '갈';
+		std::cout << MultipleLanguage;
+
+		setlocale(LC_ALL, "");
+		//std::wstring MultipleLanguageWstring = L"Hello 한글 こんにちは 哈罗 صباح الخير\n";
+		std::wstring MultipleLanguageWstring = TEXT("Hello 한글 こんにちは 哈罗 صباح الخير\n");
+		//MultipleLanguageWstring[6] = L'갈';
+		MultipleLanguageWstring[6] = TEXT('갈');
+		std::wcout << MultipleLanguageWstring;
+	}
+
 #pragma endregion
 }
 

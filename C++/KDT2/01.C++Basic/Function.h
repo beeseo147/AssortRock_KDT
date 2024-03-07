@@ -112,7 +112,6 @@ void FunctionWithPointer(int* InPointer);
 //#define					SAFE_DELETE(Var)		delete Var;\
 //Var = nullptr;
 #define	SAFE_DELETE(Var)delete Var;Var = nullptr;
-#define Hi std::cout <<"Hi\n";
 
 void Swap(int& InFirst, int& InSecond);
 void Swap(int* InOutFirst, int* InOutSecond);
