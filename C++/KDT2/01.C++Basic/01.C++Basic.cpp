@@ -1451,13 +1451,13 @@ int main()
 			//안에서 그녀석을 바꾸면 밖에 영향을 미치지 않는다.
 			int a = 10;
 			Test(a);
-			
+
 			//안에서 aa를 바꾸면 밖의 a가 바뀐다
 			TestReference(a);
 			TestPointer(&a);
 		}
 		{
-			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
+			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 			//_crtBreakAlloc = 338;
 			int* Pointer = new int{ 10 };
 			//만능은 아니다..싱글스레드 환경에서는 잘 되는데,
@@ -1475,10 +1475,10 @@ int main()
 			// 레퍼런스 카운트 기반
 			// 참조 횟수를 내부에 보관하고 있다가
 			// 참조 횟수가 0이되면 메모리를 delete한다
-std::shared_ptr<int> A = std::make_shared<int>(10);
-Shared = A;
+			std::shared_ptr<int> A = std::make_shared<int>(10);
+			Shared = A;
 
-*A = 1000;
+			*A = 1000;
 		}
 		std::cout << std::format("Shared: {}\n", *Shared);
 
@@ -1579,7 +1579,7 @@ Shared = A;
 		int Result2 = sum({ 1,2 });
 		int Result3 = sum({ 1,2,3,4,5,6,7,8,9 });
 		int result4 = sum2(std::vector<int>{1, 2, 3, 4, 5, 6, 7, 8, 9});
-		int result5 = sum2({1, 2, 3, 4, 5, 6, 7, 8, 9});
+		int result5 = sum2({ 1, 2, 3, 4, 5, 6, 7, 8, 9 });
 	}
 #pragma endregion
 #pragma region 14.구조적 바인드(structured binding)
@@ -1589,7 +1589,6 @@ Shared = A;
 			int a = 0;
 			int b{ 10 };
 			int c = 20;
-
 		};
 		FStruct Instance{ .b = 50, .c = 100 };
 		FStruct Instance2{ .a = 50, .c = 50 };
@@ -1611,19 +1610,19 @@ Shared = A;
 		Hello2 cc = 100;
 
 		using V = std::vector<int>;
-		V vvv = V{0,1,2,3,4};
+		V vvv = V{ 0,1,2,3,4 };
 		vvv.push_back(100);
 		std::vector<int> vv2 = std::vector<int>{ 5,4,3,2 };
 
 		{
 			struct FStruct
 			{
-				FStruct() 
+				FStruct()
 				{
 					a = 1000;
 				}
 				FStruct(int InA)
-					: a(InA) 
+					: a(InA)
 				{
 
 				}
@@ -1631,15 +1630,15 @@ Shared = A;
 				int a = 100;
 
 				FStruct(const FStruct& InOther)
-					:a(InOther.a) 
+					:a(InOther.a)
 				{
-					std::cout << __FUNCTION__ <<"FStruct(const FStruct& InOther)" << std::endl;
+					std::cout << __FUNCTION__ << "FStruct(const FStruct& InOther)" << std::endl;
 				}
 
 				FStruct(const FStruct&& InOther)
 					:a(InOther.a)
 				{
-					std::cout << __FUNCTION__ <<"FStruct(const FStruct&& InOther)" << std::endl;
+					std::cout << __FUNCTION__ << "FStruct(const FStruct&& InOther)" << std::endl;
 				}
 			};
 
@@ -1651,33 +1650,59 @@ Shared = A;
 #pragma endregion
 #pragma region 16.문자열(string)**
 	{
-		std::cout << "Hello World!" << std::endl;
 		const char* Text = "Hello World!";
-		std::string String = std::string("Hello World");
+		const char* Text2 = "Hello World!";
+		const char* Text3 = "Hello World!";
+		const char* Text4 = "Hello World@";
+		const char Textt[13] = "Hello World!";
+		// 배열에 13으로 선언했는데, 글자는 총 12자 이다.
+		// 문자열의 끝인 \0이 끝에 생략되어 있다. 그래서 총 13
 
-		std::cout << String << std::endl;
+		std::cout << "Hello World!" << std::endl;
+
+		std::string String = std::string("Hello World!");
+		const std::string String2 = Text;
+		//String2[0] = 'A';
 		String += " Wow!";
+
+		std::cout << String << std::endl;
+		String[0] = 'W';
 		std::cout << String << std::endl;
 
-		String[0] = 'W';
+		String = "Oh my name is...!";
 		std::cout << String << std::endl;
 	}
 	{
 		std::string String = "Hello";
-		if (String == "Hello") {
-			std::cout << "동일합니다\n";
+		if (String == "Hello")
+		{
+			std::cout << "동일합니다!\n";
 		}
 		else
-			std::cout << "불 일치합니다\n";
+		{
+			std::cout << "동일하지 않습니다!\n";
+		}
+
+		std::string String2 = "Hell";
+		if (String != String2)
+		{
+			std::cout << "동일하지 않습니다!\n";
+		}
+		else
+		{
+			std::cout << "동일합니다!\n";
+		}
 	}
 	{
 		int Value = 5000;
 		float Float = 3.14f;
-		std::string ValueToString = "정수 : ";
-		ValueToString += std::to_string(Value) + ". " + std::to_string(Float);
+		std::string ValueToString = "정수: ";
+		//ValueToString += 10;
+		ValueToString += std::to_string(Value) + ", " + std::to_string(Float);
 
-		//UTF-8 인코딩 방식을 사용해서 다국어 표현중
-		std::string ValueToStringFormat = std::format("정수 : {}, Float : {}", Value, Float);
+		// UTF-8 인코딩 방식을 사용해서 다국어 표현중
+		std::string ValueToStringFormat = std::format("정수: {}, Float: {}\n", Value, Float);
+		std::cout << ValueToStringFormat;
 	}
 	{
 		std::string MultipleLanguage = "Hello 한글 こんにちは 哈罗 صباح الخير\n";
@@ -1692,7 +1717,6 @@ Shared = A;
 		MultipleLanguageWstring[6] = TEXT('갈');
 		std::wcout << MultipleLanguageWstring;
 	}
-
 #pragma endregion
 #pragma region 17.Class(클래스)****
 	{
@@ -1705,7 +1729,7 @@ Shared = A;
 			//		-지역변수(Stack)	: FStruct Instance; 와 같은상황
 			//		-동적할당(Heap)		: new를 호출하는 경우
 			//		-전역변수(Data영역)	: 프로그램이 시작할때
-			FStruct() 
+			FStruct()
 			{
 
 			}
@@ -1713,12 +1737,12 @@ Shared = A;
 			//		-지역변수(Stack)	: 스코프를{} 빠져나가는경우
 			//		-동적할당(Heap)		: delete를 호출하는 경우
 			//		-전역변수(Data영역)	: 프로그램이 종료되기전
-			~FStruct() 
+			~FStruct()
 			{
 
 			}
 			int a = 0;
-		//private:
+			//private:
 			int b = 10;
 
 		};
@@ -1734,7 +1758,7 @@ Shared = A;
 		FStruct StructureInstance;
 		StructureInstance.a = 100;
 		//StructureInstance.b = 1000;
-		
+
 		class FClass
 		{
 			// 접근 지정자
