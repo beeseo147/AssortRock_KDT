@@ -218,7 +218,65 @@ int main()
 		}
 		// 다차원 배열 동적할당 쓰지말자
 		{
+		}
+		// 함수에 포인터로 배열 전달
+		{
+			int Array[100]{};
+			InitArray(Array, 100);
 
+			int Array2[500]{};
+			InitArray(Array2, 500);
+		}
+		// STL(Standard Template Library)에 있는 자료구조
+		{
+			std::vector<int> Vector;
+			Vector.resize(10);
+
+			/*for (int i = 0; i < 10; ++i)
+			{
+				Vector[i] = i;
+			}*/
+			InitArray(Vector);
+			InitArray(&Vector);
+		}
+		// Sum
+		{
+			int Result = 888;
+			std::vector<int> Numbers{ 1,2,3,4,5,6 };
+			Sum(Numbers, &Result);
+		}
+		// Swap
+		{
+			int A = 10;
+			int B = 560;
+			Swap(A, B);
+		}
+	}
+
+	// Smart Pointer
+	{
+		using namespace std;
+
+		// unique_ptr
+		{
+			// 단 하나의 동적할당된 인스턴스만 동시에 존재할 수 있다
+			unique_ptr<int> Unique = make_unique<int>(10);
+			*Unique = 1000;
+		}
+		// 커스텀 제거자(딜리터)
+		{
+			unique_ptr<int, decltype(&CustomDeleterInt)> Unique(new int, CustomDeleterInt);
+		}
+		{
+			unique_ptr<FStruct> Unique = make_unique<FStruct>();
+			Unique->Hello();
+			UniqueParam(Unique);
+			UniqueParam(&Unique);
+			UniqueParam(Unique.get());
+
+
+			shared_ptr<FStruct> Unique2 = make_shared<FStruct>();
+			UniqueParam(Unique2.get());
 		}
 	}
 }
