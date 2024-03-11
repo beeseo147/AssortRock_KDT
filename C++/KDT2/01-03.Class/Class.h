@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <Windows.h>
-
+#include<vector>
 // Class, Struct
 //{
 //	// Members...
@@ -97,6 +97,22 @@ public:
 		std::wcout << String << std::endl;
 	}
 
+	//이동 생성자
+	FClass(FClass&& InOther) noexcept
+		//String에 구현되어 있는 이동생성자에 의해서
+		//this->String이 생성된다.
+
+		//string은 특정 상황을 만족할때 데이터를 stack에 보관
+		//이 상황일 경우 복사가 move를 한다고 하더라도 발생
+		//이 경우에는 move가 의미가 없다.
+		//하지만 문자열이 긴 경우 Heap에 할당
+		//이경우 주소만 변경하면 된다.(성능향상)
+		:Value(InOther.Value)
+		,String(std::move(InOther.String))
+		,Pointer(InOther.Pointer)
+	{
+		InOther.Pointer = nullptr;
+	}
 	~FClass()
 	{
 		if (Pointer)
@@ -108,8 +124,8 @@ public:
 
 	// 대입 연산자 오버로딩(선언하지 않더라도 기본적으로 만들어줌)
 	// 기본 대입 연산자로 복사하는 경우 이를 얕은 복사
-	// 아래처럼 추가로 포인터 값복사 처리를 하는 경우 깊은 복사
-	//void operator=(const FClass& InOther)
+	//void operator=(const FClass& InOther);
+
 	FClass& operator=(const FClass& InOther)
 		//FClass* operator=(const FClass& InOther)
 	{
@@ -125,7 +141,9 @@ public:
 		Value = InOther;
 		return *this;
 	}
-
+	void SetValue(int a) {
+		this->Value = a;
+	}
 private:
 	int Value = 0;
 	int* Pointer = nullptr;
