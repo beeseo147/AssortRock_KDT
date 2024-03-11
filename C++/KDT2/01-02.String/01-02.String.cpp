@@ -172,8 +172,46 @@ int main()
 	}
 #pragma endregion
 #pragma region StringView
+	//C++17에 추가된 읽기 전용 String class
 	{
+		std::wstring String{ TEXT("Hello") };
+		//복사 발생
+		std::wstring String2 = String;
+		String2[0] = TEXT('A');
 
+		//이렇게 하면 복사가 발생하지 않는다.
+		std::wstring& StringReference = String;
+		std::wstring* const StringPointer = &String;
+		StringReference[0] = L'W';
+
+		std::wstring_view WStringVIew = TEXT("Hello");
+		//WStringVIew[0] = TEXT('A');
+		//const wchar_t Text = WStringView.data();
+
+		WStringVIew = String;
+		auto Function1 = [](std::wstring InString) 
+			{
+				InString[0] = L'B';
+				std::wcout << InString << std::endl;
+			};
+		auto Function2 = [](const std::wstring_view InStringView)
+			{
+				std::wcout << InStringView << std::endl;
+			};
+
+		auto FuncionWrong = []()->std::wstring {
+			return L"HelloWorld";
+			};
+		auto Function3 = [](const std::wstring& InString)
+			{
+				std::wcout << InString << std::endl;
+			};
+		Function1(String);
+		Function2(WStringVIew);
+
+		//std::wstring_view NewSV = FuncionWrong();
+
+		Function3(TEXT("HelloWorld"));
 	}
 #pragma endregion
 }
