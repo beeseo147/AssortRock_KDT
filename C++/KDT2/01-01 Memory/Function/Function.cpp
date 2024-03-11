@@ -127,7 +127,7 @@ void FunctionFunction(std::function<void()> InFunction)
 void FStruct::Hello()
 {
 	std::cout << "굿\n";
-	std::cout << Value;
+	std::cout << Value << std::endl;
 }
 FStruct::FStruct(int InA)
 	:Value(InA)

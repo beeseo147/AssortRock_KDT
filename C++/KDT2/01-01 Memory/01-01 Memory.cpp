@@ -299,7 +299,7 @@ int main()
 			Count = SharedPtrStruct.use_count();
 
 			GWeakPtrStruct = SharedPtrStruct;
-			Count = SharedPtrStruct.use_count();
+			Count = SharedPtrStruct.use_count();//2
 
 			SharedParam(SharedPtrStruct);
 			UniqueParam(SharedPtrStruct.get());
@@ -308,7 +308,7 @@ int main()
 				shared_ptr<int> SharedPtrInt{ new int, CustomDeleterInt };
 			}
 		}
-		int Count = GSharedPtrStruct.use_count();
+		int Count = GSharedPtrStruct.use_count(); //1
 		FStruct* Pointer = GSharedPtrStruct.get();
 		
 		shared_ptr<FStruct> PointerToSharedPointer = Pointer->shared_from_this();
@@ -410,7 +410,7 @@ int main()
 			std::function<void()>Function2 = std::bind(&FStruct::Hello, &Instance);
 
 			//멤버 함수의 경우
-			//입력 인자가 있는 경우 std::placeholders::_1,std::placeholders::_2..
+			//*입력 인자가 있는 경우*/ std::placeholders::_1, std::placeholders::_2;
 			//인자의 갯수 만큼 뒤에 추가로 붙혀 주어야한다.
 			auto SetFunction = std::bind(&FStruct::SetValue, &Instance2, std::placeholders::_1);
 			SetFunction(10);
@@ -537,11 +537,11 @@ int main()
 				});
 
 			// 만약에 등록해둔 람다의 함수가 늦게 호출되는 경우
-			// 늦게라는 의미는 아래처럼 즉시 함수호출후 람다가 실행되는 경ㄴ우가 아닌 상황을 의미한다
+			// 늦게라는 의미는 아래처럼 즉시 함수호출후 람다가 실행되는 경우가 아닌 상황을 의미한다
 			// Ex. 멀티스레딩, 엔진에서 다른 시점에 호출되는 경우
 			// 람다로 &나 pointer로 capture해둔 변수에 접근하는 경우 해당 변수가 유효한지 확인을 해야 합니다.
 			// 그렇지 않은 경우 잠재적인 문제가 발생할 수 있습니다.
-			// 쉽게 생각하면 댕글링 포인ㅇ터와 비슷한 이슈라고 할 수 있습니다.
+			// 쉽게 생각하면 댕글링 포인터와 비슷한 이슈라고 할 수 있습니다.
 			std::shared_ptr<int> SharedPointer2;
 			{
 				std::shared_ptr<int> Test = std::make_shared<int>(999);
@@ -557,7 +557,7 @@ int main()
 
 				SharedPointer2 = SharedPointer;
 			} // <- Test가 사라지는 시점
-		}
+		}// <- SharedPointer2가 사라지는 시점
 	}
 #pragma endregion
 #pragma region Random,sort
@@ -581,8 +581,7 @@ int main()
 
 		// 내림차순 정렬
 		std::sort(Vector.begin(), Vector.end(), std::greater<int>{});
-		
-		
+
 	}
 #pragma endregion
 }
