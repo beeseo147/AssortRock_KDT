@@ -184,4 +184,178 @@ int main()
 
 		};*/
 	}
+
+	// interface 상속
+	// 순수 가상 함수
+	{
+		class FA
+		{
+		};
+
+		class FB : public FA, public IInterface
+		{
+		public:
+			virtual void MustFunction() override
+			{
+				std::cout << __FUNCTION__ << std::endl;
+			}
+
+		public:
+			int Value = 1;
+		};
+
+		FB B;
+		//B.IInterface::Value = 10;
+		B.MustFunction();
+		B.MustFunction2();
+
+		class FC : public IInterface
+		{
+			virtual void MustFunction() override
+			{
+				std::cout << __FUNCTION__ << std::endl;
+			}
+
+			virtual void MustFunction2() override
+			{
+				IInterface::MustFunction2();
+				Value = 200;
+				std::cout << Value << std::endl;
+			}
+
+			int Value = 100;
+		};
+
+		FC C;
+
+		FunctionMustInterface(&C);
+
+		std::vector<IInterface*> Vector;
+		Vector.reserve(2);
+		Vector.push_back(&B);
+		Vector.push_back(&C);
+
+		for (IInterface* It : Vector)
+		{
+			It->MustFunction();
+			It->MustFunction2();
+		}
+	}
+
+	//C++ cast
+	{
+		//static_cast<>
+		//const_cast<> :const를 일시적으로 제거할 수 있다.
+		//reinterpret_cast
+		//dynamic_cast
+
+		//static cast : 명시적 변환
+		{
+			int i{ 3 };
+			int k{ 4 };
+			double Result = static_cast<double>(i)/k;
+
+			class FA {
+			public:
+				FA() = default;
+				FA(const FA&) = delete;
+			};
+			class FB : public FA
+			{
+			public :
+				int Value2 = 0;
+			};
+			FA* A = new FA;
+			// down cast, 지금은 문제가 많음
+			FB* B = static_cast<FB*> (A);
+
+			// up cast
+			A = B;
+
+			delete A;
+
+			int* Int = new int;
+			// static_cast는 생각만큼 강하지 않음
+			// 서로 관련이 없는 포인터 타입의 경우 static_cast를 사용할 수없다
+			//double* Double = static_cast<double*>(Int);
+			//short* Short = static_cast<short*>(Int);
+			delete Int;
+		}
+
+		//reinterpret_cast : static_cast 보다 강력(자유도)하지만 안전성이 떨어진다
+		{
+			int* Int = new int;
+			
+			double* Double = reinterpret_cast<double*>(Int);
+			short* Short = reinterpret_cast<short*>(Int);
+			delete Int;
+		}
+
+		// dynamic_cast : 실행시간(런타임)에 type을 검사해서 관련이 있으면 변환
+		// 관련이 없으면 nullptr로 초기화
+		// virtual talbe이 있어야 가능
+		{
+			class FA
+			{
+			public:
+				FA() = default;
+				FA(const int InA) {}
+				FA(const FA&) = delete;
+				virtual ~FA() = default;
+			};
+			class FB : public FA
+			{
+			public:
+				int Value2 = 0;
+			};
+			class FC
+			{
+				virtual ~FC() = default;
+			};
+
+			FA* A = new FA;
+			FA* AB = new FB;
+
+			//Down cast
+			//RTTI(RunTime Type Information) 기술을 기반으로
+			//실행 시간에 타입을 검사해서 Cast 여부를 판단
+			//virtual table이 있어야 동작
+			FB* B = dynamic_cast<FB*>(A);
+			if (B) {
+				std::cout << "Cast Succeessed\n";
+			}
+			else {
+				std::cout << "Cast failed\n";
+			}
+
+			B = dynamic_cast<FB*>(A);
+			if (B) {
+				std::cout << "Cast Succeessed\n";
+			}
+			else {
+				std::cout << "Cast failed\n";
+			}
+			
+		}
+	}
+	// 객체지향 프로그래밍(Object-Oriented Programming(OOP))
+	{
+		// C++ class, struct OOP의 핵심 요소라고 할 수 있다.
+
+		// - 캡슐화(encapsulation)
+		// 변수와 함수를 하나의 단위로 묶는 것을 의미합니다.
+
+		// - 정보 은닉(information hiding)
+		// 프로그램의 세부 구현을 외부로 드러나지 않도록 특정 모듈 내부로 감추는 것
+		// 접근 지정자(private, protected, public)가 그 중 하나
+
+		// - 상속(inheritance)
+		// 상속은 자식 클래스가 부모 클래스의 특성과 기능을 그대로 물려받는 것을 말한다
+		// overriding: 기능의 일부분을 변경해야 할 경우 자식 클래스에서 상속받는
+		// 기능만 수정해서 다시 정의할 수 있다.
+		// 상속은 캡슐화를 유지하면서 클래스의 재사용이 용이하도록 해 준다.
+
+		// - 다형성(polymorphism)
+		// 하나의 변수나 함수가 상황에 따라 다른 의미로 해석될 수 있는 것을 말한다.
+	}
 }

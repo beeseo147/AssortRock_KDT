@@ -50,5 +50,8 @@
     <ClInclude Include="MISC\Headers.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Interface\Interface.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
