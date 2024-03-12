@@ -1,5 +1,6 @@
 #pragma once
 #include "Base.h"
+
 class FDerived : public FBase
 {
 public:

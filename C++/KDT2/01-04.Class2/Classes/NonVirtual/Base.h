@@ -1,7 +1,6 @@
 #pragma once
-#include <iostream>
-#include <vector>
-#include <format>
+//프로젝트 속성 ->C,C++ ->일반 -> 추가포함 디렉토리
+#include "MISC/Headers.h"
 
 // 접근 지정자
 // - public: 어디서든 접근 가능

@@ -13,23 +13,41 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Virtual">
+      <UniqueIdentifier>{73a67c19-6e7e-4b28-8f9e-8cbf94ea73f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="01-04.Class2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\FBase.cpp">
+    <ClCompile Include="Classes\NonVirtual\Base.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\FDerived.cpp">
+    <ClCompile Include="Classes\NonVirtual\Derived.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Virtual\BasedVirtual.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\Virtual\DerivedVirtual.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Classes\Base.h">
+    <ClInclude Include="Classes\NonVirtual\Base.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\FDerived.h">
+    <ClInclude Include="Classes\NonVirtual\Derived.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Virtual\BasedVirtual.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Virtual\DerivedVirtual.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MISC\Headers.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

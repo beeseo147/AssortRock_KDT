@@ -111,6 +111,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,6 +128,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,12 +139,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="01-04.Class2.cpp" />
-    <ClCompile Include="Classes\FBase.cpp" />
-    <ClCompile Include="Classes\FDerived.cpp" />
+    <ClCompile Include="Classes\NonVirtual\Base.cpp" />
+    <ClCompile Include="Classes\NonVirtual\Derived.cpp" />
+    <ClCompile Include="Classes\Virtual\BasedVirtual.cpp" />
+    <ClCompile Include="Classes\Virtual\DerivedVirtual.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Classes\Base.h" />
-    <ClInclude Include="Classes\FDerived.h" />
+    <ClInclude Include="Classes\NonVirtual\Base.h" />
+    <ClInclude Include="Classes\NonVirtual\Derived.h" />
+    <ClInclude Include="Classes\Virtual\BasedVirtual.h" />
+    <ClInclude Include="Classes\Virtual\DerivedVirtual.h" />
+    <ClInclude Include="MISC\Headers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

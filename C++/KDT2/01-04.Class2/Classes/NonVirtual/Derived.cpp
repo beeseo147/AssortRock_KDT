@@ -21,7 +21,7 @@ FDerived::~FDerived()
 
 void FDerived::PublicMethod()
 {
-	DerivedPublicValue = 999;
-	DerivedPublicValue2 = 333;
+	/*DerivedPublicValue = 999;
+	DerivedPublicValue2 = 333;*/
 	std::cout << __FUNCTION__ << std::endl;
 }
