@@ -8,7 +8,7 @@
 #include <queue>
 #include <unordered_map>
 #include <format>
-
+#include<functional>
 int main()
 {
 	// 빅오(영어 O) 표기법
@@ -136,7 +136,156 @@ int main()
 			}
 		}
 
-		
+		// [List]
+		// #include <list>
+		// list는 이중 연결 리스트(doubly Link List)로 구현되어 있다.
+		// 동적 할당된 데이터가 메모리 공간에 존재하고 이를 포인터 등으로 이어주고 있다
+		// 이론적으로 중간에 삭입 삭제가 vector에 비해 빠르다.
+		// 그렇지만 메모리 공간이 떨어져 있을 확률이 높기 때문에
+		// 캐시 미스 발생으로 인해 vector가 더 빠를 가능성이 높다.
+		{
+			std::list<int> List;
+			for (int i = 0; i < 10; i++) {
+				List.push_back(i);
+			}
 
+			std::list<int>::iterator it = List.begin();
+			int a = *it;
+			int b = *(++it);
+			int c = *(--it);
+			int d = *(++it);
+			int e = *(++it);
+			std::list<int>::iterator it2 = List.insert(it, 1000);
+			List.erase(it2);
+			List.erase(it);
+
+			for (auto& T : List) {
+				std::cout << T << std::endl;
+			}
+			for (std::list<int>::iterator it = List.begin(); it != List.end(); it++) {
+				std::cout << *it << std::endl;
+			}
+		}
+
+		// [Queue] : 선입선출[FIFO,First In First out]
+		// #include <queue>
+		// queue 컨테이너는 항상 한쪽 끝에서만 원소를 추가하고 다른쪽 끝에서는 꺼내기만 한다.
+		{
+			std::queue<int> Queue;
+			for (int i = 0; i < 10; i++) {
+				//Queue.emplace(i);
+				Queue.push(i);
+
+			}
+			Queue.push(100);
+			std::cout << "Queue" << std::endl;
+
+			//Queue[0]; // Random access 불가
+			while (!Queue.empty()) {
+				int Value = Queue.front();
+				std::cout << Value << std::endl;
+				Value = Queue.back();
+				Queue.pop();
+			}
+		}
+
+		// 우선순위 큐
+		// priority_queue
+		{
+			std::priority_queue<int, std::vector<int>, std::greater<int>> PQ;
+			PQ.push(50);
+			PQ.push(40);
+			PQ.push(70);
+			PQ.push(30);
+			std::cout << "priority_queue\n";
+			while (!PQ.empty()) {
+				std::cout << PQ.top() << std::endl;
+				PQ.pop();
+			}
+		}
+
+		//queue사용
+		{
+			std::queue<int> First;
+			std::queue<int> Second;
+			std::queue<int> Third;
+
+			enum class EPriority
+			{
+				FirstGroup,
+				SecondGroup,
+				ThirdGroup,
+			};
+
+			std::function Function = [&](const EPriority InPriority, int InValue)
+				{
+					switch (InPriority)
+					{
+					case EPriority::FirstGroup:
+						First.push(InValue);
+						break;
+					case EPriority::SecondGroup:
+						Second.push(InValue);
+						break;
+					case EPriority::ThirdGroup:
+						Third.push(InValue);
+						break;
+					default:
+						_ASSERT(false);
+						break;
+					}
+				};
+			Function(EPriority::SecondGroup, 10000);
+			Function(EPriority::FirstGroup, 150);
+			Function(EPriority::SecondGroup, 140);
+			Function(EPriority::ThirdGroup, 130);
+			Function(EPriority::SecondGroup, 1300);
+			Function(EPriority::ThirdGroup, 21300);
+
+			std::cout << "First\n";
+			while (!First.empty())
+			{
+				std::cout << First.front() << std::endl;
+				First.pop();
+			}
+			std::cout << "Second\n";
+			while (!Second.empty())
+			{
+				std::cout << Second.front() << std::endl;
+				Second.pop();
+			}
+			std::cout << "Third\n";
+			while (!Third.empty())
+			{
+				std::cout << Third.front() << std::endl;
+				Third.pop();
+			}
+		}
+		
+		// [Stack] : 후입선출(LIFO , Last In First Out)
+		// #include <stack>
+		{
+			std::stack<int> Stack;
+			std::cout << "Stack\n";
+			for (int i = 0; i < 10; i++) {
+				std::cout << i << std::endl;
+				Stack.push(i);
+			}
+			std::cout << "[Stack Pop]" << std::endl;
+			while (!Stack.empty()) {
+				int Value = Stack.top();
+				std::cout << Value << std::endl;
+				Stack.pop();
+			}
+		}
+
+		// pair : 두 데이터를 들고 있는 컨테이너
+		{
+			std::pair<int, std::string> Pair{ 0,"Player0" };
+			std::pair<std::string, std::string> Pair2{ "Player","Player0"};
+			std::cout << std::format("Ket : {}, Value : {}", Pair.first, Pair.second);
+			std::cout << std::format("Ket : {}, Value : {}", Pair2.first, Pair2.second);
+		}
 	}
+
 }
