@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <format>
 #include<functional>
+#include<string>
 int main()
 {
 	// 빅오(영어 O) 표기법
@@ -261,7 +262,7 @@ int main()
 				Third.pop();
 			}
 		}
-		
+
 		// [Stack] : 후입선출(LIFO , Last In First Out)
 		// #include <stack>
 		{
@@ -282,9 +283,117 @@ int main()
 		// pair : 두 데이터를 들고 있는 컨테이너
 		{
 			std::pair<int, std::string> Pair{ 0,"Player0" };
-			std::pair<std::string, std::string> Pair2{ "Player","Player0"};
+			std::pair<std::string, std::string> Pair2{ "Player","Player0" };
 			std::cout << std::format("Ket : {}, Value : {}", Pair.first, Pair.second);
 			std::cout << std::format("Ket : {}, Value : {}", Pair2.first, Pair2.second);
+		}
+
+		// map : pair의 컨테이너
+		// #include<map>
+		// 레드 블랙 트리로 구현
+		// 원소의 키를 기준으로 정렬되어 데이터를 관리
+		// 키와 값을 쌍으로 저장하고자 할때 map을 쓰면 좋다
+
+		// 추가와 삭제는 vector보다 빠르고 list보다 느리지만,조회 연산은 list보다 빠르고 vector보다 느리다
+		// 원소의 순서를 유지해야 하고 추가 / 삭제 / 조회 연산을 골고루 사용하고
+		// 각 연산의 성능도 비슷한 수준으로 최적화하고 싶다면 map을 사용하면 좋다
+		
+		// map은 동일한 키에 대해서는 하나의 값만 보관할 수 있다.
+		// 동일한 키에 대해서 여러 값을 보관하면 multimap을 사용하면 됩니다.
+		{
+			std::map<int, std::string> Map;
+			Map.insert(std::make_pair(0, "Test"));
+			//Map.insert(std::make_pair(0, "Test2")); //예는 무시된다 , 이미 Key값이 존재
+			Map[0] = "Test2";
+			Map[1] = "Test2";
+			Map.insert(std::make_pair(999, "Test999"));
+
+			std::string Data = Map[999];
+			/*std::map<int,std::string>::iterator*/ auto it =Map.find(999);
+			auto it2 = Map.find(591);
+			if (it == Map.end())
+			{
+				std::cout << "못찾음\n";
+			}
+			else
+			{
+				std::cout << std::format("Key: {} Value: {}\n", it->first, it->second);
+			}
+			if (it2 == Map.end())
+			{
+				std::cout << "못찾음\n";
+			}
+
+			for (int i = 0; i < 20; ++i)
+			{
+				const std::string Key = "Test";
+				Map[i] = "Hello" + std::to_string(i);
+			}
+
+			for (auto& It : Map)
+			{
+				std::cout << std::format("Key: {} Value: {}\n", It.first, It.second);
+				It.second = "Yes";
+			}
+			std::map<int, int> Map2;
+			Map2[1] += 1;
+
+		}
+		{
+			std::map<std::string, std::string> Map;
+			auto it = Map.insert(std::make_pair("P2", "Player2"));
+			Map["HoHo"] = "Ho!";
+
+			std::string& Data = Map["HoHo"];
+			Data = "Wow";
+			Map.erase("P2");
+
+			for (auto& it : Map) {
+				const std::string Key = "Test";
+
+			}
+			for (int i = 0; i < 20; ++i)
+			{
+				const std::string Key = "Test";
+				Map[Key + std::to_string(i)] = "Hello" + std::to_string(i);
+			}
+
+			for (auto& It : Map)
+			{
+				std::cout << std::format("Key: {} Value: {}\n", It.first, It.second);
+				It.second = "Yes";
+			}
+		}
+
+		//				Map							unordered_map
+		// 순서			오름차순정렬(바꾸기가능)	비정렬
+		// 구현			Red Black Tree				Hash Table
+		// 탐색 시간	log(n)						0(1)
+		// 삽입 시간	log(n)
+		
+		// 비정렬 연관 컨테이너(unordered associative container)/ 해시 테이블
+		// #include <unordered_map>
+		// map은 키 기반으로 정렬을 해줬으나, 얘는 안해줌
+		{
+			//hashmap으로 구현되어 있어서 이름이 hash_map이면 좋겠지만,C++11에 추가되어 (상대적으로 늦게)
+			//이미 많은 서드파티 라이브러리들이 hash로 시작하는 이름이 많아서 hash대신 unordered란 접두어를 사용했다고함 (표준위원회)
+			// 사용법은 unordered_map은 원소를 정렬하지 않는다는 점을 제외하면 map과 동일하다.
+			// 원소를 추가하고 삭제하고 조회하는 연산의 속도는 대체로 상수시간이고,최악의 경우라도 선형시간에 처리된다.
+			// 원소를 조회하는 속도는 map보다 훨씬 빠르다.
+
+			std::unordered_map<int, std::string> Map;
+			Map.insert(std::make_pair(999, "Test999"));
+			Map.insert(std::make_pair(0, "Test"));
+			//Map.insert(std::make_pair(0, "Test2")); //예는 무시된다 , 이미 Key값이 존재
+			Map[0] = "Test2";
+			Map[1] = "Test3";
+			Map[40] = "Test4";
+			Map[30] = "Test5";
+
+			for (auto& it : Map) {
+				std::cout << std::format("Key : {} Value : {}\n ", it.first, it.second);
+				it.second = "Yes";
+			}
 		}
 	}
 
