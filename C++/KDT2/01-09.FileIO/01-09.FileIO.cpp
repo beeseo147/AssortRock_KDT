@@ -1,9 +1,15 @@
 ﻿// 01-09.FileIO.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
-
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #include <iostream>
 #include <fstream>
+#include <format>
+#include <codecvt>
+#include <string>
 #include "ThirdParty/inicpp.h"
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 
 int main()
 {
@@ -101,11 +107,137 @@ int main()
 			ini::IniFile File("IniFile.ini");
 			std::string Value = File["Section"]["Key"].as<std::string>();
 			int Value2 = File["Section"]["Key2"].as<int>();
-
 			int Width = File["Graphics"]["Width"].as<int>();
 			int Height = File["Graphics"]["Height"].as<int>();
+
+			ini::IniSection Section = File["Graphics"];
+			for (auto It : Section)
+			{
+				std::cout << std::format("Key: {}, Value: {}\n", It.first, It.second.as<std::string>());
+			}
 		}
 	}
 
+	// 3. json file IO
+	{
+		struct FPlayer
+		{
+			FPlayer() = default;
+			FPlayer(std::wstring_view InName, const unsigned int InLevel)
+				: Name(InName), Level(InLevel) { }
+			~FPlayer() = default;
 
+			void Save(rapidjson::Value& InOutValue, rapidjson::Document::AllocatorType& InAllocator)
+			{
+				std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+				std::string UTF8 = myconv.to_bytes(Name);
+
+				rapidjson::Value String(rapidjson::kStringType);
+				String.SetString(UTF8.c_str(), InAllocator);
+
+				InOutValue.AddMember("Name", String, InAllocator);
+				InOutValue.AddMember("Level", Level, InAllocator);
+				InOutValue.AddMember("Exp", Exp, InAllocator);
+			}
+			void Load(rapidjson::Value& InValue)
+			{
+				if (InValue.HasMember("Name"))
+				{
+					const char* String = InValue["Name"].GetString();
+					std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+					Name = myconv.from_bytes(String);
+				}
+				else
+				{
+					_ASSERT(false);
+					// Player 정보를 불러 왔는데 이름이 없다면 이건 심각한 상황!
+					// Log를 남겨서 문제를 추적할 수 있도록 대응!
+					Name = L"DefaultName";
+				}
+
+				if (InValue.HasMember("Level"))
+				{
+					Level = InValue["Level"].GetUint();
+				}
+				if (InValue.HasMember("Exp"))
+				{
+					Exp = InValue["Exp"].GetInt();
+				}
+			}
+
+		private:
+			std::wstring Name;
+			unsigned int Level = 0;
+			int Exp = 0;
+		};
+
+		using uint = unsigned int;
+		constexpr uint PlayerNumbers = 20;
+
+		// write
+		{
+			std::vector<FPlayer> Players;
+			Players.reserve(PlayerNumbers);
+			for (uint i = 0; i < PlayerNumbers; ++i)
+			{
+				// std::move: rvalute로 던짐
+				// std::forward: 일반적으로 template에 사용, rvalue rvalue로 던지고, lvalue면 lvalue로 던진다
+				Players.emplace_back(L"이름こんにちは哈罗صباير" + std::to_wstring(i), i);
+			}
+
+			rapidjson::Document Doc(rapidjson::kObjectType);
+			rapidjson::Document::AllocatorType& Allocator = Doc.GetAllocator();
+
+			rapidjson::Value Array(rapidjson::kArrayType);
+			for (FPlayer& It : Players)
+			{
+				rapidjson::Value Player(rapidjson::kObjectType);
+				It.Save(Player, Allocator);
+
+				Array.PushBack(Player, Allocator);
+			}
+
+			Doc.AddMember("PlayerInfo", Array, Allocator);
+
+			rapidjson::StringBuffer Buffer;
+			rapidjson::Writer<rapidjson::StringBuffer> Writer(Buffer);
+			Doc.Accept(Writer);
+			std::string Json(Buffer.GetString(), Buffer.GetSize());
+
+			std::ofstream File("TestJson.json");
+			File << Json;
+		}
+
+		// load
+		{
+			std::vector<FPlayer> Players;
+			Players.reserve(PlayerNumbers);
+
+			std::ifstream File("TestJson.json");
+			std::string Json;
+			File >> Json;
+
+			rapidjson::Document Doc(rapidjson::kObjectType);
+			Doc.Parse(Json.data());
+
+			const bool bPlayerInfo = Doc.HasMember("PlayerInfo");
+			_ASSERT(bPlayerInfo);
+			if (bPlayerInfo)
+			{
+				rapidjson::Value& Array = Doc["PlayerInfo"];
+				_ASSERT(Array.IsArray());
+				if (Array.IsArray())
+				{
+					rapidjson::SizeType Size = Array.Size();
+					for (rapidjson::SizeType i = 0; i < Size; ++i)
+					{
+						FPlayer NewPlayer;
+						rapidjson::Value& Value = Array[i];
+						NewPlayer.Load(Value);
+						Players.push_back(NewPlayer);
+					}
+				}
+			}
+		}
+	}
 }
