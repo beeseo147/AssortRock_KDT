@@ -162,7 +162,7 @@ int main()
 		{
 			boost::object_pool<FData> ObjectPool{ MaxCount };
 			ObjectPool.free(ObjectPool.malloc());
-
+			//메모리 블록만 생성했다가 삭제
 			auto Start{ std::chrono::steady_clock::now() };
 			{
 				for (size_t i = 0; i < MaxCount; ++i)
