@@ -2,7 +2,8 @@
 //
 #include "Pool.h"
 #include <boost/pool/pool.hpp>
-//#include <boost/pool/object_pool.hpp>
+#include <boost/pool/object_pool.hpp>
+
 class FClass
 {
 public:
@@ -58,7 +59,7 @@ int main()
 	//		- 예산(메모리)을 정해서 그 예산 안에서 사용하게 제한할 수 있다
 	//			- 예를 들면 메모리풀 크기를 10으로 고정해두고 이를 사용하면 최대 동시에 10개까지 (인스턴스)만들수 있다
 
-	const size_t MaxCount = 100000;
+	const size_t MaxCount = 1000000;
 	{
 		auto Start{ std::chrono::steady_clock::now() };
 		{
@@ -88,12 +89,14 @@ int main()
 		std::cout << std::format("new, delete: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
 	}
 	{
-		FMemoryPool MemoryPool{ sizeof(int) /** 1024*/, MaxCount };
+		//FMemoryPool MemoryPool{ sizeof(int) /** 1024*/, MaxCount };
+		FMemoryPool MemoryPool{ 4, MaxCount };
 		auto Start{ std::chrono::steady_clock::now() };
 		{
 			for (size_t i = 0; i < MaxCount; ++i)
 			{
-				int* Test = (int*)MemoryPool.malloc();
+				char* Test = (char*)MemoryPool.malloc();
+				*Test = (char)i;
 				//MemoryPool.free(Test);
 			}
 		}
@@ -117,6 +120,150 @@ int main()
 		}
 		auto End{ std::chrono::steady_clock::now() };
 		auto Diff{ End - Start };
-		std::cout << std::format("pool: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
+		std::cout << std::format("boost::pool: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
+	}
+
+	// 오브젝트 풀: 메모리풀은 순수한 메모리 블락만 가지고 있고, 오브젝트 풀은
+	// placement new를 사용해서 Object를 만들어주는 기능이 추가됨
+	{
+		struct FData
+		{
+		public:
+			FData()
+			{
+				//std::cout << __FUNCTION__ << std::endl;
+			}
+			FData(const int InA, const int InB)
+			{
+
+			}
+			~FData()
+			{
+				//std::cout << __FUNCTION__ << std::endl;
+			}
+
+			int Value = 10;
+			int Value2 = 10;
+		};
+
+		{
+			auto Start{ std::chrono::steady_clock::now() };
+			{
+				for (size_t i = 0; i < MaxCount; ++i)
+				{
+					FData* Data2 = new FData((int)i, 20);
+					delete Data2;
+				}
+			}
+			auto End{ std::chrono::steady_clock::now() };
+			auto Diff{ End - Start };
+			std::cout << std::format("new FData: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
+		}
+		{
+			boost::object_pool<FData> ObjectPool{ MaxCount };
+			ObjectPool.free(ObjectPool.malloc());
+
+			auto Start{ std::chrono::steady_clock::now() };
+			{
+				for (size_t i = 0; i < MaxCount; ++i)
+				{
+					FData* Data2 = ObjectPool.construct();
+					ObjectPool.destroy(Data2);
+				}
+			}
+			auto End{ std::chrono::steady_clock::now() };
+			auto Diff{ End - Start };
+			std::cout << std::format("boost::object_pool: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
+		}
+
+		{
+			boost::object_pool<FData> ObjectPool{ MaxCount };
+			ObjectPool.free(ObjectPool.malloc());
+
+			auto Start{ std::chrono::steady_clock::now() };
+			{
+				for (size_t i = 0; i < MaxCount; ++i)
+				{
+					FData* Data2 = ObjectPool.construct();
+					std::shared_ptr<FData> SmartPointer{ Data2, [&ObjectPool](FData* InPointer)
+						{
+							ObjectPool.destroy(InPointer);
+						} };
+					//ObjectPool.destroy(Data2);
+				}
+			}
+			auto End{ std::chrono::steady_clock::now() };
+			auto Diff{ End - Start };
+			std::cout << std::format("boost::object_pool shared_ptr: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
+		}
+		{
+			FObjectPool<FData> ObjectPool{ MaxCount };
+
+			auto Start{ std::chrono::steady_clock::now() };
+			{
+				for (size_t i = 0; i < MaxCount; ++i)
+				{
+					FData* Data2 = ObjectPool.construct((int)i, 10);
+					ObjectPool.destroy(Data2);
+				}
+			}
+			auto End{ std::chrono::steady_clock::now() };
+			auto Diff{ End - Start };
+			std::cout << std::format("FObjectPool: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
+		}
+		{
+			FObjectPool<FData> ObjectPool{ MaxCount };
+
+			auto Start{ std::chrono::steady_clock::now() };
+			//std::shared_ptr<FData> Test;
+			{
+				for (size_t i = 0; i < MaxCount; ++i)
+				{
+					std::shared_ptr<FData> Data2 = ObjectPool.construct_shared((int)i, 10);
+					/*if (i == 0)
+					{
+						Test = Data2;
+					}*/
+				}
+			}
+			auto End{ std::chrono::steady_clock::now() };
+			auto Diff{ End - Start };
+			std::cout << std::format("FObjectPool construct_shared: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
+		}
+		{
+			auto Start{ std::chrono::steady_clock::now() };
+			//std::shared_ptr<FData> Test;
+			{
+				for (size_t i = 0; i < MaxCount; ++i)
+				{
+					std::shared_ptr<FData> Data2 = std::make_shared<FData>((int)i, 10);
+				}
+			}
+			auto End{ std::chrono::steady_clock::now() };
+			auto Diff{ End - Start };
+			std::cout << std::format("shared_ptr<FData>: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
+		}
+	}
+	// Memory Header
+	{
+		//  r(MemoryHeader)		 r(12byte), FData*
+		//  [                    |                            ]
+		FMemoryPool MemoryPool{ sizeof(FMemoryHeader) + sizeof(FData), 1 };
+		void* Pointer = MemoryPool.malloc();
+		FMemoryHeader* Header = static_cast<FMemoryHeader*>(Pointer);
+		new(Header)FMemoryHeader();
+		Header->Flag = 999;
+
+		FData2* Data = reinterpret_cast<FData2*>(Header + 1);
+		new(Data)FData2();
+	}
+	// Unreal 스타일
+	{
+		FObjectInitializer Init;
+		Init.Flag = 1234;
+		FObject* Object = FObject::NewObject<FObject>(Init);
+		FTest* Object2 = FObject::NewObject<FTest>(Init);
+		Init.Flag = 1000;
+		FTest* Object3 = FObject::NewObject<FTest>(Init);
 	}
 }
