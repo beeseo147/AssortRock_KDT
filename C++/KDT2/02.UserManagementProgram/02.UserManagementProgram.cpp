@@ -3,7 +3,7 @@
 #include "MISC/Headers.h"
 #include "Classes/Account.h"
 #include "Classes/DataBase.h"
-
+#include "Classes/Engine.h"
 // C++을 사용해서 간단한 
 // - 회원가입, 회원 탈퇴
 // - 로그인, 로그아웃
@@ -17,6 +17,9 @@
 
 int main()
 {
+	GEngine.Run();
+	
+
 	/*FAccount Account("Hello", "World");
 
 	FAccount* NewAccount = GDataBase.CreateAccount(Account);

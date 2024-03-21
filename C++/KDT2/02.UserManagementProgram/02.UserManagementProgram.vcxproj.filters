@@ -24,6 +24,18 @@
     <ClCompile Include="Classes\Account.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Classes\Engine.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Task\CreateAccountTask.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MISC\Utils.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Task\DeleteAccountTask.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MISC\Headers.h">
@@ -33,6 +45,24 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Classes\DataBase.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Engine.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MISC\Enum.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Task\CreateAccountTask.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Task\Task.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MISC\Utils.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Task\DeleteAccountTask.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

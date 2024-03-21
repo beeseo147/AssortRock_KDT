@@ -140,11 +140,21 @@
     <ClCompile Include="02.UserManagementProgram.cpp" />
     <ClCompile Include="Classes\Account.cpp" />
     <ClCompile Include="Classes\DataBase.cpp" />
+    <ClCompile Include="Classes\Engine.cpp" />
+    <ClCompile Include="Task\DeleteAccountTask.cpp" />
+    <ClCompile Include="Task\CreateAccountTask.cpp" />
+    <ClCompile Include="MISC\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Classes\Account.h" />
     <ClInclude Include="Classes\DataBase.h" />
+    <ClInclude Include="Classes\Engine.h" />
+    <ClInclude Include="Task\DeleteAccountTask.h" />
+    <ClInclude Include="Task\CreateAccountTask.h" />
+    <ClInclude Include="MISC\Enum.h" />
     <ClInclude Include="MISC\Headers.h" />
+    <ClInclude Include="Task\Task.h" />
+    <ClInclude Include="MISC\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

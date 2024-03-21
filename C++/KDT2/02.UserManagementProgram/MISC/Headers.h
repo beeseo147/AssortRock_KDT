@@ -11,5 +11,7 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 
+#include "Enum.h"
+
 using namespace std;
 using FAccountName = string;
