@@ -1,55 +1,92 @@
 #include "Engine.h"
 #include "Task/Task.h"
 #include "MISC/Utils.h"
+
 void FEngine::Run()
 {
 	Init();
-	while (!bTerminated) 
+
+	while (!bTerminated)
 	{
 		system("pause");
 		const EMenuEvent Event = PrintMenu();
 		switch (Event)
 		{
-		case ETerminate:
+		case ETerminate://0
 			bTerminated = true;
 			break;
-		case ECreateAccount:
+		case ECreateAccount://1
 		{
+			FPrintAccountTask PrintAccountTask;
+			FPrintLoginPlayerTask PrintLoginPlayerTask;
 			FCreateAccountTask Task;
 			break;
 		}
-		case EDeleteAccount:
+		case EDeleteAccount://2
 		{
+			FPrintAccountTask PrintAccountTask;
+			FPrintLoginPlayerTask PrintLoginPlayerTask;
 			FDeleteAccountTask Task;
 			break;
 		}
+		case EPrintAccount://3
+		{
+			FPrintAccountTask Task;
+			break;
 		}
-		
+		case ELogIn:
+		{
+			FPrintAccountTask PrintAccountTask;
+			FPrintLoginPlayerTask PrintLoginPlayerTask;
+			FLogingTask Task;
+			break;
+		}
+		case ELogout:
+		{
+			FPrintAccountTask PrintAccountTask;
+			FPrintLoginPlayerTask PrintLoginPlayerTask;
+			FLogoutTask Task;
+			break;
+		}
+		case EPrintLoginPlayer:
+		{
+			FPrintLoginPlayerTask Task;
+			break;
+		}
+		default:
+			bTerminated = true;
+			break;
+		}
 	}
+	
 	Release();
+	//Enum 이외의 값이 들어올 경우 While문을 빠져나와 Run()함수가 종료된다.
 }
 
 void FEngine::Init()
 {
-	cout << "[System]Start" << __FUNCTION__ << endl;
+	cout << format("[System]Start {}\n", __FUNCTION__);
 }
 
 void FEngine::Release()
 {
-	cout << "[System]ShutDown" << __FUNCTION__ << endl;
+	cout << format("[System]Shutdown {}\n", __FUNCTION__);
 }
 
 EMenuEvent FEngine::PrintMenu()
 {
 	system("cls");
-	cout << "[=====================================]\n";
-	cout << "[=====================================]\n";
-	cout << "[ Please	Input	event	number ]\n";
-	cout << "[ 0) 프로그램 종료				]\n";
-	cout << "[ 1) 회원 가입					]\n";
-	cout << "[ 2) 회원 탈퇴					]\n";
-	cout << "[=====================================]\n";
-	cout << "====> \n";
+	cout << "[---------------------------]" << endl;
+	cout << "[ Please input event number ]" << endl;
+	cout << "[ 0) 프로그램 종료          ]" << endl;
+	cout << "[ 1) 회원 가입              ]" << endl;
+	cout << "[ 2) 회원 탈퇴              ]" << endl;
+	cout << "[ 3) 회원 정보 출력         ]" << endl;
+	cout << "[ 4) 로그인                 ]" << endl;
+	cout << "[ 5) 로그아웃               ]" << endl;
+	cout << "[ 6) 로그인 유저 정보 출력  ]" << endl;
+	cout << "[---------------------------]" << endl;
+	cout << "--> ";
 
 	int Event = 0;
 	cin >> Event;

@@ -72,7 +72,9 @@ private:
 	{
 		Save(Allocator);
 	}
-
+	FAccountSaveEvent(const FAccountSaveEvent&) = delete;
+	FAccountSaveEvent(const FAccountSaveEvent&&) = delete;
+	FAccountSaveEvent& operator =(const FAccountSaveEvent&) =delete;
 	rapidjson::Document::AllocatorType& Allocator;
 };
 

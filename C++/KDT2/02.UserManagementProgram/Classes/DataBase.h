@@ -20,6 +20,7 @@ public:
 	// 회원 탈퇴
 	bool DeleteAccount(const FAccount& InAccount);
 
+	const unordered_map<FAccountName, FAccount>& GetAccountMap() const {return AccountMap;}
 public:
 	// 정말로 DB에 값을 써야하는 상황이라면
 	// 중요한 요청(회원가입과 같은 상황에는 즉시 DB에 값을 써야 하지만
@@ -27,7 +28,7 @@ public:
 	// 꺼질때 디스크에 저장 하도록 하겠습니다)
 	FDataBase();
 	~FDataBase();
-
+	
 private:
 	void Save();
 	void Load();

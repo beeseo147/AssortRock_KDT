@@ -4,6 +4,7 @@
 
 FCreateAccountTask::FCreateAccountTask()
 {
+	cout << "[------ Create Account -----]" << endl;
 	FAccount Account = FUtils::MakeAccountFromUserInput();
 	FAccount* Result = GDataBase.CreateAccount(Account);
 	FUtils::PrintSystemSuccessOrFailed(Result, __FUNCTION__);
