@@ -2,6 +2,7 @@
 #include "CreateAccountTask.h"
 #include "DeleteAccountTask.h"
 #include "PrintAccountTask.h"
-#include "LogingTask.h"
+#include "LoginTask.h"
 #include "LogoutTask.h"
 #include "PrintLoginPlayerTask.h"
+#include "AllPlayerLogout.h"

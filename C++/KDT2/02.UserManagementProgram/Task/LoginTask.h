@@ -1,9 +1,9 @@
 #pragma once
 #include "Classes/LoginSession.h"
 #include "MISC/Utils.h"
-#include "LogingTask.h"
-struct FLogingTask
+#include "LoginTask.h"
+struct FLoginTask
 {
-	FLogingTask();
+	FLoginTask();
 };
 

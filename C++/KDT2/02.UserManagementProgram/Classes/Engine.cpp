@@ -38,7 +38,7 @@ void FEngine::Run()
 		{
 			FPrintAccountTask PrintAccountTask;
 			FPrintLoginPlayerTask PrintLoginPlayerTask;
-			FLogingTask Task;
+			FLoginTask Task;
 			break;
 		}
 		case ELogout:
@@ -71,6 +71,7 @@ void FEngine::Init()
 void FEngine::Release()
 {
 	cout << format("[System]Shutdown {}\n", __FUNCTION__);
+	FAllPlayerLogout Task;
 }
 
 EMenuEvent FEngine::PrintMenu()

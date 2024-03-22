@@ -1,4 +1,5 @@
 #include "DataBase.h"
+#include "Player.h"
 
 FDataBase GDataBase;
 
@@ -80,20 +81,23 @@ bool FDataBase::DeleteAccount(const FAccount& InAccount)
 
 	AccountMap.erase(InAccount.ID);
 
+	string DeleteFileCmd = "del /q .\\PlayerInfo\\" + InAccount.ID + ".json";
+	system(DeleteFileCmd.c_str());
+
 	return true;
 }
 
 FDataBase::FDataBase()
 {
-	Load();
+	LoadAccount();
 }
 
 FDataBase::~FDataBase()
 {
-	Save();
+	SaveAccount();
 }
 
-void FDataBase::Save()
+void FDataBase::SaveAccount()
 {
 	rapidjson::Document Doc(rapidjson::kObjectType);
 	rapidjson::Document::AllocatorType& Allocator = Doc.GetAllocator();
@@ -102,7 +106,7 @@ void FDataBase::Save()
 	for (auto& It : AccountMap)
 	{
 		rapidjson::Value Player(rapidjson::kObjectType);
-		//FAccountSaveEvent Save{ It.second, Player, Allocator };
+		FAccountSaveEvent Save{ It.second, Player, Allocator };
 		Array.PushBack(Player, Allocator);
 	}
 
@@ -117,7 +121,7 @@ void FDataBase::Save()
 	File << Json;
 }
 
-void FDataBase::Load()
+void FDataBase::LoadAccount()
 {
 	std::ifstream File("AccountInfo.json");
 	if (!File.is_open())
@@ -125,11 +129,11 @@ void FDataBase::Load()
 		return;
 	}
 
-	std::string Json;
-	std::string TempLine;
-	while (std::getline(File, TempLine))
+	string Json;
 	{
-		Json += TempLine;
+		string Temp;
+		while (getline(File, Temp)) { Json += Temp; }
+		if (Json.empty()) { return; }
 	}
 
 	rapidjson::Document Doc(rapidjson::kObjectType);
@@ -158,4 +162,18 @@ void FDataBase::Load()
 			}
 		}
 	}
+}
+
+bool FDataBase::SavePlayer(FPlayer& InPlayer)
+{
+	FPlayerSaveLoader PlayerSaveLoader(InPlayer);
+	const bool bSave = PlayerSaveLoader.Save();
+	return bSave;
+}
+
+bool FDataBase::LoadPlayer(const FAccountName& InAccountName, FPlayer& OutPlayer)
+{
+	FPlayerSaveLoader PlayerSaveLoader(OutPlayer);
+	const bool bLoad = PlayerSaveLoader.Load(InAccountName);
+	return bLoad;
 }

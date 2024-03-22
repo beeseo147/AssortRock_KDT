@@ -143,10 +143,11 @@
     <ClCompile Include="Classes\Engine.cpp" />
     <ClCompile Include="Classes\LoginSession.cpp" />
     <ClCompile Include="Classes\Player.cpp" />
+    <ClCompile Include="Task\AllPlayerLogout.cpp" />
     <ClCompile Include="Task\DeleteAccountTask.cpp" />
     <ClCompile Include="Task\CreateAccountTask.cpp" />
     <ClCompile Include="MISC\Utils.cpp" />
-    <ClCompile Include="Task\LogingTask.cpp" />
+    <ClCompile Include="Task\LoginTask.cpp" />
     <ClCompile Include="Task\LogoutTask.cpp" />
     <ClCompile Include="Task\PrintAccountTask.cpp" />
     <ClCompile Include="Task\PrintLoginPlayerTask.cpp" />
@@ -157,11 +158,12 @@
     <ClInclude Include="Classes\Engine.h" />
     <ClInclude Include="Classes\LoginSession.h" />
     <ClInclude Include="Classes\Player.h" />
+    <ClInclude Include="Task\AllPlayerLogout.h" />
     <ClInclude Include="Task\DeleteAccountTask.h" />
     <ClInclude Include="Task\CreateAccountTask.h" />
     <ClInclude Include="MISC\Enum.h" />
     <ClInclude Include="MISC\Headers.h" />
-    <ClInclude Include="Task\LogingTask.h" />
+    <ClInclude Include="Task\LoginTask.h" />
     <ClInclude Include="Task\LogoutTask.h" />
     <ClInclude Include="Task\PrintAccountTask.h" />
     <ClInclude Include="Task\PrintLoginPlayerTask.h" />

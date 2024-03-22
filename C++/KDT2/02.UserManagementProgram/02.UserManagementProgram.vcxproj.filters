@@ -45,13 +45,16 @@
     <ClCompile Include="Classes\LoginSession.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Task\LogingTask.cpp">
+    <ClCompile Include="Task\LoginTask.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Task\LogoutTask.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Task\PrintLoginPlayerTask.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Task\AllPlayerLogout.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,13 +95,16 @@
     <ClInclude Include="Classes\LoginSession.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Task\LogingTask.h">
+    <ClInclude Include="Task\LoginTask.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Task\LogoutTask.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Task\PrintLoginPlayerTask.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Task\AllPlayerLogout.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
