@@ -5,6 +5,7 @@
 #include "../03-01.StaticLibrary/framework.h"
 #include "../03-02.StaticLibrary/framework.h"
 #include "../03-03.StaticLibrary/framework.h"
+#include "../03-04.DLL/framework.h"
 // [Windows 기준]
 // lib, dll
 // - Windows에서 사용이 가능하다.
@@ -79,4 +80,17 @@ int main()
     fnMy0301StaticLibrary();
     fnMy0302StaticLibrary();
     fnMy0303StaticLibrary();
+    // DLL의 경우 MT, MD가 다른 경우 메모리 할당
+    // 해제에서 문제가 발생할 수 있다
+    int* Pointer = nullptr;
+    fnMy0304DLL(&Pointer);
+    // delete Pointer;
+    fnMy0304DLLFree(&Pointer);
+
+    FClass Instance;
+    Instance.Test2();
+    Instance.Test3();
+    Instance.TTest = 100;
+
+    // @TODO: 동적 로드
 }
