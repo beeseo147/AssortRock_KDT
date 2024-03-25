@@ -93,4 +93,18 @@ int main()
     Instance.TTest = 100;
 
     // @TODO: 동적 로드
+    HINSTANCE hDLLInstance = LoadLibrary(L"03-05.DLLLoad.dll");
+    if (!hDLLInstance) {
+        return 0;
+    }
+    using MYPROC = void(*)(int**);
+
+
+    MYPROC InfnMy0305DLL = (MYPROC)GetProcAddress(hDLLInstance, "fnMy0305DLL");
+    MYPROC fnMy0305DLLFree = (MYPROC)GetProcAddress(hDLLInstance, "fnMy0305DLLFree");
+    int* Test = nullptr;
+    InfnMy0305DLL(&Test);
+    fnMy0305DLLFree(&Test);
+    FreeLibrary(hDLLInstance);
+
 }
