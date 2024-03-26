@@ -361,3 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+Unreal/KDT2/Binaries
+Unreal/KDT2/Intermediate
+Unreal/KDT2/Saved
+Unreal/KDT2/Content/Developers
+Unreal/KDT2/*.sln
+Unreal/KDT2/.vsconfig
