@@ -1,13 +1,16 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "5.3",
+	"EngineAssociation": "{108FA5C9-4D30-F5B0-9E28-138A7A90ADF7}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
 		{
 			"Name": "KDT2",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
 		}
 	],
 	"Plugins": [
