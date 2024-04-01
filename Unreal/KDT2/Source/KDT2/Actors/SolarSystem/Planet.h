@@ -6,6 +6,23 @@
 #include "GameFramework/Actor.h"
 #include "Planet.generated.h"
 
+USTRUCT(BlueprintType)
+struct FSatellite
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USceneComponent* Axis;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UChildActorComponent* ChildActorComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	double RotationSpeed = 90.0;
+};
+
+
 UCLASS()
 class KDT2_API APlanet : public AActor
 {
@@ -38,6 +55,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* CloudStaticMeshComponent;
 
+protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	USceneComponent* newPlanetAxis;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -54,7 +72,8 @@ protected:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<UChildActorComponent*> SatelliteArray;
+	TArray<FSatellite> SatelliteArray;
+	
 
 protected:
 	UPROPERTY()

@@ -17,8 +17,6 @@ APlanet::APlanet()
 
 		CloudAxis = CreateDefaultSubobject<USceneComponent>(TEXT("CloudAxis"));
 		CloudStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CloudStaticMeshComponent"));
-
-
 	}
 	SetRootComponent(DefaultSceneRoot);
 
@@ -46,6 +44,21 @@ void APlanet::OnConstruction(const FTransform& Transform)
 	PlanetMaterialInstanceDynamic = PlanetStaticMeshComponent->CreateDynamicMaterialInstance(ElementIndex, MaterialInterface);
 
 	CloudStaticMeshComponent->SetVisibility(bCloud);
+
+	const int32 NumbersOfSetelite = SatelliteArray.Num();
+	for (int32 i = 0; i < NumbersOfSetelite; i++)
+	{
+		if (!SatelliteArray[i].ChildActorComponent)
+		{
+			/*FString AxisName = FString::Printf(TEXT("AxisName%d", i));
+			FString AxisName = FString::Printf(TEXT("AxisName%d", i));*/
+			SatelliteArray[i].Axis = NewObject< USceneComponent>(this, TEXT("PLANET"+i));
+			SatelliteArray[i].Axis->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			SatelliteArray[i].ChildActorComponent = NewObject<UChildActorComponent>(this);
+			SatelliteArray[i].ChildActorComponent->RegisterComponent();
+			SatelliteArray[i].ChildActorComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+		}
+	}
 }
 
 // Called when the game starts or when spawned
@@ -72,5 +85,13 @@ void APlanet::Tick(float DeltaTime)
 		const FQuat Quat = Rotator.Quaternion();
 		CloudStaticMeshComponent->AddLocalRotation(Quat);
 	}//구름회전
+
+	for (auto& it : SatelliteArray) 
+	{
+		const double DeltaSpeed = (DeltaTime * PlanetRotationSpeed);
+		const FRotator Rotator{ 0., DeltaSpeed, 0. };
+		const FQuat Quat = Rotator.Quaternion();
+		it.ChildActorComponent->AddLocalRotation(Quat);
+	}
 }
 
