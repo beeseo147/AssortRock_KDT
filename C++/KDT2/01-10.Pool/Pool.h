@@ -233,3 +233,65 @@ public:
 
 	int Test = 1000;
 };
+
+template <class _Ty>
+class FAllocator
+{
+public:
+	static inline shared_ptr<boost::pool<>> Pool;
+	friend class std::_Ref_count_obj_alloc3<_Ty, FAllocator<_Ty>>;
+	static_assert(!is_const_v<_Ty>, "The C++ Standard forbids containers of const elements "
+		"because allocator<const T> is ill-formed.");
+	static_assert(!is_function_v<_Ty>, "The C++ Standard forbids allocators for function elements "
+		"because of [allocator.requirements].");
+	static_assert(!is_reference_v<_Ty>, "The C++ Standard forbids allocators for reference elements "
+		"because of [allocator.requirements].");
+
+	using _From_primary = FAllocator;
+
+	using value_type = _Ty;
+	using size_type = size_t;
+	using difference_type = ptrdiff_t;
+
+	using propagate_on_container_move_assignment = true_type;
+	using is_always_equal _CXX20_DEPRECATE_IS_ALWAYS_EQUAL = true_type;
+	FAllocator() noexcept {}
+	constexpr FAllocator(const FAllocator&) noexcept = default;
+	template <class _Other>
+	constexpr FAllocator(const FAllocator<_Other>& InOther) noexcept
+	{
+		if (!Pool)
+		{
+			auto& Type = typeid(_Other);
+			const char* Test = Type.name();
+			Pool = make_shared<boost::pool<>>(sizeof(_Other), 100000);
+			Pool->free(Pool->malloc());
+		}
+	}
+	_CONSTEXPR20 ~FAllocator() = default;
+	_CONSTEXPR20 FAllocator& operator=(const FAllocator&) = default;
+
+	_CONSTEXPR20 void deallocate(_Ty* const _Ptr, const size_t _Count) {
+		_STL_ASSERT(_Ptr != nullptr || _Count == 0, "null pointer cannot point to a block of non-zero size");
+		_STL_ASSERT(_Count == 1, "error");
+		// no overflow check on the following multiply; we assume _Allocate did that check
+		//_Deallocate<_New_alignof<_Ty>>(_Ptr, sizeof(_Ty) * _Count);
+		Pool->free(_Ptr);
+	}
+
+	_NODISCARD_RAW_PTR_ALLOC _CONSTEXPR20 __declspec(allocator) _Ty* allocate(_CRT_GUARDOVERFLOW const size_t _Count) {
+		static_assert(sizeof(value_type) > 0, "value_type must be complete before calling allocate.");
+		//return static_cast<_Ty*>(_Allocate<_New_alignof<_Ty>>(_Get_size_of_n<sizeof(_Ty)>(_Count)));
+		//return reinterpret_cast<_Ty*>(Pool->construct());
+		return (_Ty*)Pool->malloc();
+	}
+};
+
+_EXPORT_STD template <class _Ty, class _Other>
+_NODISCARD _CONSTEXPR20 bool operator==(const FAllocator<_Ty>&, const FAllocator<_Other>&) noexcept {
+	return true;
+}
+_EXPORT_STD template <class _Ty, class _Other>
+_NODISCARD _CONSTEXPR20 bool operator!=(const FAllocator<_Ty>& a, const FAllocator<_Other>& b) noexcept {
+	return !(a == b);
+}

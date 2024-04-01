@@ -197,6 +197,24 @@ int main()
 			std::cout << std::format("boost::object_pool shared_ptr: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
 		}
 		{
+			// allocate Memory pool
+			std::shared_ptr<FData> Init = std::allocate_shared<FData>(FAllocator<FData>());
+
+			auto Start{ std::chrono::steady_clock::now() };
+			{
+				// allocate_shared 를 사용하면 커스텀 Allocator를 등록할 수 있다.
+				// 불필요한 메모리 할당을 줄여 성능을 항향 시킬 수 있다
+				for (size_t i = 0; i < MaxCount; ++i)
+				{
+					// std::allocator<int>;
+					std::shared_ptr<FData> SmartPointer = std::allocate_shared<FData>(FAllocator<FData>());
+				}
+			}
+			auto End{ std::chrono::steady_clock::now() };
+			auto Diff{ End - Start };
+			std::cout << std::format("boost::pool allocate_shared: {}ms\n", std::chrono::duration<double, std::milli>(Diff).count());
+		}
+		{
 			FObjectPool<FData> ObjectPool{ MaxCount };
 
 			auto Start{ std::chrono::steady_clock::now() };
