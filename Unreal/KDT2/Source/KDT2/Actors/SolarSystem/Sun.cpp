@@ -31,12 +31,23 @@ ASun::ASun()
 		static ConstructorHelpers::FObjectFinder<UCurveFloat> ObjectFinder(TEXT("/Script/Engine.CurveFloat'/Game/BluePrint/SolarSystem/Curve_SunPower.Curve_SunPower'"));
 		ensure(ObjectFinder.Object);
 
-		FOnTimelineFloat Delegate;
+		FOnTimelineFloat Delegate;//Delegate는 함수 포인터
 		Delegate.BindUFunction(this, TEXT("OnSunPower"));
 
 		SunPowerTimelineComponent->AddInterpFloat(ObjectFinder.Object, Delegate);
 		SunPowerTimelineComponent->SetPlayRate(0.5f);
 		SunPowerTimelineComponent->SetLooping(true);
+		//타임 라인이 반복 되고
+		//0.5초마다
+		//Float형의 interp을 생성한다
+	}
+	{
+		PointLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("Sun Light"));
+		PointLight->SetupAttachment(GetRootComponent());
+		PointLight->Intensity = 10.0f;
+		PointLight->AttenuationRadius = 1000000.0f;
+		PointLight->bUseInverseSquaredFalloff = false;
+		PointLight->LightFalloffExponent = 0.0001f;
 	}
 }
 //AActor.h에 있는 초기 생성 OnConstruction

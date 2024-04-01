@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/TimelineComponent.h"
+#include "Components/PointLightComponent.h"
 #include "Sun.generated.h"
 
 UCLASS()
@@ -37,6 +38,9 @@ private:
 
 	UPROPERTY()
 	UMaterialInstanceDynamic* MID = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UPointLightComponent* PointLight;
 
 	static inline UMaterial* SunMaterial = nullptr;
 };
