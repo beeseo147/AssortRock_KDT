@@ -6,10 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "Planet.generated.h"
 
+
 USTRUCT(BlueprintType)
 struct FSatellite
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -20,12 +21,20 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	double RotationSpeed = 90.0;
-};
 
+	void Create(class APlanet* InPlanet, FSatellite* InTemplate);
+	void Destroy();
+
+	bool operator==(const FSatellite& InOther) const
+	{
+		return Axis == InOther.Axis;
+	}
+};
 
 UCLASS()
 class KDT2_API APlanet : public AActor
 {
+	friend struct FSatellite;
 	GENERATED_BODY()
 
 public:
@@ -33,10 +42,19 @@ public:
 	APlanet();
 
 protected:
+#if WITH_EDITOR
+	virtual void PreEditChange(FProperty* PropertyThatWillChange) override;
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+
+	TArray<FSatellite> Temp;
+#endif
+
+protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	virtual void BeginDestroy() override;
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -56,11 +74,6 @@ protected:
 	UStaticMeshComponent* CloudStaticMeshComponent;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	USceneComponent* newPlanetAxis;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UStaticMeshComponent* newPlanetStaticMeshComponent;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	double PlanetRotationSpeed = 90.0;
 
@@ -70,12 +83,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCloud = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bNightSide = false;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FSatellite> SatelliteArray;
-	
+
+	UPROPERTY()
+	class ASun* Sun;
 
 protected:
+	void CalculateNightSide();
 	UPROPERTY()
 	UMaterialInstanceDynamic* PlanetMaterialInstanceDynamic;
 };
