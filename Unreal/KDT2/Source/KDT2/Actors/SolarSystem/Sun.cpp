@@ -17,18 +17,18 @@ ASun::ASun()
 
 	{
 		static ConstructorHelpers::FObjectFinder<UStaticMesh> ObjectFinder(TEXT("/Script/Engine.StaticMesh'/Engine/EngineMeshes/Sphere.Sphere'"));
-		ensure(ObjectFinder.Object);
+		//ensure(ObjectFinder.Object);
 		StaticMeshComponent->SetStaticMesh(ObjectFinder.Object);
 	}//액터의 StaticMeshComponent에 찾은 Sphere 스태틱 메쉬를 할당합니다.
 	{
-		static ConstructorHelpers::FObjectFinder<UMaterial> ObjectFinder(TEXT("/Script/Engine.Material'/Game/BluePrint/SolarSystem/MT_Sun.MT_Sun'"));
+		static ConstructorHelpers::FObjectFinder<UMaterial> ObjectFinder(TEXT("/Script/Engine.Material'/Game/KDT2/BluePrint/SolarSystem/MT_Sun.MT_Sun'"));
 		ensure(ObjectFinder.Object);
 		SunMaterial = ObjectFinder.Object;
 		StaticMeshComponent->SetMaterial(0, SunMaterial);
 	}//액터의 메시 컴포넌트에 StaticMeshComponent에 찾은 MT_Sun 메테리얼(0번)을 할당합니다.
 
 	{
-		static ConstructorHelpers::FObjectFinder<UCurveFloat> ObjectFinder(TEXT("/Script/Engine.CurveFloat'/Game/BluePrint/SolarSystem/Curve_SunPower.Curve_SunPower'"));
+		static ConstructorHelpers::FObjectFinder<UCurveFloat> ObjectFinder(TEXT("/Script/Engine.CurveFloat'/Game/KDT2/BluePrint/SolarSystem/Curve_SunPower.Curve_SunPower'"));
 		ensure(ObjectFinder.Object);
 
 		FOnTimelineFloat Delegate;//Delegate는 함수 포인터

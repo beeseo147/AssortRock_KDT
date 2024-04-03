@@ -106,9 +106,9 @@ void APlanet::OnConstruction(const FTransform& Transform)
 
 	const int32 ElementIndex = 0;
 	UMaterialInterface* MaterialInterface = PlanetStaticMeshComponent->GetMaterial(ElementIndex);
+	if (!MaterialInterface) { return; }
 	PlanetMaterialInstanceDynamic = PlanetStaticMeshComponent->CreateDynamicMaterialInstance(ElementIndex, MaterialInterface);
-
-	CloudStaticMeshComponent->SetVisibility(bCloud);
+	if (!PlanetMaterialInstanceDynamic) { return; }
 
 	if (bNightSide)
 	{
