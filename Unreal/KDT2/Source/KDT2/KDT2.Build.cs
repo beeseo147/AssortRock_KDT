@@ -4,20 +4,23 @@ using UnrealBuildTool;
 
 public class KDT2 : ModuleRules
 {
-	public KDT2(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
-		PublicDependencyModuleNames.AddRange(new string[] 
-		{ "Core", "CoreUObject", "Engine", "InputCore" ,"UMG",
-		"MoviePlayer"
-		});
+    public KDT2(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+        PublicDependencyModuleNames.AddRange(new string[]
+        {
+            "Core", "CoreUObject", "Engine", "InputCore", "UMG",
+            "MoviePlayer",
+            "EnhancedInput"
+        });
 
-		PublicIncludePaths.Add("KDT2");
-		PublicIncludePaths.Add("KDT2/Actors");
+        PrivateDependencyModuleNames.AddRange(new string[] { });
+
+        PublicIncludePaths.Add("KDT2");
+        PublicIncludePaths.Add("KDT2/Actors");
         PublicIncludePaths.Add("KDT2/Actors/SolarSystem");
+
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 

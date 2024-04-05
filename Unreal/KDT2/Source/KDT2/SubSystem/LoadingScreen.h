@@ -3,7 +3,7 @@
 #include "LoadingScreen.generated.h"
 
 UCLASS()
-class ULoadingScreenSubSystem : public UGameInstanceSubsystem 
+class ULoadingScreenSubSystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 

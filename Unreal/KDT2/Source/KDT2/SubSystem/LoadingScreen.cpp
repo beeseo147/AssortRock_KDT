@@ -1,6 +1,7 @@
 #include "LoadingScreen.h"
 #include "Blueprint/UserWidget.h"
 #include "MoviePlayer.h"
+
 void ULoadingScreenSubSystem::SetLoadingScreenClass(TSubclassOf<UUserWidget> InWidgetClass)
 {
 	WidgetClass = InWidgetClass;
@@ -17,23 +18,23 @@ void ULoadingScreenSubSystem::OnPreLoadMap(const FString& MapName)
 {
 	if (!WidgetClass)
 	{
-		//widget class net set
-		UE_LOG(LogTemp, Warning, TEXT("OnPreLoadMap"));
-		check(false);
+		UE_LOG(LogTemp, Warning, TEXT("Widget class not set"));
+		//check(false);
 		return;
 	}
-	UUserWidget* Widget = CreateWidget(GetWorld(), WidgetClass);
+
+	//UUserWidget* Widget = CreateWidget(GetWorld(), WidgetClass);
 	if (IsMoviePlayerEnabled())
 	{
 		FLoadingScreenAttributes LoadingScreen;
-		//LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
-		LoadingScreen.MinimumLoadingScreenDisplayTime = 4.f;
+		LoadingScreen.MinimumLoadingScreenDisplayTime = 1.f;
+		//LoadingScreen.bAllowEngineTick = true;
 		//LoadingScreen.WidgetLoadingScreen = Widget->TakeWidget();
-		LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
+		LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();;
 		GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
 	}
-	/*else
-	{
-		Widget->AddToViewport();
-	}*/
+	//else
+	//{
+	//	Widget->AddToViewport();
+	//}
 }
