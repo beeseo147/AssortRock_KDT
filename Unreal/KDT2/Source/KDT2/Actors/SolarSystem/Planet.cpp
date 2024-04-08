@@ -180,7 +180,7 @@ void FSatellite::Create(class APlanet* InPlanet, FSatellite* InTemplate)
 {
 	FName AxisName = MakeUniqueObjectName(InPlanet, USceneComponent::StaticClass());
 	USceneComponent* AxisTemplate = InTemplate ? InTemplate->Axis : nullptr;
-	Axis = NewObject<USceneComponent>(InPlanet, AxisName, RF_Transactional, AxisTemplate);
+	Axis = NewObject<USceneComponent>(InPlanet, AxisName, RF_Transactional, AxisTemplate); //동적 할당의 명시적 할당 (다만 소멸을 선언해줄필요는 없다)
 	Axis->RegisterComponent();
 	if (!InTemplate)
 	{
