@@ -3,15 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameStateBase.h"
-#include "CoinGameStateBase.generated.h"
+#include "Blueprint/UserWidget.h"
+#include "CoinInfoUserWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class KDT2_API ACoinGameStateBase : public AGameStateBase
+class KDT2_API UCoinInfoUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+protected:
+
 };

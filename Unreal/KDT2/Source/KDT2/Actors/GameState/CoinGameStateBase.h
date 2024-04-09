@@ -15,4 +15,6 @@ class KDT2_API ACoinGameStateBase : public AGameStateBase
 	GENERATED_BODY()
 public:
 	ACoinGameStateBase();
+private:
+	//TSubclassOf<
 };
