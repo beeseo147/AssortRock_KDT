@@ -62,7 +62,7 @@ void ACoin::InTrigger()
 			}
 		};
 
-	GetWorld()->GetTimerManager().SetTimer(CoinDestroyTimerHandle, TimerDelegate, 2.5f, false);
+	//GetWorld()->GetTimerManager().SetTimer(CoinDestroyTimerHandle, TimerDelegate, 2.5f, false);
 }
 
 void ACoin::OutTrigger()

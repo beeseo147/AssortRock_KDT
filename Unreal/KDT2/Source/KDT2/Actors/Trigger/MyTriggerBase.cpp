@@ -71,7 +71,7 @@ AActor* AMyTriggerBase::GetTriggerOjbect()
 	AActor* Actor = TriggerObject->GetChildActor();
 	if (!IsValid(Actor))
 	{
-		ensureAlwaysMsgf(false, TEXT("Actor is nullptr"));
+		//ensureAlwaysMsgf(false, TEXT("Actor is nullptr"));
 		return nullptr;
 	}
 

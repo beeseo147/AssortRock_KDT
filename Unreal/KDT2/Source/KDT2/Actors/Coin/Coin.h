@@ -62,8 +62,8 @@ protected:
 protected:
 	bool bPandingKill = false;
 
-	/*UPROPERTY(EditAnywhere)
-	double RotationSpeed = 45.0;*/
+	UPROPERTY(EditAnywhere)
+	double RotationSpeed = 45.0;
 
 	/*UPROPERTY(EditAnywhere)
 	USoundBase* CoinSound;*/
