@@ -14,7 +14,8 @@ UCLASS()
 class KDT2_API AKDT2PlayerController : public APlayerController
 {
 	GENERATED_BODY()
-
+public:
+	AKDT2PlayerController();
 protected:
 	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
