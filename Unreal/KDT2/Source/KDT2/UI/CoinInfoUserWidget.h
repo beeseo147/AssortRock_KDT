@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 #include "CoinInfoUserWidget.generated.h"
 
 /**
@@ -14,6 +15,10 @@ class KDT2_API UCoinInfoUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void NativeConstruct() override;
 protected:
+	UPROPERTY(EditAnywhere,meta=(BindWidget))
+	UTextBlock* RemainCoinText;
 
 };

@@ -3,3 +3,8 @@
 
 #include "UI/CoinInfoUserWidget.h"
 
+void UCoinInfoUserWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+}
