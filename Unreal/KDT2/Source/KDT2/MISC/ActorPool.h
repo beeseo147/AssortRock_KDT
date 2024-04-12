@@ -42,8 +42,6 @@ struct FActorPool
 			{
 				It->UninitializeComponent();
 			}
-
-			//It->ReinitializeProperties();
 		}
 
 		Actor->SetActorTransform(InTransform, false, nullptr, ETeleportType::TeleportPhysics);
@@ -73,6 +71,19 @@ struct FActorPool
 		}
 		ActiveActors.RemoveAt(Index);
 		Pool.Add(InActor);
+
+		InActor->SetActorEnableCollision(false);
+		InActor->SetActorHiddenInGame(true);
+		InActor->SetActorTickEnabled(false);
+		const TSet<UActorComponent*>& Components = InActor->GetComponents();
+		for (UActorComponent* It : Components)
+		{
+			It->SetComponentTickEnabled(false);
+			if (It->HasBeenInitialized())
+			{
+				It->UninitializeComponent();
+			}
+		}
 	}
 
 	TArray<AActor*> Pool;

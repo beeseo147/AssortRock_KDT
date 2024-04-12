@@ -3,6 +3,7 @@
 
 #include "Actors/Tank/Projectile.h"
 #include "MISC/MISC.h"
+#include "Actors/GameMode/KDT2GameModeBase.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -38,7 +39,20 @@ AProjectile::~AProjectile()
 void AProjectile::SetProjectileData(const FProjectileDataTableRow* InData)
 {
 	ensure(InData);
+	GetWorld()->GetTimerManager().ClearTimer(InitialLifeSpanTimer);
 
+	if (InData->InitialLifeSpan == 0.f)
+	{
+		ensure(false);
+	}
+	auto TimerDelegate = [this]()
+		{
+			AKDT2GameModeBase* GameMode = Cast<AKDT2GameModeBase>(GetWorld()->GetAuthGameMode());
+			ensure(GameMode);
+			GameMode->GetProjectilePool().Delete(this);
+		};
+
+	GetWorld()->GetTimerManager().SetTimer(InitialLifeSpanTimer, TimerDelegate, InData->InitialLifeSpan, false);
 	//InitialLifeSpan = InData->InitialLifeSpan;
 
 	Collider->SetSphereRadius(InData->ColliderSphereRadius);
@@ -81,6 +95,8 @@ void AProjectile::BeginPlay()
 void AProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
+
+	GetWorld()->GetTimerManager().ClearTimer(InitialLifeSpanTimer);
 }
 
 void AProjectile::BeginDestroy()

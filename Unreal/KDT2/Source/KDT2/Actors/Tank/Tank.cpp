@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
+#include "Subsystem/Subsystem.h"
+#include "Actors/GameMode/KDT2GameModeBase.h"
 
 // Sets default values
 ATank::ATank()
@@ -67,8 +69,6 @@ void ATank::BeginPlay()
 
 	UDataSubsystem* DataSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UDataSubsystem>();
 	ProjectileRow = DataSubsystem->FindProjectile(ProjectileName);
-
-	ProjectilePool.Create(GetWorld(), AProjectile::StaticClass(), 5);
 }
 
 // Called every frame
@@ -87,6 +87,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATank::ZoomIn()
 {
+	if (!ZoomInWidget) { return; }
 	ZoomCamera->SetActive(true);
 	DefaultCamera->SetActive(false);
 	ZoomInWidget->AddToViewport();
@@ -94,6 +95,8 @@ void ATank::ZoomIn()
 
 void ATank::ZoomOut()
 {
+	if (!ZoomInWidget) { return; }
+
 	ZoomCamera->SetActive(false);
 	DefaultCamera->SetActive(true);
 	ZoomInWidget->RemoveFromParent();
@@ -112,7 +115,11 @@ void ATank::Fire()
 	const FTransform& MuzzleTransform = Muzzle->GetComponentTransform();
 	FTransform Transform = FTransform(MuzzleTransform.GetRotation(), MuzzleTransform.GetLocation());
 
-	AProjectile* NewProjectile = ProjectilePool.New<AProjectile>(MuzzleTransform,
+	//UActorPoolSubsystem* ActorPoolSubsystem = GetWorld()->GetSubsystem<UActorPoolSubsystem>();
+
+	AKDT2GameModeBase* GameMode = Cast<AKDT2GameModeBase>(GetWorld()->GetAuthGameMode());
+	ensure(GameMode);
+	AProjectile* NewProjectile = GameMode->GetProjectilePool().New<AProjectile>(MuzzleTransform,
 		[this](AProjectile* NewActor)
 		{
 			NewActor->SetProjectileData(ProjectileRow);

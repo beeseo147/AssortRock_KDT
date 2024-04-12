@@ -83,8 +83,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UUserWidget> UI;
 
+	UPROPERTY()
 	UUserWidget* ZoomInWidget;
-
-protected:
-	FActorPool ProjectilePool;
 };

@@ -42,9 +42,14 @@ void FActorPool::Create(UWorld* World, TSubclassOf<AActor> Class, uint32 Count)
 
 void FActorPool::Destroy()
 {
+	for (auto* It : ActiveActors)
+	{
+		It->Destroy();
+	}
 	for (auto* It : Pool)
 	{
 		It->Destroy();
 	}
 	Pool.Empty();
+	ActiveActors.Empty();
 }
