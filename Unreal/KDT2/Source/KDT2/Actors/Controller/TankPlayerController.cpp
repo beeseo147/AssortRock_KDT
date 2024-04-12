@@ -5,6 +5,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Actors/Tank/Tank.h"
+#include "Actors/Interface/TankInterface.h"
 #include "Data/Input/TankInputDataConfig.h"
 
 void ATankPlayerController::BeginPlay()
@@ -32,20 +33,20 @@ void ATankPlayerController::SetupInputComponent()
 
 void ATankPlayerController::OnZoomIn(const FInputActionValue& InputActionValue)
 {
-	ATank* Tank = Cast<ATank>(GetPawn());
+	ITankInterface* Tank = Cast<ITankInterface>(GetPawn());
 	ensure(Tank);
 	Tank->ZoomIn();
 }
 void ATankPlayerController::OnZoomOut(const FInputActionValue& InputActionValue)
 {
-	ATank* Tank = Cast<ATank>(GetPawn());
+	ITankInterface* Tank = Cast<ITankInterface>(GetPawn());
 	ensure(Tank);
 	Tank->ZoomOut();
 }
 
 void ATankPlayerController::OnFire(const FInputActionValue& InputActionValue)
 {
-	ATank* Tank = Cast<ATank>(GetPawn());
+	ITankInterface* Tank = Cast<ITankInterface>(GetPawn());
 	ensure(Tank);
 	Tank->Fire();
 }

@@ -87,19 +87,19 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATank::ZoomIn()
 {
-	if (!ZoomInWidget) { return; }
+	/*if (!ZoomInWidget) { return; }
 	ZoomCamera->SetActive(true);
 	DefaultCamera->SetActive(false);
-	ZoomInWidget->AddToViewport();
+	ZoomInWidget->AddToViewport();*/
 }
 
 void ATank::ZoomOut()
 {
-	if (!ZoomInWidget) { return; }
+	/*if (!ZoomInWidget) { return; }
 
 	ZoomCamera->SetActive(false);
 	DefaultCamera->SetActive(true);
-	ZoomInWidget->RemoveFromParent();
+	ZoomInWidget->RemoveFromParent();*/
 }
 
 void ATank::Fire()
