@@ -12,7 +12,6 @@
 #include "Components/KDT2FloatingPawnMovement.h"
 #include "Subsystem/DataSubsystem.h"
 #include "MISC/MISC.h"
-#include "Actors/Tank/Projectile.h"
 #include "Tank.generated.h"
 
 UCLASS()
@@ -42,6 +41,7 @@ public:
 protected:
 	FName ProjectileName = TEXT("TankProjectile");
 	const FProjectileDataTableRow* ProjectileRow;
+	FTimerHandle FireTimerHandle;
 
 protected:
 	/*
@@ -84,6 +84,7 @@ protected:
 	TSubclassOf<UUserWidget> UI;
 
 	UUserWidget* ZoomInWidget;
+
 protected:
-	
+	FActorPool ProjectilePool;
 };

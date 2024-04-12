@@ -67,6 +67,8 @@ void ATank::BeginPlay()
 
 	UDataSubsystem* DataSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UDataSubsystem>();
 	ProjectileRow = DataSubsystem->FindProjectile(ProjectileName);
+
+	ProjectilePool.Create(GetWorld(), AProjectile::StaticClass(), 5);
 }
 
 // Called every frame
@@ -110,8 +112,12 @@ void ATank::Fire()
 	const FTransform& MuzzleTransform = Muzzle->GetComponentTransform();
 	FTransform Transform = FTransform(MuzzleTransform.GetRotation(), MuzzleTransform.GetLocation());
 
-	AProjectile* NewProjectile = ProjectilePool.New<AProjectile>(MuzzleTransform, true, this, this); // World->SpawnActorDeferred<AProjectile>(AProjectile::StaticClass(), Transform, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-	NewProjectile->SetProjectileData(ProjectileRow);
+	AProjectile* NewProjectile = ProjectilePool.New<AProjectile>(MuzzleTransform,
+		[this](AProjectile* NewActor)
+		{
+			NewActor->SetProjectileData(ProjectileRow);
+		}
+	, true, this, this); // World->SpawnActorDeferred<AProjectile>(AProjectile::StaticClass(), Transform, this, this, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 	//NewProjectile->FinishSpawning(MuzzleTransform, true);
 }
 

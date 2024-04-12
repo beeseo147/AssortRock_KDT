@@ -9,7 +9,6 @@ AProjectile::AProjectile()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	InitialLifeSpan = 5.f;
 
 	Collider = CreateDefaultSubobject<USphereComponent>(TEXT("Collider"));
 	ArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComponent"));
@@ -32,15 +31,22 @@ AProjectile::AProjectile()
 	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
 }
 
+AProjectile::~AProjectile()
+{
+}
+
 void AProjectile::SetProjectileData(const FProjectileDataTableRow* InData)
 {
 	ensure(InData);
+
+	//InitialLifeSpan = InData->InitialLifeSpan;
 
 	Collider->SetSphereRadius(InData->ColliderSphereRadius);
 
 	StaticMeshComponent->SetStaticMesh(InData->StaticMesh);
 	StaticMeshComponent->SetRelativeTransform(InData->StaticMeshTransform);
 
+	ProjectileMovementComponent->Velocity = FVector(1.f, 0.f, 0.f);
 	ProjectileMovementComponent->MaxSpeed = InData->ProjectileSpeed;
 	ProjectileMovementComponent->InitialSpeed = InData->ProjectileSpeed;
 	ProjectileMovementComponent->ProjectileGravityScale = InData->ProjectileGravityScale;
@@ -70,6 +76,21 @@ void AProjectile::OnConstruction(const FTransform& Transform)
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void AProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+}
+
+void AProjectile::BeginDestroy()
+{
+	Super::BeginDestroy();
+}
+
+void AProjectile::FinishDestroy()
+{
+	Super::FinishDestroy();
 }
 
 void AProjectile::OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)

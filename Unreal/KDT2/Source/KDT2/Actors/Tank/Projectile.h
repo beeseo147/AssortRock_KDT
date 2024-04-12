@@ -19,6 +19,9 @@ struct KDT2_API FProjectileDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, Category = StaticMeshComponent)
 	FTransform StaticMeshTransform;
 
+	UPROPERTY(EditAnywhere, Category = Actor)
+	float InitialLifeSpan = 5.f;
+
 	UPROPERTY(EditAnywhere, Category = SphereComponent)
 	float ColliderSphereRadius = 32.f;
 
@@ -26,6 +29,9 @@ struct KDT2_API FProjectileDataTableRow : public FTableRowBase
 	float ProjectileSpeed = 2000.f;
 	UPROPERTY(EditAnywhere, Category = ProjectileMovementComponent)
 	float ProjectileGravityScale = 0.f;
+
+	UPROPERTY(EditAnywhere, Category = Owner)
+	float FireDelay = 1.f;
 };
 
 UCLASS()
@@ -36,6 +42,7 @@ class KDT2_API AProjectile : public AActor
 public:
 	// Sets default values for this actor's properties
 	AProjectile();
+	~AProjectile();
 	void SetProjectileData(const FProjectileDataTableRow* InData);
 
 protected:
@@ -45,6 +52,9 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	virtual void BeginDestroy() override;
+	virtual void FinishDestroy() override;
 
 	UFUNCTION()
 	void OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
@@ -68,5 +78,6 @@ protected:
 	UStaticMeshComponent* StaticMeshComponent;
 
 protected:
+	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* ProjectileMovementComponent;
 };
