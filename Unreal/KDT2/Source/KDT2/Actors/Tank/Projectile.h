@@ -81,5 +81,5 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
-	FTimerHandle InitialLifeTimerHandle;
+	FTimerHandle InitialLifeSpanTimer;
 };
