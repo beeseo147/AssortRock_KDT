@@ -2,10 +2,16 @@
 
 
 #include "Actors/Tank/NewTank.h"
-#include "Projectile.h"
-#include "MISC/MISC.h"
 #include "Blueprint/UserWidget.h"
+#include "Projectile.h"
 #include "Actors/GameMode/KDT2GameModeBase.h"
+
+namespace Socket
+{
+	const FName TurretJointSocket = TEXT("turret_jntSocket");
+	const FName FireSocket = TEXT("gun_1_jntSocket");
+}
+
 // Sets default values
 ANewTank::ANewTank()
 {
@@ -42,21 +48,58 @@ ANewTank::ANewTank()
 			- ZoomCamera (gun_1_jntSocket)
 	*/
 	SkeletalMeshComponent->SetupAttachment(BoxComponent);
-	CameraSpringArmComponent->SetupAttachment(SkeletalMeshComponent, TEXT("turret_jntSocket"));
+	CameraSpringArmComponent->SetupAttachment(SkeletalMeshComponent, Socket::TurretJointSocket);
 	DefaultCamera->SetupAttachment(CameraSpringArmComponent);
 
-	ZoomCamera->SetupAttachment(SkeletalMeshComponent, TEXT("gun_1_jntSocket"));
+	ZoomCamera->SetupAttachment(SkeletalMeshComponent, Socket::FireSocket);
 
 	SetRootComponent(BoxComponent);
 
-	const TSet<UActorComponent*>& Components = GetComponents();
-	for (auto* It : Components)
+	SkeletalMeshComponent->AddTickPrerequisiteComponent(KDT2FloatingPawnMovement);
+}
+
+void ANewTank::ZoomIn()
+{
+	if (!ZoomInWidget) { return; }
+	ZoomCamera->SetActive(true);
+	DefaultCamera->SetActive(false);
+	ZoomInWidget->AddToViewport();
+}
+
+void ANewTank::ZoomOut()
+{
+	if (!ZoomInWidget) { return; }
+	ZoomCamera->SetActive(false);
+	DefaultCamera->SetActive(true);
+	ZoomInWidget->RemoveFromParent();
+}
+
+void ANewTank::Fire()
+{
+	bool bTimer = GetWorld()->GetTimerManager().IsTimerActive(FireTimerHandle);
+	if (bTimer) { return; }
+	ensure(ProjectileRow->FireDelay > 0.f);
+	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, ProjectileRow->FireDelay, false);
+
+	const FTransform SocketTransform = SkeletalMeshComponent->GetSocketTransform(Socket::FireSocket);
+
+	if (EffectClass)
 	{
-		if (It != SkeletalMeshComponent)
-		{
-			SkeletalMeshComponent->AddTickPrerequisiteComponent(It);
-		}
+		FActorSpawnParameters ActorSpawnParameters;
+		ActorSpawnParameters.Owner = this;
+		ActorSpawnParameters.Instigator = this;
+		ActorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		GetWorld()->SpawnActor<AActor>(EffectClass, SocketTransform, ActorSpawnParameters);
 	}
+
+	AKDT2GameModeBase* GameMode = Cast<AKDT2GameModeBase>(GetWorld()->GetAuthGameMode());
+	ensure(GameMode);
+	AProjectile* NewProjectile = GameMode->GetProjectilePool().New<AProjectile>(SocketTransform,
+		[this](AProjectile* NewActor)
+		{
+			NewActor->SetProjectileData(ProjectileRow);
+		}
+	, true, this, this);
 }
 
 // Called when the game starts or when spawned
@@ -65,6 +108,9 @@ void ANewTank::BeginPlay()
 	Super::BeginPlay();
 	ensure(UI);
 	ZoomInWidget = CreateWidget<UUserWidget>(GetWorld(), UI);
+
+	UDataSubsystem* DataSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UDataSubsystem>();
+	ProjectileRow = DataSubsystem->FindProjectile(ProjectileName);
 }
 
 // Called every frame

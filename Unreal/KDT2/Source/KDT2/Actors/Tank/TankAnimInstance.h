@@ -7,17 +7,20 @@
 #include "TankAnimInstance.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class KDT2_API UTankAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-protected:
 
+protected:
+	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	FRotator TurretRotation;
+
+	APawn* Pawn;
 };

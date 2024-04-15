@@ -19,6 +19,9 @@ struct KDT2_API FProjectileDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, Category = StaticMeshComponent)
 	FTransform StaticMeshTransform;
 
+	UPROPERTY(EditAnywhere, Category = Material)
+	TArray<UMaterial*> Materials;
+
 	UPROPERTY(EditAnywhere, Category = Actor)
 	float InitialLifeSpan = 5.f;
 
@@ -32,6 +35,10 @@ struct KDT2_API FProjectileDataTableRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, Category = Owner)
 	float FireDelay = 1.f;
+
+	//UPROPERTY(EditAnywhere, Category = Owner)
+	//float FireDelay = 1.f;
+
 };
 
 UCLASS()

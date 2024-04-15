@@ -60,6 +60,21 @@ void AProjectile::SetProjectileData(const FProjectileDataTableRow* InData)
 	StaticMeshComponent->SetStaticMesh(InData->StaticMesh);
 	StaticMeshComponent->SetRelativeTransform(InData->StaticMeshTransform);
 
+	if (!InData->Materials.IsEmpty())
+	{
+		const int32 MaterialNum = StaticMeshComponent->GetStaticMesh()->GetStaticMaterials().Num();
+		if (InData->Materials.Num() == MaterialNum)
+		{
+			for (uint32 i = 0; UMaterial * It : InData->Materials)
+			{
+				StaticMeshComponent->SetMaterial(i++, It);
+			}
+		}
+		else
+		{
+			ensure(false);
+		}
+	}
 	ProjectileMovementComponent->Velocity = FVector(1.f, 0.f, 0.f);
 	ProjectileMovementComponent->MaxSpeed = InData->ProjectileSpeed;
 	ProjectileMovementComponent->InitialSpeed = InData->ProjectileSpeed;

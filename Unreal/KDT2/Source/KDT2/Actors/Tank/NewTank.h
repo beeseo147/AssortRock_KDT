@@ -14,7 +14,7 @@
 #include "NewTank.generated.h"
 
 UCLASS()
-class KDT2_API ANewTank : public APawn , public ITankInterface
+class KDT2_API ANewTank : public APawn, public ITankInterface
 {
 	GENERATED_BODY()
 
@@ -22,26 +22,30 @@ public:
 	// Sets default values for this pawn's properties
 	ANewTank();
 
+public:
+	// ITankInterface begin
+	virtual void ZoomIn() override;
+	virtual void ZoomOut() override;
+	virtual void Fire() override;
+	// ITankInterface end
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
 public:
-	virtual void ZoomIn()  override {}
-	virtual void ZoomOut()  override {}
-	virtual void Fire() override {}
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
 	FName ProjectileName = TEXT("TankProjectile");
 	const FProjectileDataTableRow* ProjectileRow;
 	FTimerHandle FireTimerHandle;
+
 protected:
-	/*
-	- BoxComponent
-		- CameraSpringArmComponent
-			- DefaultCamera
-		- SkeletalMeshComponent
-				- ZoomCamera
-	*/
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
 	UPROPERTY(EditAnywhere)
@@ -50,24 +54,22 @@ protected:
 	UCameraComponent* DefaultCamera;
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* SkeletalMeshComponent;
-	
+
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* ZoomCamera;
 
-
+protected:
 	UPROPERTY(EditAnywhere)
 	UKDT2FloatingPawnMovement* KDT2FloatingPawnMovement;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UUserWidget> UI;
 
 	UPROPERTY(Transient)
 	UUserWidget* ZoomInWidget;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AActor> EffectClass;
 };
