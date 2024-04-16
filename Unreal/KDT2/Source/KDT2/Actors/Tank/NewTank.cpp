@@ -97,7 +97,7 @@ void ANewTank::Fire()
 				NewActor->SetEffectData(EffectDataTableRow);
 			}
 		, true, this, nullptr);
-	}
+	}//쐇을때 Projectile에서 이펙트를 꺼내온다
 
 	AProjectile* NewProjectile = GameMode->GetProjectilePool().New<AProjectile>(SocketTransform,
 		[this](AProjectile* NewActor)

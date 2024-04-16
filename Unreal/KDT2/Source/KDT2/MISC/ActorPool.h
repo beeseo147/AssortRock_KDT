@@ -19,12 +19,12 @@ struct FActorPool
 		if (Pool.Num() == 0)
 		{
 			Actor = ActiveActors[0];
-			ActiveActors.RemoveAt(0);
+			Delete(Actor);
+			Actor = nullptr;
 		}
-		else
-		{
-			Actor = Pool.Pop(false);
-		}
+		// 만약 전부 활성화되어 있는 상태라면 
+		// 가장 먼저 활성화 시킨 액터에서 삭제한다.
+		Actor = Pool.Pop(false);
 
 		Actor->SetOwner(Owner);
 		Actor->SetInstigator(Instigator);
@@ -54,7 +54,10 @@ struct FActorPool
 		for (UActorComponent* It : Components)
 		{
 			It->SetComponentTickEnabled(true);
-			It->InitializeComponent();
+			if (!It->HasBeenInitialized())
+			{
+				It->InitializeComponent();
+			}
 		}
 
 		ActiveActors.Push(Actor);
@@ -71,6 +74,16 @@ struct FActorPool
 		}
 		ActiveActors.RemoveAt(Index);
 		Pool.Add(InActor);
+
+		if (UFunction* Function = InActor->FindFunction(TEXT("OnActorPoolBeginDelete")))
+		{
+			InActor->ProcessEvent(Function, nullptr);
+		}
+
+		if (AActor* ParentActor = InActor->GetAttachParentActor())
+		{
+			InActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		}
 
 		InActor->SetActorEnableCollision(false);
 		InActor->SetActorHiddenInGame(true);

@@ -24,6 +24,8 @@ void AKDT2PlayerController::BeginPlay()
 
 	const UBasicInputDataConfig* BasicInputDataConfig=GetDefault<UBasicInputDataConfig>();
 	Subsystem->AddMappingContext(BasicInputDataConfig->InputMappingContext,0);
+
+	SetControlRotation(FRotator(-30., 0., 0.));
 }
 
 void AKDT2PlayerController::SetupInputComponent()

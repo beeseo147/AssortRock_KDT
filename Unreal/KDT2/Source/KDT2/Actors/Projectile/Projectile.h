@@ -6,8 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "Components/ArrowComponent.h"
-#include "Actors/Effect/Effect.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Actors/Effect/Effect.h"
 #include "Projectile.generated.h"
 
 USTRUCT()
@@ -37,9 +37,12 @@ struct KDT2_API FProjectileDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, Category = "Projectile|Effect", meta = (RowType = "/Script/KDT2.EffectDataTableRow"))
 	FDataTableRowHandle HitEffect;
 
-	UPROPERTY(EditAnywhere, Category = Owner)
+	UPROPERTY(EditAnywhere, Category = "Projectile|Damage")
+	float Damage = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Owner")
 	float FireDelay = 1.f;
-	UPROPERTY(EditAnywhere, Category = Owner, meta = (RowType = "/Script/KDT2.EffectDataTableRow"))
+	UPROPERTY(EditAnywhere, Category = "Owner", meta = (RowType = " / Script / KDT2.EffectDataTableRow"))
 	FDataTableRowHandle FireEffect;
 };
 
@@ -68,6 +71,12 @@ protected:
 	UFUNCTION()
 	void OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 
+	UFUNCTION()
+	void OnReturnToPool(AActor* DestroyedActor);
+
+	UFUNCTION()
+	void OnActorPoolBeginDelete();
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -92,4 +101,6 @@ protected:
 
 	FTimerHandle InitialLifeSpanTimer;
 	const FProjectileDataTableRow* ProjectileDataTableRow;
+
+	FScriptDelegate ParentActorDestroyedDelegate;
 };

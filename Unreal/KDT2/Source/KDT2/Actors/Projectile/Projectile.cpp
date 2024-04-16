@@ -4,6 +4,8 @@
 #include "Projectile.h"
 #include "MISC/MISC.h"
 #include "Actors/GameMode/TankGameModeBase.h"
+#include "Actors/Enemy/Enemy.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -49,9 +51,7 @@ void AProjectile::SetProjectileData(const FProjectileDataTableRow* InData)
 	}
 	auto TimerDelegate = [this]()
 		{
-			ATankGameModeBase* GameMode = Cast<ATankGameModeBase>(GetWorld()->GetAuthGameMode());
-			ensure(GameMode);
-			GameMode->GetProjectilePool().Delete(this);
+			OnReturnToPool(nullptr);
 		};
 
 	GetWorld()->GetTimerManager().SetTimer(InitialLifeSpanTimer, TimerDelegate, InData->InitialLifeSpan, false);
@@ -108,6 +108,8 @@ void AProjectile::OnConstruction(const FTransform& Transform)
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ParentActorDestroyedDelegate.BindUFunction(this, TEXT("OnReturnToPool"));
 }
 
 void AProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -129,6 +131,11 @@ void AProjectile::FinishDestroy()
 
 void AProjectile::OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
+	SetActorEnableCollision(false);
+	AttachToActor(OtherActor, FAttachmentTransformRules::KeepWorldTransform);
+
+	OtherActor->OnDestroyed.Add(ParentActorDestroyedDelegate);
+
 	if (!ProjectileDataTableRow->HitEffect.IsNull() && ProjectileDataTableRow->HitEffect.RowName != NAME_None)
 	{
 		ATankGameModeBase* GameMode = Cast<ATankGameModeBase>(GetWorld()->GetAuthGameMode());
@@ -145,6 +152,35 @@ void AProjectile::OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVec
 				NewActor->SetEffectData(EffectDataTableRow);
 			}
 		, true, this, nullptr);
+	}
+
+	AEnemy* Enemy = Cast<AEnemy>(OtherActor);
+	if (IsValid(Enemy))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit Enemy!"));
+		const float Damage = ProjectileDataTableRow->Damage;
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), GetInstigator(), nullptr);
+	}
+}
+
+void AProjectile::OnReturnToPool(AActor* DestroyedActor)
+{
+	if (AActor* Parent = GetAttachParentActor())
+	{
+		Parent->OnDestroyed.Remove(ParentActorDestroyedDelegate);
+	}
+
+	GetWorld()->GetTimerManager().ClearTimer(InitialLifeSpanTimer);
+	ATankGameModeBase* GameMode = Cast<ATankGameModeBase>(GetWorld()->GetAuthGameMode());
+	ensure(GameMode);
+	GameMode->GetProjectilePool().Delete(this);
+}//시간이 지나 소멸할때 파괴가 되었을때
+
+void AProjectile::OnActorPoolBeginDelete()
+{
+	if (AActor* Parent = GetAttachParentActor())
+	{
+		Parent->OnDestroyed.Remove(ParentActorDestroyedDelegate);
 	}
 }
 
