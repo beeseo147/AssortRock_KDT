@@ -153,13 +153,23 @@ void AProjectile::OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVec
 			}
 		, true, this, nullptr);
 	}
-
-	AEnemy* Enemy = Cast<AEnemy>(OtherActor);
-	if (IsValid(Enemy))
+	const float Damage = ProjectileDataTableRow->Damage;
+	const float DamageRadius = ProjectileDataTableRow->DamageRadius;
+	if (FMath::IsNearlyZero(DamageRadius))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit Enemy!"));
-		const float Damage = ProjectileDataTableRow->Damage;
-		UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), GetInstigator(), nullptr);
+		AEnemy* Enemy = Cast<AEnemy>(OtherActor);
+		if (IsValid(Enemy))
+		{
+			UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), this,nullptr);
+		}
+	}
+	else
+	{
+		DrawDebugSphere(GetWorld(), Hit.ImpactPoint, DamageRadius, 32, FColor::Red, false, 2);
+		TArray<AActor*> IgnoreActors;
+		UGameplayStatics::ApplyRadialDamage(this, Damage, Hit.ImpactPoint, DamageRadius, nullptr, IgnoreActors, this
+		, GetInstigatorController(),true, FCollisionChannel::EnemyChannel);
+
 	}
 }
 

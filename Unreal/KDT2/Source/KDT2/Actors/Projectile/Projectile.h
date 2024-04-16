@@ -39,6 +39,7 @@ struct KDT2_API FProjectileDataTableRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, Category = "Projectile|Damage")
 	float Damage = 1.f;
+	float DamageRadius = 1000.f;//Radius가 0이면 단일 대상 공격
 
 	UPROPERTY(EditAnywhere, Category = "Owner")
 	float FireDelay = 1.f;

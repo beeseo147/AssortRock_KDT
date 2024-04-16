@@ -13,23 +13,27 @@ AEnemy::AEnemy()
 	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
 	KDT2FloatingPawnMovement = CreateDefaultSubobject<UKDT2FloatingPawnMovement>(TEXT("MovementComponent"));
 
+	StatusComponent = CreateDefaultSubobject<UStatusComponent>(StatusComponentName);
+
 	SetRootComponent(BoxComponent);
 	SkeletalMeshComponent->SetupAttachment(GetRootComponent());
 	SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	BoxComponent->SetCollisionProfileName(FCollisionPresetNameTable::Enemy);
+
+}
+
+AEnemy::~AEnemy()
+{
 }
 
 float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	static float HP = 2;
-	HP -= Damage;
-	if (HP <= 0.f)
-	{
-		Destroy();
-	}
+	UE_LOG(LogTemp, Warning, TEXT("Hit Enemy!: %f"), Damage);
+
+	Damage = StatusComponent->ProcessDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
 	return Damage;
 }
@@ -38,7 +42,11 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
+void AEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
 }
 
 // Called every frame
