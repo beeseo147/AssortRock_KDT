@@ -13,7 +13,7 @@ AEnemy::AEnemy()
 	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
 	KDT2FloatingPawnMovement = CreateDefaultSubobject<UKDT2FloatingPawnMovement>(TEXT("MovementComponent"));
 
-	StatusComponent = CreateDefaultSubobject<UStatusComponent>(StatusComponentName);
+	//StatusComponent = CreateDefaultSubobject<UStatusComponent>(StatusComponentName);
 
 	SetRootComponent(BoxComponent);
 	SkeletalMeshComponent->SetupAttachment(GetRootComponent());
@@ -27,6 +27,25 @@ AEnemy::~AEnemy()
 {
 }
 
+void AEnemy::SetEnemyData(const FEnemyDataTableRow* InData)
+{
+	ensure(InData);
+	//if (InData == EnemyDataTableRow) { return; }
+
+	EnemyDataTableRow = InData;
+
+	BoxComponent->SetBoxExtent(InData->BoxExtent);
+
+	SkeletalMeshComponent->SetSkeletalMesh(InData->SkeletalMesh);
+	SkeletalMeshComponent->SetRelativeTransform(InData->SkeletalMeshTransform);
+
+	if (StatusComponent && !InData->StatusData.IsNull() && InData->StatusData.RowName != NAME_None)
+	{
+		FStatusDataTableRow* StatusDataTableRow = InData->StatusData.GetRow<FStatusDataTableRow>(TEXT(""));
+		StatusComponent->SetStatusData(StatusDataTableRow);
+	}
+}
+
 float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -38,10 +57,34 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	return Damage;
 }
 
+void AEnemy::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	if (DataTableRowHandle.IsNull()) { return; }
+	if (DataTableRowHandle.RowName == NAME_None) { return; }
+	FEnemyDataTableRow* Data = DataTableRowHandle.GetRow<FEnemyDataTableRow>(TEXT(""));
+	SetEnemyData(Data);
+}
+
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (!DataTableRowHandle.IsNull() && DataTableRowHandle.RowName != NAME_None)
+	{
+		EnemyDataTableRow = DataTableRowHandle.GetRow<FEnemyDataTableRow>(TEXT(""));
+
+		if (!EnemyDataTableRow->StatusData.IsNull() && EnemyDataTableRow->StatusData.RowName != NAME_None)
+		{
+			FStatusDataTableRow* StatusDataTableRow = EnemyDataTableRow->StatusData.GetRow<FStatusDataTableRow>(TEXT(""));
+			StatusComponent = NewObject<UStatusComponent>(this, StatusDataTableRow->StatusComponentClass, TEXT("StatusComponent"));
+			StatusComponent->RegisterComponent();
+		}
+
+		SetEnemyData(EnemyDataTableRow);
+	}
 }
 
 void AEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason)

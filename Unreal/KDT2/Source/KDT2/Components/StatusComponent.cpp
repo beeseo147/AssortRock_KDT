@@ -3,6 +3,15 @@
 
 #include "Components/StatusComponent.h"
 
+void UStatusComponent::SetStatusData(const FStatusDataTableRow* InData)
+{
+	ensure(InData);
+
+	StatusDataTableRow = InData;
+
+	HP = InData->HP;
+}
+
 // Sets default values for this component's properties
 UStatusComponent::UStatusComponent()
 {
@@ -21,7 +30,7 @@ float UStatusComponent::ProcessDamage(float DamageAmount, FDamageEvent const& Da
 		AActor* Actor = GetOwner();
 		Actor->Destroy();
 	}
-	return 0.0f;
+	return HP;
 }
 
 
@@ -43,3 +52,12 @@ void UStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
+FStatusDataTableRow::FStatusDataTableRow()
+	: StatusComponentClass(UStatusComponent::StaticClass())
+{
+}
+
+FStatus2DataTableRow::FStatus2DataTableRow()
+{
+	StatusComponentClass = UStatusComponent2::StaticClass();
+}

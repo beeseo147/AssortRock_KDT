@@ -98,8 +98,8 @@ void AProjectile::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
-	/*if (!DataTableRowHandle.DataTable) { return; }
-	if (DataTableRowHandle.IsNull()) { return; }
+	/*if (!DataTableRowHandle.IsNull()) { return; }
+	if (DataTableRowHandle.RowName==NAME_None) { return; }
 	FProjectileDataTableRow* Data = DataTableRowHandle.GetRow<FProjectileDataTableRow>(TEXT(""));
 	SetProjectileData(Data);*/
 }

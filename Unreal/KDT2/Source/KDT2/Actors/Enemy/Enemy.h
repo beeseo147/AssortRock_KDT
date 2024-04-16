@@ -7,9 +7,26 @@
 #include "Components/BoxComponent.h"
 #include "MISC/MISC.h"
 #include "Components/KDT2FloatingPawnMovement.h"
-#include "Actors/Interface/StatusInterface.h"
 #include "Components/StatusComponent.h"
 #include "Enemy.generated.h"
+
+USTRUCT()
+struct KDT2_API FEnemyDataTableRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, Category = "Enemy")
+	FVector BoxExtent;
+
+	UPROPERTY(EditAnywhere, Category = "Enemy")
+	USkeletalMesh* SkeletalMesh;
+
+	UPROPERTY(EditAnywhere, Category = "Enemy")
+	FTransform SkeletalMeshTransform;
+
+	UPROPERTY(EditAnywhere, meta = (RowType = "/Script/KDT2.StatusDataTableRow"))
+	FDataTableRowHandle StatusData;
+};
 
 UCLASS()
 class KDT2_API AEnemy : public APawn
@@ -24,9 +41,12 @@ public:
 	// Sets default values for this pawn's properties
 	AEnemy();
 	~AEnemy();
+	virtual void SetEnemyData(const FEnemyDataTableRow* InData);
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
+	virtual void OnConstruction(const FTransform& Transform) override;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -39,6 +59,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
+	UPROPERTY(EditAnywhere, meta = (RowType = "/Script/KDT2.EnemyDataTableRow"))
+	FDataTableRowHandle DataTableRowHandle;
+
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBoxComponent* BoxComponent;
 
@@ -49,6 +73,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UKDT2FloatingPawnMovement* KDT2FloatingPawnMovement;
 
-	UPROPERTY(EditAnywhere)
-	UStatusComponent* StatusComponent;
+	UPROPERTY(Transient)
+	UStatusComponent* StatusComponent = nullptr;
+
+protected:
+	const FEnemyDataTableRow* EnemyDataTableRow = nullptr;
 };
