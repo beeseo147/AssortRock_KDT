@@ -21,9 +21,4 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
 
-public:
-	FActorPool& GetProjectilePool() { return ProjectilePool; }
-
-protected:
-	FActorPool ProjectilePool;
 };

@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Actors/Tank/Projectile.h"
+#include "Projectile.h"
 #include "MISC/MISC.h"
-#include "Actors/GameMode/KDT2GameModeBase.h"
+#include "Actors/GameMode/TankGameModeBase.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -39,15 +39,17 @@ AProjectile::~AProjectile()
 void AProjectile::SetProjectileData(const FProjectileDataTableRow* InData)
 {
 	ensure(InData);
+	ProjectileDataTableRow = InData;
 	GetWorld()->GetTimerManager().ClearTimer(InitialLifeSpanTimer);
 
 	if (InData->InitialLifeSpan == 0.f)
 	{
 		ensure(false);
+		return;
 	}
 	auto TimerDelegate = [this]()
 		{
-			AKDT2GameModeBase* GameMode = Cast<AKDT2GameModeBase>(GetWorld()->GetAuthGameMode());
+			ATankGameModeBase* GameMode = Cast<ATankGameModeBase>(GetWorld()->GetAuthGameMode());
 			ensure(GameMode);
 			GameMode->GetProjectilePool().Delete(this);
 		};
@@ -75,6 +77,7 @@ void AProjectile::SetProjectileData(const FProjectileDataTableRow* InData)
 			ensure(false);
 		}
 	}
+
 	ProjectileMovementComponent->Velocity = FVector(1.f, 0.f, 0.f);
 	ProjectileMovementComponent->MaxSpeed = InData->ProjectileSpeed;
 	ProjectileMovementComponent->InitialSpeed = InData->ProjectileSpeed;
@@ -126,6 +129,23 @@ void AProjectile::FinishDestroy()
 
 void AProjectile::OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
+	if (!ProjectileDataTableRow->HitEffect.IsNull() && ProjectileDataTableRow->HitEffect.RowName != NAME_None)
+	{
+		ATankGameModeBase* GameMode = Cast<ATankGameModeBase>(GetWorld()->GetAuthGameMode());
+		ensure(GameMode);
+
+		FEffectDataTableRow* EffectDataTableRow = ProjectileDataTableRow->HitEffect.GetRow<FEffectDataTableRow>(TEXT(""));
+		ensure(EffectDataTableRow);
+
+		FTransform ImpactTransfrom = FTransform(Hit.ImpactPoint);
+
+		AEffect* NewEffect = GameMode->GetEffectPool().New<AEffect>(ImpactTransfrom,
+			[this, EffectDataTableRow](AEffect* NewActor)
+			{
+				NewActor->SetEffectData(EffectDataTableRow);
+			}
+		, true, this, nullptr);
+	}
 }
 
 // Called every frame

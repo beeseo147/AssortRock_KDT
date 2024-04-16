@@ -5,9 +5,9 @@
 #include "MISC/MISC.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
-#include "Projectile.h"
+#include "Actors/Projectile/Projectile.h"
 #include "Subsystem/Subsystem.h"
-#include "Actors/GameMode/KDT2GameModeBase.h"
+#include "Actors/GameMode/TankGameModeBase.h"
 
 // Sets default values
 ATank::ATank()
@@ -87,19 +87,19 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATank::ZoomIn()
 {
-	/*if (!ZoomInWidget) { return; }
+	if (!ZoomInWidget) { return; }
 	ZoomCamera->SetActive(true);
 	DefaultCamera->SetActive(false);
-	ZoomInWidget->AddToViewport();*/
+	ZoomInWidget->AddToViewport();
 }
 
 void ATank::ZoomOut()
 {
-	/*if (!ZoomInWidget) { return; }
+	if (!ZoomInWidget) { return; }
 
 	ZoomCamera->SetActive(false);
 	DefaultCamera->SetActive(true);
-	ZoomInWidget->RemoveFromParent();*/
+	ZoomInWidget->RemoveFromParent();
 }
 
 void ATank::Fire()
@@ -117,7 +117,7 @@ void ATank::Fire()
 
 	//UActorPoolSubsystem* ActorPoolSubsystem = GetWorld()->GetSubsystem<UActorPoolSubsystem>();
 
-	AKDT2GameModeBase* GameMode = Cast<AKDT2GameModeBase>(GetWorld()->GetAuthGameMode());
+	ATankGameModeBase* GameMode = Cast<ATankGameModeBase>(GetWorld()->GetAuthGameMode());
 	ensure(GameMode);
 	AProjectile* NewProjectile = GameMode->GetProjectilePool().New<AProjectile>(MuzzleTransform,
 		[this](AProjectile* NewActor)

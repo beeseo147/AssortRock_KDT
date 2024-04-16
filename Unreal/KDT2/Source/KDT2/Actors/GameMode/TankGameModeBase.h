@@ -17,11 +17,12 @@ class KDT2_API ATankGameModeBase : public AKDT2GameModeBase
 public:
 	ATankGameModeBase();
 	FActorPool& GetProjectilePool() { return ProjectilePool; }
-
+	FActorPool& GetEffectPool() { return EffectPool; }
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 protected:
 	FActorPool ProjectilePool;
+	FActorPool EffectPool;
 };

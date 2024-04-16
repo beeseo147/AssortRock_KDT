@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
-#include "Actors/Tank/Projectile.h"
+#include "Actors/Projectile/Projectile.h"
 #include "DataSubsystem.generated.h"
 
 /**

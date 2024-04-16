@@ -52,8 +52,8 @@ protected:
 	USpringArmComponent* CameraSpringArmComponent;
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* DefaultCamera;
-	UPROPERTY(EditAnywhere)
-	USkeletalMeshComponent* SkeletalMeshComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USkeletalMeshComponent* SkeletalMeshComponent; //
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* ZoomCamera;
@@ -68,8 +68,4 @@ protected:
 
 	UPROPERTY(Transient)
 	UUserWidget* ZoomInWidget;
-
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AActor> EffectClass;
 };

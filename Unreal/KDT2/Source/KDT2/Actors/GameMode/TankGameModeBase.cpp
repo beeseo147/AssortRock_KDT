@@ -3,6 +3,7 @@
 
 #include "Actors/GameMode/TankGameModeBase.h"
 #include "Actors/Controller/TankPlayerController.h"
+#include "Actors/Effect/Effect.h"
 #include "Actors/Tank/NewTank.h"
 
 ATankGameModeBase::ATankGameModeBase()
@@ -19,10 +20,13 @@ void ATankGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 	ProjectilePool.Create(GetWorld(), AProjectile::StaticClass(), 50);
+	EffectPool.Create(GetWorld(), AEffect::StaticClass(), 50);
+
 }
 
 void ATankGameModeBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 	ProjectilePool.Destroy();
+	EffectPool.Destroy();
 }

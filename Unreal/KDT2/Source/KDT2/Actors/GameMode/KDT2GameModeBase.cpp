@@ -2,7 +2,7 @@
 
 
 #include "Actors/GameMode/KDT2GameModeBase.h"
-#include "Actors/Tank/Projectile.h"
+#include "Actors/Projectile/Projectile.h"
 
 AKDT2GameModeBase::AKDT2GameModeBase()
 {
@@ -16,11 +16,9 @@ void AKDT2GameModeBase::BeginPlay()
 
 	UWorld* World = GetWorld();
 	UWorld* GGWorld = GWorld;
-	ProjectilePool.Create(GetWorld(), AProjectile::StaticClass(), 50);
 }
 
 void AKDT2GameModeBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-	ProjectilePool.Destroy();
 }

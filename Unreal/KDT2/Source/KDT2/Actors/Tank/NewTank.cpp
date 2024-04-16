@@ -3,8 +3,9 @@
 
 #include "Actors/Tank/NewTank.h"
 #include "Blueprint/UserWidget.h"
-#include "Projectile.h"
-#include "Actors/GameMode/KDT2GameModeBase.h"
+#include "Projectile/Projectile.h"
+#include "Actors/Effect/Effect.h"
+#include "Actors/GameMode/TankGameModeBase.h"
 
 namespace Socket
 {
@@ -83,17 +84,21 @@ void ANewTank::Fire()
 
 	const FTransform SocketTransform = SkeletalMeshComponent->GetSocketTransform(Socket::FireSocket);
 
-	if (EffectClass)
+	ATankGameModeBase* GameMode = Cast<ATankGameModeBase>(GetWorld()->GetAuthGameMode());
+	ensure(GameMode);
+
+	if (!ProjectileRow->FireEffect.IsNull() && ProjectileRow->FireEffect.RowName != NAME_None)
 	{
-		FActorSpawnParameters ActorSpawnParameters;
-		ActorSpawnParameters.Owner = this;
-		ActorSpawnParameters.Instigator = this;
-		ActorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		GetWorld()->SpawnActor<AActor>(EffectClass, SocketTransform, ActorSpawnParameters);
+		const FEffectDataTableRow* EffectDataTableRow = ProjectileRow->FireEffect.GetRow<FEffectDataTableRow>(TEXT(""));
+		ensure(EffectDataTableRow);
+		AEffect* NewEffect = GameMode->GetEffectPool().New<AEffect>(SocketTransform,
+			[this, EffectDataTableRow](AEffect* NewActor)
+			{
+				NewActor->SetEffectData(EffectDataTableRow);
+			}
+		, true, this, nullptr);
 	}
 
-	AKDT2GameModeBase* GameMode = Cast<AKDT2GameModeBase>(GetWorld()->GetAuthGameMode());
-	ensure(GameMode);
 	AProjectile* NewProjectile = GameMode->GetProjectilePool().New<AProjectile>(SocketTransform,
 		[this](AProjectile* NewActor)
 		{

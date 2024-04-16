@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Actors/Effect/Effect.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Projectile.generated.h"
 
@@ -14,31 +15,32 @@ struct KDT2_API FProjectileDataTableRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, Category = StaticMeshComponent)
+	UPROPERTY(EditAnywhere, Category = "Projectile|StaticMeshComponent")
 	UStaticMesh* StaticMesh;
-	UPROPERTY(EditAnywhere, Category = StaticMeshComponent)
-	FTransform StaticMeshTransform;
-
-	UPROPERTY(EditAnywhere, Category = Material)
+	UPROPERTY(EditAnywhere, Category = "Projectile|StaticMeshComponent")
 	TArray<UMaterial*> Materials;
 
-	UPROPERTY(EditAnywhere, Category = Actor)
+	UPROPERTY(EditAnywhere, Category = "Projectile|StaticMeshComponent")
+	FTransform StaticMeshTransform;
+
+	UPROPERTY(EditAnywhere, Category = "Projectile|Actor")
 	float InitialLifeSpan = 5.f;
 
-	UPROPERTY(EditAnywhere, Category = SphereComponent)
+	UPROPERTY(EditAnywhere, Category = "Projectile|SphereComponent")
 	float ColliderSphereRadius = 32.f;
 
-	UPROPERTY(EditAnywhere, Category = ProjectileMovementComponent)
+	UPROPERTY(EditAnywhere, Category = "Projectile|ProjectileMovementComponent")
 	float ProjectileSpeed = 2000.f;
-	UPROPERTY(EditAnywhere, Category = ProjectileMovementComponent)
+	UPROPERTY(EditAnywhere, Category = "Projectile|ProjectileMovementComponent")
 	float ProjectileGravityScale = 0.f;
+
+	UPROPERTY(EditAnywhere, Category = "Projectile|Effect", meta = (RowType = "/Script/KDT2.EffectDataTableRow"))
+	FDataTableRowHandle HitEffect;
 
 	UPROPERTY(EditAnywhere, Category = Owner)
 	float FireDelay = 1.f;
-
-	//UPROPERTY(EditAnywhere, Category = Owner)
-	//float FireDelay = 1.f;
-
+	UPROPERTY(EditAnywhere, Category = Owner, meta = (RowType = "/Script/KDT2.EffectDataTableRow"))
+	FDataTableRowHandle FireEffect;
 };
 
 UCLASS()
@@ -89,4 +91,5 @@ protected:
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
 	FTimerHandle InitialLifeSpanTimer;
+	const FProjectileDataTableRow* ProjectileDataTableRow;
 };

@@ -22,5 +22,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	FRotator TurretRotation;
 
+	double Speed = 0;
+	UPROPERTY(BlueprintReadOnly)
+	FRotator WheelRotation;
+	UPROPERTY(BlueprintReadOnly)
+	double TracksV = 0.;
+
 	APawn* Pawn;
 };
