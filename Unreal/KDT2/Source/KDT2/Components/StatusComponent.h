@@ -40,10 +40,11 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-protected:
+public:
 	UPROPERTY(EditAnywhere)
 	float HP = 10;
 
+protected:
 	const FStatusDataTableRow* StatusDataTableRow = nullptr;
 };
 

@@ -107,6 +107,17 @@ void ANewTank::Fire()
 	, true, this, this);
 }
 
+void ANewTank::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+	int32 MaterialNum = SkeletalMeshComponent->GetSkinnedAsset()->GetMaterials().Num();
+	for (int i = 0; i < MaterialNum; i++)
+	{
+		SkeletalMeshComponent->CreateDynamicMaterialInstance(i);
+	}
+
+}
+
 // Called when the game starts or when spawned
 void ANewTank::BeginPlay()
 {

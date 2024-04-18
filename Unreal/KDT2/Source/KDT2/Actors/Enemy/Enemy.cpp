@@ -13,7 +13,20 @@ AEnemy::AEnemy()
 	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
 	KDT2FloatingPawnMovement = CreateDefaultSubobject<UKDT2FloatingPawnMovement>(TEXT("MovementComponent"));
 
-	//StatusComponent = CreateDefaultSubobject<UStatusComponent>(StatusComponentName);
+	PaperBurnEffectTimelineComponent = CreateDefaultSubobject<UTimelineComponent>(TEXT("PaperBurnEffectTimelineComponent"));
+	{
+		static ConstructorHelpers::FObjectFinder<UCurveFloat> ObjectFinder(TEXT("/Script/Engine.CurveFloat'/Game/KDT2/BluePrint/Effect/Curve_ParperBurnEffect.Curve_ParperBurnEffect'"));
+		ensure(ObjectFinder.Object);
+
+		FOnTimelineFloat Delegate;
+		Delegate.BindUFunction(this, TEXT("OnPaperBurnEffect"));
+
+		PaperBurnEffectTimelineComponent->AddInterpFloat(ObjectFinder.Object, Delegate);
+		FScriptDelegate FinishedDelegate;
+		FinishedDelegate.BindUFunction(this, TEXT("OnPaperBurnEffectEnd"));
+		PaperBurnEffectTimelineComponent->SetTimelineFinishedFunc(FOnTimelineEvent(FinishedDelegate));
+		PaperBurnEffectTimelineComponent->SetPlayRate(0.5f);
+	}
 
 	SetRootComponent(BoxComponent);
 	SkeletalMeshComponent->SetupAttachment(GetRootComponent());
@@ -36,7 +49,16 @@ void AEnemy::SetEnemyData(const FEnemyDataTableRow* InData)
 
 	BoxComponent->SetBoxExtent(InData->BoxExtent);
 
-	SkeletalMeshComponent->SetSkeletalMesh(InData->SkeletalMesh);
+	//if (SkeletalMeshComponent->GetSkeletalMeshAsset() != InData->SkeletalMesh)
+	{
+		SkeletalMeshComponent->SetSkeletalMesh(InData->SkeletalMesh);
+		const int32 MaterialNum = SkeletalMeshComponent->GetSkinnedAsset()->GetMaterials().Num();
+		for (int32 i = 0; i < MaterialNum; ++i)
+		{
+			SkeletalMeshComponent->CreateDynamicMaterialInstance(i);
+		}
+	}
+
 	SkeletalMeshComponent->SetRelativeTransform(InData->SkeletalMeshTransform);
 
 	if (StatusComponent && !InData->StatusData.IsNull() && InData->StatusData.RowName != NAME_None)
@@ -54,9 +76,35 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 
 	Damage = StatusComponent->ProcessDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
+	if (StatusComponent->HP <= 0.f)
+	{
+		SetActorEnableCollision(false);
+		PaperBurnEffectTimelineComponent->PlayFromStart();
+	}
+
 	return Damage;
 }
+void AEnemy::OnPaperBurnEffect(float InPower)
+{
+	const int32 MaterialNum = SkeletalMeshComponent->GetSkinnedAsset()->GetMaterials().Num();
+	for (int32 i = 0; i < MaterialNum; ++i)
+	{
+		UMaterialInstanceDynamic* MID = Cast<UMaterialInstanceDynamic>(SkeletalMeshComponent->GetMaterial(i));
+		if (MID)
+		{
+			MID->SetScalarParameterValue(TEXT("MF_PostEffect_PaperBurn"), InPower);
+		}
+		else
+		{
+			ensure(false);
+		}
+	}
+}
 
+void AEnemy::OnPaperBurnEffectEnd()
+{
+	Destroy();
+}
 void AEnemy::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);

@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Components/BoxComponent.h"
 #include "MISC/MISC.h"
+#include "Components/TimelineComponent.h"
 #include "Components/KDT2FloatingPawnMovement.h"
 #include "Components/StatusComponent.h"
 #include "Enemy.generated.h"
@@ -44,6 +45,15 @@ public:
 	virtual void SetEnemyData(const FEnemyDataTableRow* InData);
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+public:
+	// PaperBurn Effect
+
+	UFUNCTION()
+	void OnPaperBurnEffect(float InPower);
+	UFUNCTION()
+	void OnPaperBurnEffectEnd();
+
+	// PaperBurn Effect End
 protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
@@ -75,6 +85,9 @@ protected:
 
 	UPROPERTY(Transient)
 	UStatusComponent* StatusComponent = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UTimelineComponent* PaperBurnEffectTimelineComponent = nullptr;
 
 protected:
 	const FEnemyDataTableRow* EnemyDataTableRow = nullptr;

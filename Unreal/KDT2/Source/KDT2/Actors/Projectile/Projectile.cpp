@@ -160,7 +160,7 @@ void AProjectile::OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVec
 		AEnemy* Enemy = Cast<AEnemy>(OtherActor);
 		if (IsValid(Enemy))
 		{
-			UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), this,nullptr);
+			UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), this, nullptr);
 		}
 	}
 	else
@@ -168,7 +168,7 @@ void AProjectile::OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVec
 		DrawDebugSphere(GetWorld(), Hit.ImpactPoint, DamageRadius, 32, FColor::Red, false, 2);
 		TArray<AActor*> IgnoreActors;
 		UGameplayStatics::ApplyRadialDamage(this, Damage, Hit.ImpactPoint, DamageRadius, nullptr, IgnoreActors, this
-		, GetInstigatorController(),true, FCollisionChannel::EnemyChannel);
+			, GetInstigatorController(), true, FCollisionChannel::EnemyChannel);
 
 	}
 }
