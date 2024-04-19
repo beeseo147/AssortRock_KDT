@@ -12,7 +12,8 @@ public class KDT2 : ModuleRules
         {
             "Core", "CoreUObject", "Engine", "InputCore", "UMG",
             "MoviePlayer",
-            "EnhancedInput"
+            "EnhancedInput",
+            "Niagara"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { });
