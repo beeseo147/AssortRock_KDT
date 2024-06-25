@@ -1,80 +1,105 @@
 using System;
-using System.io;
+using System.IO;
 using Sharpmake;
 
 public class Utils
 {
-    //GenerateSolution.bat 에서 지정됩니다.
+    // GenerateSolution.bat 에서 지정됩니다.
     public static string GetEngineDir()
     {
         return Environment.GetEnvironmentVariable("EngineDir");
     }
-    //GenerateSolution.bat 에서 지정됩니다.
+    // GenerateSolution.bat 에서 지정됩니다.
     public static string GetSolutionDir()
     {
-        return Environment.GetEnvironmentVariable("SharpeMakeSolutionDir");
+        return Environment.GetEnvironmentVariable("SharpMakeSolutionDir");
     }
-    //EngineSolution.ConfigureAll 에서 지정됩니다.
+    // EngineSolution ConfigureAll에서 지정 됩니다.
     public static string GetProjectDir()
     {
-        return Environment.GetEnvironmentVariable("ProjectFileDir");
+        return Environment.GetEnvironmentVariable("ProjectFilesDir");
     }
-    public static void MakeConfiturationNameAndDefines(Project.Configuration conf,EngineTarget target)
-    {
-        if(target.Name == "Release"){conf.Name == "Development";}
 
+    public static void MakeConfiturationNameDefine(Solution.Configuration conf, EngineTarget target)
+    {
+        if (target.Name == "Release") { conf.Name = "Development"; }
+
+        // Conf Name
         {
-            if(target.LaunchType == ELaunchType.Editor)
+            if (target.LaunchType == ELaunchType.Editor)
             {
                 conf.Name += " Editor";
             }
-            else if(target.LaunchType == ELaunchType.Client)
+            else if (target.LaunchType == ELaunchType.Client)
             {
-                conf.Name += " Client"
+                conf.Name += " Client";
             }
-            else if(target.LaunchType == ELaunchType.Server)
+            else if (target.LaunchType == ELaunchType.Server)
             {
-                conf.Name += " Server"
+                conf.Name += " Server";
             }
         }
-       
+    }
+
+    public static void MakeConfiturationNameDefine(Project.Configuration conf, EngineTarget target)
+    {
+        if (target.Name == "Release") { conf.Name = "Development"; }
+
+        // Conf Name
         {
-            conf.Define.Add("SOLUTION_NAME=\"$(SolutionName\"");
-            if(target.Name == "Release")
+            if (target.LaunchType == ELaunchType.Editor)
             {
-                conf.Define.Add("WITH_DEBUG=0");
+                conf.Name += " Editor";
             }
-            else
+            else if (target.LaunchType == ELaunchType.Client)
             {
-                conf.Define.Add("WITH_DEBUG=1");
+                conf.Name += " Client";
             }
-
-            if(target.LaunchType == ELaunchType.Editor)
+            else if (target.LaunchType == ELaunchType.Server)
             {
-                conf.Define.Add("WITH_DEBUG=1");
-            }
-            else
-            {
-                conf.Define.Add("WITH_DEBUG=0");
-            }
-
-            if(target.LaunchType == ELaunchType.Client)
-            {
-                conf.Define.Add("Client=1");
-            }
-            else
-            {
-                conf.Define.Add("Client=0");
-            }
-            if(target.LaunchType == ELaunchType.Server)
-            {
-                conf.Define.Add("Server=1");
-            }
-            else
-            {
-                conf.Define.Add("Server=0");
+                conf.Name += " Server";
             }
         }
 
+        // Defines
+        {
+            conf.Defines.Add("SOLUTION_NAME=\"$(SolutionName)\"");
+
+            if (target.Name == "Release")
+            {
+                conf.Defines.Add("WITH_DEBUG=0");
+            }
+            else
+            {
+                conf.Defines.Add("WITH_DEBUG=1");
+            }
+
+            if (target.LaunchType == ELaunchType.Editor)
+            {
+                conf.Defines.Add("WITH_EDITOR=1");
+            }
+            else
+            {
+                conf.Defines.Add("WITH_EDITOR=0");
+            }
+
+            if (target.LaunchType == ELaunchType.Client)
+            {
+                conf.Defines.Add("CLIENT=1");
+            }
+            else
+            {
+                conf.Defines.Add("CLIENT=0");
+            }
+
+            if (target.LaunchType == ELaunchType.Server)
+            {
+                conf.Defines.Add("SERVER=1");
+            }
+            else
+            {
+                conf.Defines.Add("SERVER=0");
+            }
+        }
     }
 }

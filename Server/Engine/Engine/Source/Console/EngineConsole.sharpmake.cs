@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using Sharpmake;
 
 [module: Include("%EngineDir%/Engine/Source/CommonProject.sharpmake.cs")]

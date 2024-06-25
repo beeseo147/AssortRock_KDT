@@ -23,6 +23,6 @@ if '%errorlevel%' NEQ '0' (goto UACPrompt) else ( goto gotAdmin )
 call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat"
 echo [Build Sharpmake]
 dotnet build --configuration Release .\Engine\Engine\Source\Programs\Sharpmake\Sharpmake.Application\Sharpmake.Application.csproj
+
 echo [Done]
 pause
-

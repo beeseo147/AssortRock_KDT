@@ -1,9 +1,10 @@
 using System;
-using System.io;
+using System.IO;
 using Sharpmake;
 
-[module:Include("%EngineDir%/Engine/Source/Console/EngineConsole.sharpmake.cs")]
-[module:Include("Utils.cs")]
+[module: Include("%EngineDir%/Engine/Source/Console/EngineConsole.sharpmake.cs")]
+[module: Include("Utils.cs")]
+
 [Generate]
 public class EngineSolution : Solution
 {
@@ -12,28 +13,26 @@ public class EngineSolution : Solution
         IsFileNameToLower = false;
 
         AddTargets(new EngineTarget(
-            // we want a target that builds for both 32 and 64-bit Windows.
-            ELaunchEngine.Server,
+            // ELaunchType.Editor | ELaunchType.Client | ELaunchType.Server
+            ELaunchType.Server,
             Platform.win64,
             DevEnv.vs2022,
             Optimization.Debug | Optimization.Release));
-	}
+    }
 
-	[Configure]
-	public void ConfigureAll(Project.Configuration conf, EngineTarget target)
-	{
-        Utils.MakeConfiturationNameAndDefines(conf,target);
-    	
-        conf.SolutionName = "Engine";
+    [Configure]
+    public void ConfigureAll(Solution.Configuration conf, EngineTarget target)
+    {
+        Utils.MakeConfiturationNameDefine(conf, target);
+
+        conf.SolutionFileName = "Engine";
         conf.SolutionPath = Utils.GetSolutionDir();
-        string ProjectFilesDir = conf.SolutionPath + @"\InterMediate\ProjectFiles";
-       
-        Environment SetEnviromnetVarialbe("ProjectFileDir",ProjectFilesDir);
-        
-        //Add Projects
-        {
-            conf.AddProject<EngineSolution>(target);
-        }
+        string ProjectFilesDir = conf.SolutionPath + @"\Intermediate\ProjectFiles";
+        Environment.SetEnvironmentVariable("ProjectFilesDir", ProjectFilesDir);
 
-	}
+        // Add Projects
+        {
+            conf.AddProject<EngineConsole>(target);
+        }
+    }
 }
