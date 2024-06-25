@@ -7,7 +7,7 @@
 // Sets default values
 AEffect::AEffect()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
@@ -74,7 +74,13 @@ void AEffect::SetEffectData(const FEffectDataTableRow* InData)
 void AEffect::BeginPlay()
 {
 	Super::BeginPlay();
+	
+}
 
+void AEffect::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	GetWorld()->GetTimerManager().ClearTimer(InitialLifeSpanTimer);
 }
 
 // Called every frame

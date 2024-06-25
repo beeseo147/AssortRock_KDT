@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "TankInterface.generated.h"
 
@@ -12,7 +11,6 @@ class UTankInterface : public UInterface
 class ITankInterface
 {
 	GENERATED_BODY()
-
 public:
 	virtual void ZoomIn() = 0;
 	virtual void ZoomOut() = 0;

@@ -5,6 +5,6 @@
 
 AKDT2PlayerCameraManager::AKDT2PlayerCameraManager()
 {
-    ViewPitchMax = 40;
-    ViewPitchMin = -60;
+	ViewPitchMax = 40;
+	ViewPitchMin = -60;
 }

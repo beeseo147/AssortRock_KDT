@@ -3,7 +3,7 @@
 
 #include "Actors/Tank/NewTank.h"
 #include "Blueprint/UserWidget.h"
-#include "Projectile/Projectile.h"
+#include "Actors/Projectile/Projectile.h"
 #include "Actors/Effect/Effect.h"
 #include "Actors/GameMode/TankGameModeBase.h"
 
@@ -16,13 +16,13 @@ namespace Socket
 // Sets default values
 ANewTank::ANewTank()
 {
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	CameraSpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArmComponent"));
 	DefaultCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("DefaultCamera"));
 	{
-		ConstructorHelpers::FObjectFinder<USkeletalMesh> Asset{ TEXT("/Script/Engine.SkeletalMesh'/Game/KDT2/Blueprint/Tank/VigilanteContent/Vehicles/West_Tank_M1A1Abrams/SK_West_Tank_M1A1Abrams.SK_West_Tank_M1A1Abrams'") };
+		ConstructorHelpers::FObjectFinder<USkeletalMesh> Asset{TEXT("/Script/Engine.SkeletalMesh'/Game/KDT2/Blueprint/Tank/VigilanteContent/Vehicles/West_Tank_M1A1Abrams/SK_West_Tank_M1A1Abrams.SK_West_Tank_M1A1Abrams'")};
 		check(Asset.Object);
 		SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
 		SkeletalMeshComponent->SetSkeletalMesh(Asset.Object);
@@ -55,8 +55,12 @@ ANewTank::ANewTank()
 	ZoomCamera->SetupAttachment(SkeletalMeshComponent, Socket::FireSocket);
 
 	SetRootComponent(BoxComponent);
-
+	BoxComponent->SetCanEverAffectNavigation(false);
 	SkeletalMeshComponent->AddTickPrerequisiteComponent(KDT2FloatingPawnMovement);
+}
+
+ANewTank::~ANewTank()
+{
 }
 
 void ANewTank::ZoomIn()
@@ -97,25 +101,25 @@ void ANewTank::Fire()
 				NewActor->SetEffectData(EffectDataTableRow);
 			}
 		, true, this, nullptr);
-	}//쐇을때 Projectile에서 이펙트를 꺼내온다
+	}
 
 	AProjectile* NewProjectile = GameMode->GetProjectilePool().New<AProjectile>(SocketTransform,
 		[this](AProjectile* NewActor)
 		{
 			NewActor->SetProjectileData(ProjectileRow);
 		}
+
 	, true, this, this);
 }
 
 void ANewTank::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
-	int32 MaterialNum = SkeletalMeshComponent->GetSkinnedAsset()->GetMaterials().Num();
-	for (int i = 0; i < MaterialNum; i++)
+	const int32 MaterialNum = SkeletalMeshComponent->GetSkinnedAsset()->GetMaterials().Num();
+	for (int32 i = 0; i < MaterialNum; ++i)
 	{
 		SkeletalMeshComponent->CreateDynamicMaterialInstance(i);
 	}
-
 }
 
 // Called when the game starts or when spawned
@@ -127,6 +131,11 @@ void ANewTank::BeginPlay()
 
 	UDataSubsystem* DataSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UDataSubsystem>();
 	ProjectileRow = DataSubsystem->FindProjectile(ProjectileName);
+}
+
+void ANewTank::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
 }
 
 // Called every frame

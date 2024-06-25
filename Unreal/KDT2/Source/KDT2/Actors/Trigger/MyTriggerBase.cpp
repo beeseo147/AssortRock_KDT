@@ -8,7 +8,7 @@
 // Sets default values
 AMyTriggerBase::AMyTriggerBase()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bGenerateOverlapEventsDuringLevelStreaming = true;
 
@@ -71,7 +71,7 @@ AActor* AMyTriggerBase::GetTriggerOjbect()
 	AActor* Actor = TriggerObject->GetChildActor();
 	if (!IsValid(Actor))
 	{
-		//ensureAlwaysMsgf(false, TEXT("Actor is nullptr"));
+		// ensureAlwaysMsgf(false, TEXT("Actor is nullptr"));
 		return nullptr;
 	}
 
@@ -172,7 +172,6 @@ void AMyTriggerBase::PostRegisterAllComponents()
 	Actor->SetOwner(this);
 
 	if (TriggerDataTableRow->SubData.IsNull()) { return; }
-	if (TriggerDataTableRow->SubData.RowName == NAME_None) { return; }
 
 	ITriggerInterface* Interface = Cast<ITriggerInterface>(Actor);
 	if (Interface)
@@ -194,7 +193,7 @@ void AMyTriggerBase::OnConstruction(const FTransform& Transform)
 void AMyTriggerBase::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 }
 
 // Called every frame

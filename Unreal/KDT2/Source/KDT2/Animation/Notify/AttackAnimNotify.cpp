@@ -31,9 +31,29 @@ void UAttackAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBa
 	}
 	AController* Controller = Pawn->GetController();
 
+	if (!HitResults.IsEmpty())
+	{
+		if (SoundHit)
+		{
+			UGameplayStatics::PlaySoundAtLocation(MeshComp, SoundHit, ActorLocation, 1.f);
+		}
+	}
+	else
+	{
+		if (SoundMiss)
+		{
+			UGameplayStatics::PlaySoundAtLocation(MeshComp, SoundMiss, ActorLocation, 1.f);
+		}
+	}
 	for (auto& It : HitResults)
 	{
 		AActor* HitActor = It.GetActor();
+
+		if (ParticleHit)
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(MeshComp, ParticleHit,
+				It.ImpactPoint, Actor->GetActorRotation(), ParticleScale);
+		}
 		UGameplayStatics::ApplyDamage(HitActor, Damage, Controller, Actor, nullptr);
 	}
 }

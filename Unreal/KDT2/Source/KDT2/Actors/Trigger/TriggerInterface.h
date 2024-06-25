@@ -18,7 +18,7 @@ class ITriggerInterface
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Active"))
+	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="Active"))
 	void ReceiveActive();
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Inactive"))
 	void ReceiveInactive();
@@ -31,7 +31,7 @@ public:
 	virtual void Inactive();
 	virtual void InTrigger();
 	virtual void OutTrigger();
-
+	
 public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OutTrigger"))
 	void ReceiveOnSubData(const FDataTableRowHandle& InTableRowBase);

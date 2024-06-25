@@ -9,7 +9,7 @@
 // Sets default values
 APlanet::APlanet()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	{
@@ -104,6 +104,8 @@ void APlanet::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
+	CloudStaticMeshComponent->SetVisibility(bCloud);
+
 	const int32 ElementIndex = 0;
 	UMaterialInterface* MaterialInterface = PlanetStaticMeshComponent->GetMaterial(ElementIndex);
 	if (!MaterialInterface) { return; }
@@ -180,7 +182,7 @@ void FSatellite::Create(class APlanet* InPlanet, FSatellite* InTemplate)
 {
 	FName AxisName = MakeUniqueObjectName(InPlanet, USceneComponent::StaticClass());
 	USceneComponent* AxisTemplate = InTemplate ? InTemplate->Axis : nullptr;
-	Axis = NewObject<USceneComponent>(InPlanet, AxisName, RF_Transactional, AxisTemplate); //동적 할당의 명시적 할당 (다만 소멸을 선언해줄필요는 없다)
+	Axis = NewObject<USceneComponent>(InPlanet, AxisName, RF_Transactional, AxisTemplate);
 	Axis->RegisterComponent();
 	if (!InTemplate)
 	{

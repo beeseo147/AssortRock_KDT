@@ -22,8 +22,6 @@ struct FActorPool
 			Delete(Actor);
 			Actor = nullptr;
 		}
-		// 만약 전부 활성화되어 있는 상태라면 
-		// 가장 먼저 활성화 시킨 액터에서 삭제한다.
 		Actor = Pool.Pop(false);
 
 		Actor->SetOwner(Owner);

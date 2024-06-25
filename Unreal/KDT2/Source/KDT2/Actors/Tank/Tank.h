@@ -10,13 +10,13 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Components/KDT2FloatingPawnMovement.h"
-#include "Subsystem/DataSubsystem.h"
+#include "Subsystem/Subsystem.h"
 #include "MISC/MISC.h"
 #include "Actors/Interface/TankInterface.h"
 #include "Tank.generated.h"
 
 UCLASS()
-class KDT2_API ATank : public APawn,public ITankInterface
+class KDT2_API ATank : public APawn, public ITankInterface
 {
 	GENERATED_BODY()
 
@@ -28,18 +28,20 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 public:
-	//ITankInterface 상속 begin
+	// ITankInterface begin
 	virtual void ZoomIn() override;
 	virtual void ZoomOut() override;
 	virtual void Fire() override;
-	// end
+	// ITankInterface end
+
 protected:
 	FName ProjectileName = TEXT("TankProjectile");
 	const FProjectileDataTableRow* ProjectileRow;
@@ -85,6 +87,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UUserWidget> UI;
 
-	UPROPERTY()
+	UPROPERTY(Transient)
 	UUserWidget* ZoomInWidget;
 };

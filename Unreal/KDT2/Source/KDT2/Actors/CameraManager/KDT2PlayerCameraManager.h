@@ -13,7 +13,6 @@ UCLASS()
 class KDT2_API AKDT2PlayerCameraManager : public APlayerCameraManager
 {
 	GENERATED_BODY()
-
-	AKDT2PlayerCameraManager();
 	
+	AKDT2PlayerCameraManager();
 };

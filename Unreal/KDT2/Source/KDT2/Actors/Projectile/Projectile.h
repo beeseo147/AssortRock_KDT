@@ -39,11 +39,12 @@ struct KDT2_API FProjectileDataTableRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, Category = "Projectile|Damage")
 	float Damage = 1.f;
-	float DamageRadius = 1000.f;//Radius가 0이면 단일 대상 공격
+	UPROPERTY(EditAnywhere, Category = "Projectile|Damage")
+	float DamageRadius = 1000.f;	// DamageRadius가 0이면 단일 대상 공격
 
 	UPROPERTY(EditAnywhere, Category = "Owner")
 	float FireDelay = 1.f;
-	UPROPERTY(EditAnywhere, Category = "Owner", meta = (RowType = " / Script / KDT2.EffectDataTableRow"))
+	UPROPERTY(EditAnywhere, Category = "Owner", meta = (RowType = "/Script/KDT2.EffectDataTableRow"))
 	FDataTableRowHandle FireEffect;
 };
 
@@ -51,8 +52,8 @@ UCLASS()
 class KDT2_API AProjectile : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
 	AProjectile();
 	~AProjectile();
@@ -78,7 +79,7 @@ protected:
 	UFUNCTION()
 	void OnActorPoolBeginDelete();
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

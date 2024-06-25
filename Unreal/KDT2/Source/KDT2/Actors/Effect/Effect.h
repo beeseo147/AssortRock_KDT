@@ -53,8 +53,8 @@ UCLASS()
 class KDT2_API AEffect : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
 	AEffect();
 	void SetEffectData(const FEffectDataTableRow* InData);
@@ -62,8 +62,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

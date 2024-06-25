@@ -10,7 +10,7 @@
 USTRUCT(BlueprintType)
 struct FSatellite
 {
-	GENERATED_USTRUCT_BODY()
+	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -36,8 +36,8 @@ class KDT2_API APlanet : public AActor
 {
 	friend struct FSatellite;
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
 	APlanet();
 
@@ -55,7 +55,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void BeginDestroy() override;
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

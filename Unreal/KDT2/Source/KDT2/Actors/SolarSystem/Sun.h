@@ -12,8 +12,8 @@ UCLASS()
 class KDT2_API ASun : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
 	ASun();
 
@@ -22,7 +22,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -30,7 +30,7 @@ public:
 	void OnSunPower(float InPower);
 
 private:
-	UPROPERTY(EditAnywhere)//UStaticMeshComponent를 언리얼 에디터에서 수정가능하게 바꾼다.
+	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMeshComponent = nullptr;
 
 	UPROPERTY(EditAnywhere)

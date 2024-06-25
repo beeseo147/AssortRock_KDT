@@ -29,8 +29,8 @@ UCLASS()
 class KDT2_API ACoin : public AActor, public ITriggerInterface
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
 	ACoin();
 
@@ -44,9 +44,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	//virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -56,15 +56,15 @@ protected:
 
 	UPROPERTY()
 	FDataTableRowHandle CoinDataTableRowHandle;
-
-	//FTimerHandle CoinDestroyTimerHandle;
+	
+	FTimerHandle CoinDestroyTimerHandle;
 
 protected:
 	bool bPandingKill = false;
 
 	UPROPERTY(EditAnywhere)
 	double RotationSpeed = 45.0;
-
-	/*UPROPERTY(EditAnywhere)
-	USoundBase* CoinSound;*/
+	
+	UPROPERTY(EditAnywhere)
+	USoundBase* CoinSound;
 };

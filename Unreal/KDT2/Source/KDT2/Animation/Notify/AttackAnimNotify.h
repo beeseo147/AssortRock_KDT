@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
+#include "NiagaraComponent.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #include "AttackAnimNotify.generated.h"
 
 /**
@@ -17,4 +20,13 @@ class KDT2_API UAttackAnimNotify : public UAnimNotify
 protected:
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	USoundBase* SoundHit;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	USoundBase* SoundMiss;
+
+	UPROPERTY(EditAnywhere, Category = "Particle")
+	UNiagaraSystem* ParticleHit;
+	UPROPERTY(EditAnywhere, Category = "Particle")
+	FVector ParticleScale = FVector::OneVector;
 };

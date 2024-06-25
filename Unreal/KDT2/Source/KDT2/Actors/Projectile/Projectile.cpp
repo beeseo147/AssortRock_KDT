@@ -10,14 +10,14 @@
 // Sets default values
 AProjectile::AProjectile()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	Collider = CreateDefaultSubobject<USphereComponent>(TEXT("Collider"));
 	ArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComponent"));
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
-
+	
 	SetRootComponent(Collider);
 	ArrowComponent->SetupAttachment(GetRootComponent());
 	StaticMeshComponent->SetupAttachment(Collider);
@@ -67,9 +67,11 @@ void AProjectile::SetProjectileData(const FProjectileDataTableRow* InData)
 		const int32 MaterialNum = StaticMeshComponent->GetStaticMesh()->GetStaticMaterials().Num();
 		if (InData->Materials.Num() == MaterialNum)
 		{
-			for (uint32 i = 0; UMaterial * It : InData->Materials)
+			for (uint32 i = 0; UMaterial* It : InData->Materials)
 			{
-				StaticMeshComponent->SetMaterial(i++, It);
+				//StaticMeshComponent->SetMaterial(, It);
+				StaticMeshComponent->CreateDynamicMaterialInstance(i, It);
+				++i;
 			}
 		}
 		else
@@ -98,8 +100,8 @@ void AProjectile::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
-	/*if (!DataTableRowHandle.IsNull()) { return; }
-	if (DataTableRowHandle.RowName==NAME_None) { return; }
+	/*if (DataTableRowHandle.IsNull()) { return; }
+	if (DataTableRowHandle.RowName == NAME_None) { return; }
 	FProjectileDataTableRow* Data = DataTableRowHandle.GetRow<FProjectileDataTableRow>(TEXT(""));
 	SetProjectileData(Data);*/
 }
@@ -153,6 +155,7 @@ void AProjectile::OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVec
 			}
 		, true, this, nullptr);
 	}
+
 	const float Damage = ProjectileDataTableRow->Damage;
 	const float DamageRadius = ProjectileDataTableRow->DamageRadius;
 	if (FMath::IsNearlyZero(DamageRadius))
@@ -165,11 +168,10 @@ void AProjectile::OnActorHitFunction(AActor* SelfActor, AActor* OtherActor, FVec
 	}
 	else
 	{
-		DrawDebugSphere(GetWorld(), Hit.ImpactPoint, DamageRadius, 32, FColor::Red, false, 2);
+		//DrawDebugSphere(GetWorld(), Hit.ImpactPoint, DamageRadius, 32, FColor::Red, false, 2.f);
 		TArray<AActor*> IgnoreActors;
-		UGameplayStatics::ApplyRadialDamage(this, Damage, Hit.ImpactPoint, DamageRadius, nullptr, IgnoreActors, this
-			, GetInstigatorController(), true, FCollisionChannel::EnemyChannel);
-
+		UGameplayStatics::ApplyRadialDamage(this, Damage, Hit.ImpactPoint, DamageRadius, nullptr, IgnoreActors, this,
+			GetInstigatorController(), true, FCollisionChannel::EnemyChannel);
 	}
 }
 
@@ -184,7 +186,7 @@ void AProjectile::OnReturnToPool(AActor* DestroyedActor)
 	ATankGameModeBase* GameMode = Cast<ATankGameModeBase>(GetWorld()->GetAuthGameMode());
 	ensure(GameMode);
 	GameMode->GetProjectilePool().Delete(this);
-}//시간이 지나 소멸할때 파괴가 되었을때
+}
 
 void AProjectile::OnActorPoolBeginDelete()
 {

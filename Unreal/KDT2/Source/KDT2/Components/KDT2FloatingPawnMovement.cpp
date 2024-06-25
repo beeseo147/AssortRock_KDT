@@ -3,7 +3,7 @@
 
 #include "Components/KDT2FloatingPawnMovement.h"
 
-float GetAxisDeltaRotation(float InAxisRotationRate, float DeltaTime)
+float MyGetAxisDeltaRotation(float InAxisRotationRate, float DeltaTime)
 {
 	// Values over 360 don't do anything, see FMath::FixedTurn. However we are trying to avoid giant floats from overflowing other calculations.
 	return (InAxisRotationRate >= 0.f) ? FMath::Min(InAxisRotationRate * DeltaTime, 360.f) : 360.f;
@@ -62,9 +62,13 @@ void UKDT2FloatingPawnMovement::TickComponent(float DeltaTime, ELevelTick TickTy
 	}
 }
 
+UKDT2FloatingPawnMovement::UKDT2FloatingPawnMovement()
+{
+}
+
 FRotator UKDT2FloatingPawnMovement::GetDeltaRotation(float DeltaTime) const
 {
-	return FRotator(GetAxisDeltaRotation(RotationRate.Pitch, DeltaTime), GetAxisDeltaRotation(RotationRate.Yaw, DeltaTime), GetAxisDeltaRotation(RotationRate.Roll, DeltaTime));
+	return FRotator(MyGetAxisDeltaRotation(RotationRate.Pitch, DeltaTime), MyGetAxisDeltaRotation(RotationRate.Yaw, DeltaTime), MyGetAxisDeltaRotation(RotationRate.Roll, DeltaTime));
 }
 
 FRotator UKDT2FloatingPawnMovement::ComputeOrientToMovementRotation(const FRotator& CurrentRotation, float DeltaTime, FRotator& DeltaRotation) const

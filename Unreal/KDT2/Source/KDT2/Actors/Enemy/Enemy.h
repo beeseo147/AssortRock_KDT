@@ -9,6 +9,9 @@
 #include "Components/TimelineComponent.h"
 #include "Components/KDT2FloatingPawnMovement.h"
 #include "Components/StatusComponent.h"
+#include "Components/WidgetComponent.h"
+#include "AIController.h"
+#include "PaperSpriteComponent.h"
 #include "Enemy.generated.h"
 
 USTRUCT()
@@ -18,15 +21,21 @@ struct KDT2_API FEnemyDataTableRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, Category = "Enemy")
 	FVector BoxExtent;
-
 	UPROPERTY(EditAnywhere, Category = "Enemy")
 	USkeletalMesh* SkeletalMesh;
-
+	UPROPERTY(EditAnywhere, Category = "Enemy")
+	TSubclassOf<UAnimInstance> AnimClass;
 	UPROPERTY(EditAnywhere, Category = "Enemy")
 	FTransform SkeletalMeshTransform;
 
+	UPROPERTY(EditAnywhere, Category = "Enemy|AI")
+	TSubclassOf<AAIController> AIClass = AAIController::StaticClass();
+
 	UPROPERTY(EditAnywhere, meta = (RowType = "/Script/KDT2.StatusDataTableRow"))
 	FDataTableRowHandle StatusData;
+
+	UPROPERTY(EditAnywhere, meta = (RowType = "/Script/KDT2.WeaponDataTableRow"))
+	FDataTableRowHandle WeaponData;
 };
 
 UCLASS()
@@ -35,16 +44,13 @@ class KDT2_API AEnemy : public APawn
 	GENERATED_BODY()
 
 public:
-	/** Name of the Status component. Use this name if you want to use a different class (with ObjectInitializer.SetDefaultSubobjectClass). */
-	static inline FName StatusComponentName = (TEXT("StatusComponent"));
-
-public:
 	// Sets default values for this pawn's properties
 	AEnemy();
 	~AEnemy();
+	virtual void SetEnemyData(const FDataTableRowHandle& InDataTableRowHandle);
 	virtual void SetEnemyData(const FEnemyDataTableRow* InData);
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
+	
 public:
 	// PaperBurn Effect
 
@@ -54,14 +60,17 @@ public:
 	void OnPaperBurnEffectEnd();
 
 	// PaperBurn Effect End
+
 protected:
+	virtual void PostInitializeComponents() override;
+	virtual void PostRegisterAllComponents() override;
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -77,11 +86,20 @@ protected:
 	UBoxComponent* BoxComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPaperSpriteComponent* PaperSpriteComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* SkeletalMeshComponent;
+	
+	UPROPERTY(EditAnywhere)
+	UChildActorComponent* WeaponChildActorComponent;
 
 protected:
 	UPROPERTY(EditAnywhere)
 	UKDT2FloatingPawnMovement* KDT2FloatingPawnMovement;
+
+	UPROPERTY(EditAnywhere)
+	UWidgetComponent* StatusWidget = nullptr;
 
 	UPROPERTY(Transient)
 	UStatusComponent* StatusComponent = nullptr;

@@ -2,22 +2,22 @@
 
 
 #include "Actors/Coin/Coin.h"
-//#include "Actors/GameState/CoinGameStateBase.h"
+#include "Actors/GameState/CoinGameStateBase.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACoin::ACoin()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> Asset{ TEXT("/Script/Engine.StaticMesh'/Engine/EditorMeshes/EditorHelp.EditorHelp'") };
+	ConstructorHelpers::FObjectFinder<UStaticMesh> Asset{TEXT("/Script/Engine.StaticMesh'/Engine/EditorMeshes/EditorHelp.EditorHelp'")};
 	check(Asset.Succeeded());
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	SetRootComponent(StaticMeshComponent);
 	StaticMeshComponent->SetStaticMesh(Asset.Object);
-	//SetActorEnableCollision(false);
+	SetActorEnableCollision(false);
 }
 
 void ACoin::Active()
@@ -36,16 +36,16 @@ void ACoin::InTrigger()
 
 	bPandingKill = true;
 
-	//ACoinGameStateBase* CoinGameState = Cast<ACoinGameStateBase>(GetWorld()->GetGameState());
-	//const FCoinDataTableRow* Data = CoinDataTableRowHandle.GetRow<FCoinDataTableRow>(TEXT(""));
-	//CoinGameState->GetCoin(Data);
+	ACoinGameStateBase* CoinGameState = Cast<ACoinGameStateBase>(GetWorld()->GetGameState());
+	const FCoinDataTableRow* Data = CoinDataTableRowHandle.GetRow<FCoinDataTableRow>(TEXT(""));
+	CoinGameState->GetCoin(Data);
 
-	/*Owner->SetActorEnableCollision(false);
+	Owner->SetActorEnableCollision(false);
 
 	if (CoinSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, CoinSound, GetActorLocation());
-	}*/
+	}
 
 	auto TimerDelegate = [this]()
 		{
@@ -62,7 +62,7 @@ void ACoin::InTrigger()
 			}
 		};
 
-	//GetWorld()->GetTimerManager().SetTimer(CoinDestroyTimerHandle, TimerDelegate, 2.5f, false);
+	GetWorld()->GetTimerManager().SetTimer(CoinDestroyTimerHandle, TimerDelegate, 2.5f, false);
 }
 
 void ACoin::OutTrigger()
@@ -79,21 +79,21 @@ void ACoin::OnSubData(const FDataTableRowHandle& InSubData)
 	CoinDataTableRowHandle = InSubData;
 	StaticMeshComponent->SetStaticMesh(Data->StaicMesh);
 	StaticMeshComponent->SetRelativeTransform(Data->StaticMeshTransform);
-	//CoinSound = Data->CoinSound;
+	CoinSound = Data->CoinSound;
 }
 
 // Called when the game starts or when spawned
 void ACoin::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 }
 
-//void ACoin::EndPlay(const EEndPlayReason::Type EndPlayReason)
-//{
-//	Super::EndPlay(EndPlayReason);
-//	GetWorld()->GetTimerManager().ClearTimer(CoinDestroyTimerHandle);
-//}
+void ACoin::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	GetWorld()->GetTimerManager().ClearTimer(CoinDestroyTimerHandle);
+}
 
 // Called every frame
 void ACoin::Tick(float DeltaTime)

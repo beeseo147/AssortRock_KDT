@@ -4,9 +4,9 @@
 #include "Actors/Controller/TankPlayerController.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Data/Input/TankInputDataConfig.h"
 #include "Actors/Tank/Tank.h"
 #include "Actors/Interface/TankInterface.h"
-#include "Data/Input/TankInputDataConfig.h"
 
 void ATankPlayerController::BeginPlay()
 {

@@ -35,7 +35,7 @@ void UStatusComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-
+	
 }
 
 

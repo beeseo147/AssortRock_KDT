@@ -12,7 +12,7 @@
 // Sets default values
 ATank::ATank()
 {
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
@@ -66,7 +66,7 @@ void ATank::BeginPlay()
 	Super::BeginPlay();
 	ensure(UI);
 	ZoomInWidget = CreateWidget<UUserWidget>(GetWorld(), UI);
-
+	
 	UDataSubsystem* DataSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UDataSubsystem>();
 	ProjectileRow = DataSubsystem->FindProjectile(ProjectileName);
 }
@@ -114,7 +114,7 @@ void ATank::Fire()
 
 	const FTransform& MuzzleTransform = Muzzle->GetComponentTransform();
 	FTransform Transform = FTransform(MuzzleTransform.GetRotation(), MuzzleTransform.GetLocation());
-
+	
 	//UActorPoolSubsystem* ActorPoolSubsystem = GetWorld()->GetSubsystem<UActorPoolSubsystem>();
 
 	ATankGameModeBase* GameMode = Cast<ATankGameModeBase>(GetWorld()->GetAuthGameMode());

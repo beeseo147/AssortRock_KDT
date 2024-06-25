@@ -21,6 +21,7 @@ class KDT2_API ANewTank : public APawn, public ITankInterface
 public:
 	// Sets default values for this pawn's properties
 	ANewTank();
+	~ANewTank();
 
 public:
 	// ITankInterface begin
@@ -33,8 +34,9 @@ protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

@@ -7,17 +7,18 @@
 #include "TankGameModeBase.generated.h"
 
 /**
- *
+ * 
  */
 UCLASS()
 class KDT2_API ATankGameModeBase : public AKDT2GameModeBase
 {
 	GENERATED_BODY()
-
+	
 public:
 	ATankGameModeBase();
 	FActorPool& GetProjectilePool() { return ProjectilePool; }
 	FActorPool& GetEffectPool() { return EffectPool; }
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;

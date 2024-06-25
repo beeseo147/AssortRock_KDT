@@ -17,8 +17,13 @@ class KDT2_API UCoinInfoUserWidget : public UUserWidget
 	
 public:
 	virtual void NativeConstruct() override;
+
 protected:
-	UPROPERTY(EditAnywhere,meta=(BindWidget))
+	UFUNCTION()
+	FText OnCoinTextChange();
+
+protected:
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	UTextBlock* RemainCoinText;
 
 };

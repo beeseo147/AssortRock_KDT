@@ -8,7 +8,7 @@
 #include "KDT2GameModeBase.generated.h"
 
 /**
- *
+ * 
  */
 UCLASS()
 class KDT2_API AKDT2GameModeBase : public AGameModeBase
@@ -19,6 +19,5 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
-
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 };

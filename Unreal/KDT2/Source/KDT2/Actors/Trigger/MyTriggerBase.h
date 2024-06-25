@@ -12,8 +12,8 @@ UCLASS()
 class KDT2_API AMyTriggerBase : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
 	AMyTriggerBase();
 
@@ -45,9 +45,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(EditAnywhere, meta = (RowType = "/Script/KDT2.TriggerDataTableRow"))
+	UPROPERTY(EditAnywhere, meta=(RowType="/Script/KDT2.TriggerDataTableRow"))
 	FDataTableRowHandle TriggerObjectData;
-
+	
 	const FTriggerDataTableRow* TriggerDataTableRow;
 
 protected:

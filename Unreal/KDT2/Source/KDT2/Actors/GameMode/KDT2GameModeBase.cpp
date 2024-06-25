@@ -2,7 +2,6 @@
 
 
 #include "Actors/GameMode/KDT2GameModeBase.h"
-#include "Actors/Projectile/Projectile.h"
 
 AKDT2GameModeBase::AKDT2GameModeBase()
 {

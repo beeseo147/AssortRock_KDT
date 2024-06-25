@@ -14,11 +14,14 @@ struct KDT2_API FStatusDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere)
 	float HP = 10;
 
+	UPROPERTY(EditAnywhere)
+	float Speed = 1000.;
+
 	FStatusDataTableRow();
 	TSubclassOf<class UStatusComponent> StatusComponentClass;
 };
 
-UCLASS(ClassGroup = (Custom)/*, meta=(BlueprintSpawnableComponent)*/)
+UCLASS( ClassGroup=(Custom)/*, meta=(BlueprintSpawnableComponent)*/ )
 class KDT2_API UStatusComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -26,7 +29,7 @@ class KDT2_API UStatusComponent : public UActorComponent
 public:
 	virtual void SetStatusData(const FStatusDataTableRow* InData);
 
-public:
+public:	
 	// Sets default values for this component's properties
 	UStatusComponent();
 
@@ -36,7 +39,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -44,7 +47,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	float HP = 10;
 
-protected:
 	const FStatusDataTableRow* StatusDataTableRow = nullptr;
 };
 
