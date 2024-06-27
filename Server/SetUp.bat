@@ -24,5 +24,12 @@ call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevC
 echo [Build Sharpmake]
 dotnet build --configuration Release .\Engine\Engine\Source\Programs\Sharpmake\Sharpmake.Application\Sharpmake.Application.csproj
 
+echo [vcpkg task]
+set "VCPKG_ROOT=..\vcpkg"
+echo VCPKG_ROOT: %VCPKG_ROOT%
+call %VCPKG_ROOT%\bootstrap-vcpkg.bat -disableMetrics
+%VCPKG_ROOT%\vcpkg install rapidjson:x64-windows boost:x64-windows sentry-native:x64-windows
+%VCPKG_ROOT%\vcpkg integreate install
+
 echo [Done]
 pause

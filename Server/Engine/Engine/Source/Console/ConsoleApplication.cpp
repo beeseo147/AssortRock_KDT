@@ -1,6 +1,11 @@
 #include <iostream>
+#include "LaunchEngineLoop.h"
 
-int main()
+int32 LAUNCH_API GuardedMain(const TCHAR* CmdLine);
+
+int32 main()
 {
-    std::cout << "Hello World!\n";
+    int32 ErrorLevel = GuardedMain(nullptr);
+
+    return ErrorLevel;
 }
