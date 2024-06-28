@@ -1,7 +1,6 @@
 #pragma once
 #include "CoreTypes.h"
 
-
 using FLogLevel = boost::log::trivial::severity_level;
 
 // Thread-Safe logger

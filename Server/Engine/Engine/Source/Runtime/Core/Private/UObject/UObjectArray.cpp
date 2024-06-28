@@ -1,13 +1,13 @@
 #include "UObject/UObjectArray.h"
 
-CORE_API FUObejctArray GUObjectArray;
+CORE_API FUObjectArray GUObjectArray;
 
 void FMemoryPool::Create(const string_view InTypeName, const uint64 InSizePerOne)
 {
     if(Pool)
     {
-        //이미 Pool이 있다.
-        _ASSERT(false);
+        ////이미 Pool이 있다.
+        //_ASSERT(false);
         return;
     }
 
@@ -37,13 +37,13 @@ void FMemoryPool::Destroy()
 }
 
 void FUObjectArray::Create(const type_info &InTypeInfo, const uint64 InSizePerOne)
-{
+{    
     MapMemoryPool[InTypeInfo.hash_code()].Create(InTypeInfo.name(),InSizePerOne);
 }
 
 void * FUObjectArray::Malloc(const type_info &InTypeInfo)
 {
-    MapMemoryPool[InTypeInfo.hash_code()].Malloc();
+    return MapMemoryPool[InTypeInfo.hash_code()].Malloc();
 }
 
 void FUObjectArray::Free(const type_info &InTypeInfo, void *InAdress)

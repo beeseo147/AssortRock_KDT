@@ -8,7 +8,7 @@ class UClass : public UObject
 {
 private:
     UClass* SuperClass;
-    UObject* ClassDefaultObject;
+    shared_ptr<UObject> ClassDefaultObject;
 
 public:
     FStringView ClassName; 
@@ -21,35 +21,16 @@ public:
     using StaticClassFunctionType = function<UClass*(void)>;
 
     UClass() = delete;
-    UClass(FStringView InClassName,const type_info& InClassTypeInfo,
-            const uint64 InClassSize,ClassConstructorType InClassConstructor,
-            StaticClassFunctionType InSuperClassFunction)
-            : SuperClass(nullptr)
-            , ClassDefaultObject(nullptr)
-            , ClassName(InClassName)
-            , ClassTypeInfo(InClassTypeInfo)
-            , ClassSize(InClassSize)
-            , ClassConstructor(InClassConstructor)
-    {
-        if(InSuperClassFunction)
-        {
-            SuperClass = InSuperClassFunction();
-        }
-    }       
+    CORE_API UClass(FString InClassName, const type_info& InClassTypeInfo,
+        const uint64 InClassSize, ClassConstructorType InClassConstructor,
+        StaticClassFunctionType InSuperClassFunction);
     
     UClass* GetSuperClass() const {return SuperClass;}
 
     template<class T>
     T* GetDefaultObject(){return (T*)GetDefaultObject();}
-    UObject* CORE_API GetDefaultObject(bool bNoCreate = true)const
-    {
-        if(ClassDefaultObject==nullptr && !bNoCreate)
-        {
-            //CDO를 만든다
-            InternalCreateDefaultObjectWrapper();
-        }
-        return ClassDefaultObject;
-    }
+    UObject* GetDefaultObject(bool bNoCreate = true) const;
+
     template<class T>
     bool IsChildOf() const{return IsChildOf(T::StaticClass());}
     
@@ -57,4 +38,34 @@ public:
 protected:
     CORE_API void InternalCreateDefaultObjectWrapper() const;
     CORE_API UObject* CreateDefaultObject();
+};
+
+CORE_API UClass* RegisterEngineClass(
+    FString InClassName,
+    UClass::ClassConstructorType InClassConstructor,
+    UClass::StaticClassFunctionType InSuperClassFunction,
+    function<void()> InClassReflection,
+    const type_info& InClassTypeInfo,
+    const uint64 InClassSize
+);
+
+template<class T>
+UClass* GetPrivateStaticClassBody(
+    FString InClassName,
+    UClass::ClassConstructorType InClassConstructor,
+    UClass::StaticClassFunctionType InSuperClassFunction,
+    function<void()> InClassReflection)
+{
+    const type_info& ClassTypeInfo = typeid(T);
+    const uint64 ClassSize = sizeof(T);
+
+    UClass* NewClass = RegisterEngineClass(InClassName, InClassConstructor,
+        InSuperClassFunction, InClassReflection, ClassTypeInfo, ClassSize);
+    return NewClass;
+}
+
+template<class T>
+void InternalConstructor(const FObjectInitializer& InObjectInitializer)
+{
+    
 };
