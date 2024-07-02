@@ -22,13 +22,14 @@ struct CORE_API FObjectInitializer
     UObject* OuterPrivate = nullptr;
     FString Name;
 
-    shared_ptr<UObject> GetObj()const { return Obj; }
+    UObject* GetObj()const { return Obj; }
 
     FObjectInitializer() {}
     FObjectInitializer(const EObjectFlags InObjectFlags);
     FObjectInitializer(const FStaticConstructObjectParameters& StaticConstructObjectParam);
 
-private:
     //FObjectInitializer를 사용하여 신규로 만들어진 UObject객체
-    shared_ptr<UObject> Obj;
+    shared_ptr<UObject> SharedObj;
+   //FAllocator 내부에서 MemoryPool로부터 shared_ptr 크기를 고려해서 계산된 주소
+    UObject* Obj = nullptr;
 };

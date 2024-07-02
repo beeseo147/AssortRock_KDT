@@ -36,7 +36,7 @@ public class EngineSolution : Solution
         {
             // dll
             conf.AddProject<Core>(target);
-            //conf.AddProject<Engine>(target);
+            conf.AddProject<Engine>(target);
             conf.AddProject<Launch>(target);
 
             // exe

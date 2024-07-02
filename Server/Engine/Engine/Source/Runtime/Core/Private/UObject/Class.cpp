@@ -1,7 +1,7 @@
 #include "UObject/Class.h"
 #include "UObject/UObjectArray.h"
 
-CORE_API map<FStringView, UClass*> MapClass;
+CORE_API map<FString, UClass*> MapClass;
 
 UClass::UClass(FString InClassName,const type_info& InClassTypeInfo,
             const uint64 InClassSize,ClassConstructorType InClassConstructor,
@@ -32,6 +32,7 @@ UObject* UClass::GetDefaultObject(bool bNoCreate) const
 
 CORE_API void UClass::InternalCreateDefaultObjectWrapper() const
 {
+    //상속성을 제거하기 위한 const_cast
     const_cast<UClass*>(this)->CreateDefaultObject();
 }
 
@@ -47,7 +48,7 @@ CORE_API UObject* UClass::CreateDefaultObject()
     FObjectInitializer ObjectInitializer{ StaticConstuctObjectParameter };
     ClassConstructor(ObjectInitializer);
 
-    ClassDefaultObject = ObjectInitializer.GetObj();
+    ClassDefaultObject = ObjectInitializer.SharedObj;
 
 
     return ClassDefaultObject.get();
@@ -61,6 +62,8 @@ CORE_API UClass* RegisterEngineClass(FString InClassName, UClass::ClassConstruct
     new(ObjectBase) UObjectBase(nullptr, EObjectFlags::RF_Class,nullptr);
     
     UClass* NewClass = new(ObjectBase) UClass(InClassName, InClassTypeInfo, InClassSize, InClassConstructor, InSuperClassFunction);
+    NewClass->ClassName = TEXT("UClass");
+
     MapClass.insert(make_pair(InClassName, NewClass));
     return NewClass;
 }

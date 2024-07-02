@@ -1,18 +1,17 @@
 #include "LaunchEngineLoop.h"
 
 FEngineLoop EngineLoop;
-
 /**
  * PreInits the engine loop
  */
 int32 EnginePreInit(const TCHAR* CmdLine)
 {
+	
 	E_Log(trace, "");
 	const int32 ErrorLevel = EngineLoop.PreInit(CmdLine);
-	
+
 	return ErrorLevel;
 }
-
 /**
  * Inits the engine loop
  */
@@ -23,14 +22,13 @@ int32 EngineInit()
 
 	return ErrorLevel;
 }
-
 /**
  * Ticks the engine loop
  */
 void EngineTick()
 {
 	E_Log(trace, "");
-	EngineLoop.Tick();
+	//EngineLoop.Tick();
 }
 
 /**
@@ -39,7 +37,7 @@ void EngineTick()
 void EngineExit()
 {
 	E_Log(trace, "");
-	EngineLoop.Exit();
+	//EngineLoop.Exit();
 }
 
 int32 LAUNCH_API GuardedMain(const TCHAR* CmdLine)

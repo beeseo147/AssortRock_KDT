@@ -5,15 +5,16 @@ using System.IO;
 using Sharpmake;
 
 [Generate]
-public class Launch : CommonProject
+public class Engine : CommonProject
 {
-    public Launch() { }
+    public Engine() { }
 
     public override void ConfigureAll(Configuration conf, EngineTarget target)
     {
         base.ConfigureAll(conf, target);
         conf.SolutionFolder = @"Engine/Source/Runtime";
-        conf.AddPublicDependency<Engine>(target);
+        conf.AddPublicDependency<Core>(target);
+        //conf.AddPublicDependency<Engine>(target);
         //conf.AddPublicDependency<EngineSettings>(target);
         //if (target.LaunchType == ELaunchType.Editor)
         //{
