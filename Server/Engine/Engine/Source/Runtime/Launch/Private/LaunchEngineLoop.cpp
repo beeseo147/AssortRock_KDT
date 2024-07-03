@@ -7,18 +7,28 @@ class LAUNCH_API UTest : public UObject
 {
 public:
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(UTest);
-	//static void __DefaultConstructor(const FObjectInitializer& X) { new((EInternal*)X.GetObj())UTest; }
+	static UClass* StaticClass() {
+		return UTestRegisterEngineClass;
+	}
+
+	static inline UClass* UTestRegisterEngineClass= GetPrivateStaticClassBody<UTest>(TEXT("UTest")
+		, InternalConstructor<UTest>, &UObject::StaticClass, nullptr);
+
 	UTest() {};
 	int a = 0;
 };
 
 int32 FEngineLoop::PreInit(const TCHAR* CmdLine)
 {
-	GetPrivateStaticClassBody<UTest>(TEXT("UTest")
-		, InternalConstructor<UTest>, nullptr, nullptr);
-
 	UClass* Class = MapClass[TEXT("UTest")];
-	Class->GetDefaultObject(true);
+	UObject* Object = Class->GetDefaultObject(false);
+	
+	for (auto& It : MapClass)
+	{
+		It.second->GetDefaultObject(false);
+	}
+	UClass* UTestClass = MapClass[TEXT("UTest2")];
+	UTestClass->IsChildOf<UTest>();
 	return 0;
 }
 

@@ -3,3 +3,4 @@
 #include "Logging/Logger.h"
 
 #include "UObject/Class.h"
+#include "UObject/SubClassOf.h"

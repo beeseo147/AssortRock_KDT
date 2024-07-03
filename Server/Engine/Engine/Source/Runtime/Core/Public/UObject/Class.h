@@ -15,7 +15,7 @@ public:
     FStringView ClassName; 
     const type_info& ClassTypeInfo;
     const uint64 ClassSize;
-
+    //함수 포인터의 지정
     using ClassConstructorType = function<void(const FObjectInitializer&)>;
     ClassConstructorType ClassConstructor;
 
@@ -35,10 +35,22 @@ public:
     template<class T>
     bool IsChildOf() const{return IsChildOf(T::StaticClass());}
     
-    bool CORE_API IsChildOf(const UClass* SomeBase) const{return false;}
+    bool CORE_API IsChildOf(const UClass* SomeBase) const;
+
+
 protected:
     CORE_API void InternalCreateDefaultObjectWrapper() const;
     CORE_API UObject* CreateDefaultObject();
+
+private:
+    /**
+     * This signature intentionally hides the method declared in UObjectBaseUtility to make it private.
+     * Call IsChildOf instead; Hidden because calling IsA on a class almost always indicates an error where the caller should use IsChildOf
+     */
+    bool IsA(const UClass* Parent) const
+    {
+        return UObject::IsA(Parent);
+    }
 };
 
 CORE_API UClass* RegisterEngineClass(
