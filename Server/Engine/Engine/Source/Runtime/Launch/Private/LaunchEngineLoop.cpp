@@ -1,52 +1,62 @@
+#pragma once
 #include "LaunchEngineLoop.h"
-
+#include "UObject/Class.h"
+UEngine* GEngine = nullptr;
 //특정 위치에서만 참조하기 위하여
 extern CORE_API map<FString, UClass*> MapClass;
 
-class LAUNCH_API UTest : public UObject
+int32 FEngineLoop::PreInit(const TCHAR* /*CmdLine*/)
 {
-public:
-	DEFINE_DEFAULT_CONSTRUCTOR_CALL(UTest);
-	static UClass* StaticClass() {
-		return UTestRegisterEngineClass;
-	}
+	// 설정 파일 로드
 
-	static inline UClass* UTestRegisterEngineClass= GetPrivateStaticClassBody<UTest>(TEXT("UTest")
-		, InternalConstructor<UTest>, &UObject::StaticClass, nullptr);
+	//User DLL을 Load
 
-	UTest() {};
-	int a = 0;
-};
 
-int32 FEngineLoop::PreInit(const TCHAR* CmdLine)
-{
-	UClass* Class = MapClass[TEXT("UTest")];
-	UObject* Object = Class->GetDefaultObject(false);
-	
+	//Create CDO
 	for (auto& It : MapClass)
 	{
+
 		It.second->GetDefaultObject(false);
 	}
-	UClass* UTestClass = MapClass[TEXT("UTest2")];
-	UTestClass->IsChildOf<UTest>();
+	
+	// User DLL을 Load
+
 	return 0;
 }
 
 int32 FEngineLoop::Init()
 {
+	Engine = NewObject<UEngine>(nullptr);
+	GEngine = Engine.get();
+	
+	// GameInstance를 생성. World 생성
+	Engine->Init();
+
+	// World에 GameMode를 지정
+	// [SERVER] World->Listen();
+	Engine->Start();
+
+	UClass* Test = UEngine::StaticClass();
 	return 0;
 }
 
 void FEngineLoop::Tick()
 {
+	//RequestEngineExit("Test");
+	Engine->Tick(0.);
 }
 
 void FEngineLoop::Exit()
 {
+	Engine->PreExit();
+	Engine = nullptr;
+	GEngine = nullptr;
+
 	for (auto& It : MapClass)
 	{
 		It.second->~UClass();
 		GUObjectArray.Free(typeid(UClass), It.second);
 	}
-	
+	MapClass.clear();
+
 }

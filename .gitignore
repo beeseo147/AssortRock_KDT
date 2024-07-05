@@ -386,3 +386,10 @@ Unreal/KDT2/Content/STF/
 
 Server/Engine/intermediate
 Server/Engine/Engine.Sln
+
+Server/Project/Game/intermediate
+Server/Project/Game/*.sln
+Server/ServerProject/Server/intermediate
+Server/ServerProject/Server/*.sln
+Server/ServerProject/Client/intermediate
+Server/ServerProject/Client/*.sln

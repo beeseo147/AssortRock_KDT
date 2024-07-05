@@ -28,7 +28,6 @@ echo [Build Headder Parser]
 cmake -G "Visual Studio 17 2022" -A x64 -S Engine\Engine\Source\Programs\HeaderParser -B Engine\Engine\Source\Programs\HeaderParser\out
 cmake --build Engine\Engine\Source\Programs\HeaderParser\out --config Release
 
-
 echo [vcpkg task]
 set "VCPKG_ROOT=..\vcpkg"
 echo VCPKG_ROOT: %VCPKG_ROOT%
@@ -38,3 +37,10 @@ call %VCPKG_ROOT%\bootstrap-vcpkg.bat -disableMetrics
 
 echo [Done]
 pause
+
+
+
+
+
+
+

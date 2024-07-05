@@ -1,5 +1,5 @@
 #pragma once
-#include "CoreMinimal.h"
+#include "EngineMinimal.h"
 
 /**
  * Implements the main engine loop.
@@ -25,5 +25,11 @@ public:
 	/** Advances the main loop. **/
 	void Tick();
 	/** Performs shut down **/
-	void Exit();
+	void Exit(); 
+
+private:
+	shared_ptr<UEngine> Engine;
+
 };
+
+extern ENGINE_API UEngine* GEngine;

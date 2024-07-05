@@ -12,7 +12,7 @@ private:
     shared_ptr<UObject> ClassDefaultObject;
 
 public:
-    FStringView ClassName; 
+    FString ClassName; 
     const type_info& ClassTypeInfo;
     const uint64 ClassSize;
     //함수 포인터의 지정
@@ -25,17 +25,18 @@ public:
     CORE_API UClass(FString InClassName, const type_info& InClassTypeInfo,
         const uint64 InClassSize, ClassConstructorType InClassConstructor,
         StaticClassFunctionType InSuperClassFunction);
-    
+    ~UClass() {}
     UClass* GetSuperClass() const {return SuperClass;}
 
     template<class T>
     T* GetDefaultObject(){return (T*)GetDefaultObject();}
-    UObject* GetDefaultObject(bool bNoCreate = true) const;
+
+    CORE_API UObject* GetDefaultObject(bool bNoCreate = true) const;
 
     template<class T>
     bool IsChildOf() const{return IsChildOf(T::StaticClass());}
     
-    bool CORE_API IsChildOf(const UClass* SomeBase) const;
+    CORE_API bool IsChildOf(const UClass* SomeBase) const;
 
 
 protected:

@@ -87,8 +87,8 @@ public abstract class CommonProject : Project
         }
         //conf.EventPreBuild.Add("msbuild EngineConfig.vcxproj /p:platform=x64 /p:configuration=\"Debug Client\"");
         //conf.EventPreBuild.Add("msbuild UserConfig.vcxproj /p:platform=x64 /p:configuration=\"Debug Client\"");
-        //string EngineDir = Utils.GetEngineDir();
-        //conf.EventPreBuild.Add(@"cmd /c """ + EngineDir + @"\Engine\Source\Programs\HeaderParser\HeaderParser.bat"" $(SolutionDir) [project.Name] [project.SourceRootPath] " + EngineDir);
+        string EngineDir = Utils.GetEngineDir();
+        conf.EventPreBuild.Add(@"cmd /c """ + EngineDir + @"\Engine\Source\Programs\HeaderParser\HeaderParser.bat"" $(SolutionDir) [project.Name] [project.SourceRootPath] " + EngineDir);
 
         // if not set, no precompile option will be used.
         //conf.PrecompHeader = "stdafx.h";

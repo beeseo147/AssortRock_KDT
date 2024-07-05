@@ -74,7 +74,7 @@ public:
 	{
 		Data.ObjectInitializer->Obj = _Ptr;
 		new(Data.ObjectInitializer->GetObj())UObjectBase(Data.ObjectInitializer->Class,
-			Data.ObjectInitializer->ObjectFlags, Data.ObjectInitializer->OuterPrivate, Data.ObjectInitializer->Name);
+			Data.ObjectInitializer->ObjectFlags, Data.ObjectInitializer->OuterPrivate/*Data.ObjectInitializer->Name*/);
 		_Objty::__DefaultConstructor(*Data.ObjectInitializer);
 	}
 

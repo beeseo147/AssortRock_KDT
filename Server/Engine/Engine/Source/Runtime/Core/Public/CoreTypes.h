@@ -5,6 +5,8 @@
 #include <memory>
 #include <typeinfo>
 #include <functional>
+#include <codecvt>
+#include <filesystem>
 
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
@@ -34,3 +36,5 @@ namespace boost
 using namespace std;
 using FString = wstring;
 using FStringView = wstring_view;
+
+#include "Name.h"

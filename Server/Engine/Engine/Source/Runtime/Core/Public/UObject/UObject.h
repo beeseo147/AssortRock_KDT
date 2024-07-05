@@ -73,3 +73,8 @@ public:
     
     FString Name;
 };
+
+template<class T1,class T2>
+static shared_ptr<T1>Cast(T2* InObj) { return std::reinterpret_pointer_cast<T1>(InObj->shared_from_this());}
+template<class T1, class T2>
+static shared_ptr<T1>Cast(shared_ptr<T2> InObj) { return std::reinterpret_pointer_cast<T1>(InObj); }

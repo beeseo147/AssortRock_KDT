@@ -23,7 +23,7 @@ UObject* UClass::GetDefaultObject(bool bNoCreate) const
 {
     if (ClassDefaultObject == nullptr && !bNoCreate)
     {
-        //CDO를 만든다
+        // CDO를 만든다
         InternalCreateDefaultObjectWrapper();
     }
     return ClassDefaultObject.get();
