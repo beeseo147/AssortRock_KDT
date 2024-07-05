@@ -38,3 +38,6 @@ using FString = wstring;
 using FStringView = wstring_view;
 
 #include "Name.h"
+
+//ThirdParty
+#include "inicpp.h"

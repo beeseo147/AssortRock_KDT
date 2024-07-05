@@ -54,11 +54,11 @@ void FFillContentTask::RunTask(Value::ConstValueIterator& InDoc, string& InOutCo
 		{
 			// Reflection
 			{
-				InOutContent += "static void Reflection() {\\\n";
+				//InOutContent += "static void Reflection() {\\\n";
 				{
-					InOutContent += (string)"\t\t" + "reflect<" + ThisClassName + ">()\\\n";
-					InOutContent += (string)"\t\t\t" + ".type(TEXT(\"" + ThisClassName + "\")_hash)\\\n";
-					InOutContent += (string)"\t\t\t" + ".base<" + ParentClassName + ">()\\\n";
+					//InOutContent += (string)"\t\t" + "reflect<" + ThisClassName + ">()\\\n";
+					//InOutContent += (string)"\t\t\t" + ".type(TEXT(\"" + ThisClassName + "\")_hash)\\\n";
+					//InOutContent += (string)"\t\t\t" + ".base<" + ParentClassName + ">()\\\n";
 
 					// Property
 					{
@@ -70,75 +70,75 @@ void FFillContentTask::RunTask(Value::ConstValueIterator& InDoc, string& InOutCo
 							string TypeName = Type.GetString();
 							if (TypeName == "property")
 							{
-								const Value& Property = Members[i - 1]["name"];
-								const char* PropertyName = Property.GetString();
-								InOutContent += (string)"\t\t\t" + ".data<&" + ThisClassName + "::" + PropertyName + ">"
-									+ "(\"" + PropertyName + "\"_hash, make_pair(0, FProperty{ ";
+								//const Value& Property = Members[i - 1]["name"];
+								//const char* PropertyName = Property.GetString();
+								//InOutContent += (string)"\t\t\t" + ".data<&" + ThisClassName + "::" + PropertyName + ">"
+								//	+ "(\"" + PropertyName + "\"_hash, make_pair(0, FProperty{ ";
 
-								{
-									const Value& DataType_Type = Members[i - 1]["dataType"]["type"];
-									const string strDataType_Type = DataType_Type.GetString();
-									const bool bPointer = strDataType_Type == "pointer";
-									const bool bTemplate = strDataType_Type == "template";
-									if (bPointer || bTemplate)
-									{
-										if (bPointer)
-										{
-											InOutContent += ".PropertyType = EPropertyType::T_POINTER";
-										}
-										else if (bTemplate)
-										{
-											const Value& Template_Type_Name = Members[i - 1]["dataType"]["name"];
-											const string strTemplate_Type_Name = Template_Type_Name.GetString();
-											if (strTemplate_Type_Name == "shared_ptr")
-											{
-												InOutContent += ".PropertyType = EPropertyType::T_SHARED_PTR";
-											}
-											else if (strTemplate_Type_Name == "engine_weak_ptr")
-											{
-												InOutContent += ".PropertyType = EPropertyType::T_ENGINE_WEAK_PTR";
-											}
-											else if (strTemplate_Type_Name == "weak_ptr")
-											{
-												InOutContent += ".PropertyType = EPropertyType::T_WEAK_PTR";
-											}
-											else
-											{
-												// not supported types
-												assert(false);
-											}
-										}
-										InOutContent += ", ";
-										InOutContent += (string)".Name = \"" + PropertyName + "\", ";
+								//{
+								//	const Value& DataType_Type = Members[i - 1]["dataType"]["type"];
+								//	const string strDataType_Type = DataType_Type.GetString();
+								//	const bool bPointer = strDataType_Type == "pointer";
+								//	const bool bTemplate = strDataType_Type == "template";
+								//	if (bPointer || bTemplate)
+								//	{
+								//		if (bPointer)
+								//		{
+								//			InOutContent += ".PropertyType = EPropertyType::T_POINTER";
+								//		}
+								//		else if (bTemplate)
+								//		{
+								//			const Value& Template_Type_Name = Members[i - 1]["dataType"]["name"];
+								//			const string strTemplate_Type_Name = Template_Type_Name.GetString();
+								//			if (strTemplate_Type_Name == "shared_ptr")
+								//			{
+								//				InOutContent += ".PropertyType = EPropertyType::T_SHARED_PTR";
+								//			}
+								//			else if (strTemplate_Type_Name == "engine_weak_ptr")
+								//			{
+								//				InOutContent += ".PropertyType = EPropertyType::T_ENGINE_WEAK_PTR";
+								//			}
+								//			else if (strTemplate_Type_Name == "weak_ptr")
+								//			{
+								//				InOutContent += ".PropertyType = EPropertyType::T_WEAK_PTR";
+								//			}
+								//			else
+								//			{
+								//				// not supported types
+								//				assert(false);
+								//			}
+								//		}
+								//		InOutContent += ", ";
+								//		InOutContent += (string)".Name = \"" + PropertyName + "\", ";
 
-										string strClassName;
-										if (bPointer)
-										{
-											strClassName = Members[i - 1]["dataType"]["baseType"]["name"].GetString();
-										}
-										else if (bTemplate)
-										{
-											strClassName = Members[i - 1]["dataType"]["arguments"][0]["name"].GetString();
-										}
-										InOutContent += (string)".ClassName = TEXT(\"" + strClassName + "\")" + "}))\\\n";
-									}
-									else
-									{
-										const Value& DataType_Name = Members[i - 1]["dataType"]["name"];
-										string strDataType_Name = DataType_Name.GetString();
-										std::transform(strDataType_Name.begin(), strDataType_Name.end(), strDataType_Name.begin(), ::tolower);
-										if (strDataType_Name == "int")
-										{
-											InOutContent += ".PropertyType = EPropertyType::T_INT";
-										}
-										if (strDataType_Name == "float")
-										{
-											InOutContent += ".PropertyType = EPropertyType::T_FLOAT";
-										}
-										InOutContent += ", ";
-										InOutContent += (string)".Name = \"" + PropertyName + "\"" + "}))\\\n";
-									}
-								}
+								//		string strClassName;
+								//		if (bPointer)
+								//		{
+								//			strClassName = Members[i - 1]["dataType"]["baseType"]["name"].GetString();
+								//		}
+								//		else if (bTemplate)
+								//		{
+								//			strClassName = Members[i - 1]["dataType"]["arguments"][0]["name"].GetString();
+								//		}
+								//		InOutContent += (string)".ClassName = TEXT(\"" + strClassName + "\")" + "}))\\\n";
+								//	}
+								//	else
+								//	{
+								//		const Value& DataType_Name = Members[i - 1]["dataType"]["name"];
+								//		string strDataType_Name = DataType_Name.GetString();
+								//		std::transform(strDataType_Name.begin(), strDataType_Name.end(), strDataType_Name.begin(), ::tolower);
+								//		if (strDataType_Name == "int")
+								//		{
+								//			InOutContent += ".PropertyType = EPropertyType::T_INT";
+								//		}
+								//		if (strDataType_Name == "float")
+								//		{
+								//			InOutContent += ".PropertyType = EPropertyType::T_FLOAT";
+								//		}
+								//		InOutContent += ", ";
+								//		InOutContent += (string)".Name = \"" + PropertyName + "\"" + "}))\\\n";
+								//	}
+								//}
 							}
 							else if (TypeName == "default constructor")
 							{
@@ -151,12 +151,12 @@ void FFillContentTask::RunTask(Value::ConstValueIterator& InDoc, string& InOutCo
 						}
 					}
 
-					InOutContent += (string)"\t\t\t" + ";\\\n";
+					///InOutContent += (string)"\t\t\t" + ";\\\n";
 
 					//InOutContent += (string)"\t\t});\\\n";
 				}
 
-				InOutContent += (string)"\t" + "}\\\n";
+				///InOutContent += (string)"\t" + "}\\\n";
 			}
 
 			{
@@ -195,7 +195,8 @@ void FFillContentTask::RunTask(Value::ConstValueIterator& InDoc, string& InOutCo
 					+ "\t\t(UClass::ClassConstructorType)InternalConstructor<" + ThisClassName + ">,\\\n"
 					+ "\t\t&" + ParentClassName + "::StaticClass, \\\n"
 					//+ "\t\t&" + ThisClassName + "::" + ParentClassName + "::StaticClass, \\\n"
-					+ "\t\t" + ThisClassName + "::Reflection" + " \\\n"
+					//+ "\t\t" + ThisClassName + "::Reflection" + " \\\n"
+					+ "\t\t" + "nullptr" + "::Reflection" + " \\\n"
 					+ "\t" + ");\\\n";
 				InOutContent += RegisterClass;
 			}

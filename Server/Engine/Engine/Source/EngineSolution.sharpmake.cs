@@ -5,6 +5,7 @@ using Sharpmake;
 [module: Include("%EngineDir%/Engine/Source/CommonProject.sharpmake.cs")]
 [module: Include("%EngineDir%/Engine/Source/Console/EngineConsole.sharpmake.cs")]
 [module: Include("%EngineDir%/Engine/Source/Runtime/**/*.sharpmake.cs")]
+[module: Include("%EngineDir%/Engine/Source/ThirdParty/**/*.sharpmake.cs")]
 [module: Include("Utils.cs")]
 
 [Generate]
@@ -34,6 +35,8 @@ public class EngineSolution : Solution
 
         // Add Projects
         {
+            // ThirdParty
+            conf.AddProject<IniParser>(target);
             // dll
             conf.AddProject<Core>(target);
             conf.AddProject<Engine>(target);
