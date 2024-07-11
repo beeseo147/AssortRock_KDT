@@ -41,10 +41,11 @@ engine_weak_ptr<AActor> UWorld::SpawnActor(UClass* InClass, const FActorSpawnPar
 	{
 		E_Log(error, "Class is nullptr");
 	}
+
 	shared_ptr<AActor> NewActor = NewObject<AActor>(this, InClass, SpawnParameters.Name, SpawnParameters.Object);
 	FString ActorName = NewActor->GetName();
 	MapActors.insert(make_pair(ActorName, NewActor));
-	
+
 	NewActor->BeginPlay();
 
 	return NewActor;

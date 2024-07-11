@@ -1,7 +1,7 @@
 #pragma once
 #include "CoreTypes.h"
 #include "UObjectGlobals.h"
-
+#include "EngineWeakPtr.h"
 
 class UClass;
 class UObject;
@@ -74,6 +74,9 @@ public:
 
 	const FString& GetName() const { return NamePrivate; }
 
+	// Temp code
+	CORE_API static void LogReflectionData(UObject* InObject);
+
 private:
 	friend class UClass;
 	template<typename> friend class FAllocator;
@@ -85,3 +88,5 @@ template<class T1, class T2>
 static shared_ptr<T1> Cast(T2* InObj) { return std::reinterpret_pointer_cast<T1>(InObj->shared_from_this()); }
 template<class T1, class T2>
 static shared_ptr<T1> Cast(shared_ptr<T2> InObj) { return std::reinterpret_pointer_cast<T1>(InObj); }
+template<class T1, class T2>
+static engine_weak_ptr<T1> Cast(engine_weak_ptr<T2> InObj) { return std::reinterpret_pointer_cast<T1>(InObj.lock()); }

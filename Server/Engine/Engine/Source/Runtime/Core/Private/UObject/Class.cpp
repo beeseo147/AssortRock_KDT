@@ -86,16 +86,22 @@ CORE_API UObject* UClass::CreateDefaultObject()
     return ClassDefaultObject.get();
 }
 
-CORE_API UClass* RegisterEngineClass(FString InClassName, UClass::ClassConstructorType InClassConstructor, UClass::StaticClassFunctionType InSuperClassFunction, function<void()> InClassReflection, const type_info& InClassTypeInfo, const uint64 InClassSize)
+CORE_API UClass* RegisterEngineClass(FString InClassName,
+    UClass::ClassConstructorType InClassConstructor,
+    UClass::StaticClassFunctionType InSuperClassFunction,
+    function<void()> InClassReflection,
+    const type_info& InClassTypeInfo, const uint64 InClassSize)
 {
-    //UClass에 메모리를 확보하기 위해
+    // Reflection 함수 호출
+    InClassReflection();
+
     GUObjectArray.Create(typeid(UClass), sizeof(UClass));
-    UObjectBase * ObjectBase = (UObjectBase*)GUObjectArray.Malloc(typeid(UClass));
-    //header값을 초기화
-    new(ObjectBase) UObjectBase(nullptr, EObjectFlags::RF_Class,nullptr);
-    //UClass의 초기화
-    UClass* NewClass = new(ObjectBase) UClass(InClassName, InClassTypeInfo, InClassSize, InClassConstructor, InSuperClassFunction);
-    NewClass->ClassName = TEXT("UClass");
+    UObjectBase* ObjectBase = (UObjectBase*)GUObjectArray.Malloc(typeid(UClass));
+
+    new(ObjectBase)UObjectBase(nullptr, EObjectFlags::RF_Class, nullptr);
+
+    UClass* NewClass = new(ObjectBase)UClass(InClassName, InClassTypeInfo, InClassSize,
+        InClassConstructor, InSuperClassFunction);
 
     MapClass.insert(make_pair(InClassName, NewClass));
 

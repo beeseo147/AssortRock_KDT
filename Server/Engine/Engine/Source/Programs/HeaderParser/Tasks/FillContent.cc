@@ -153,7 +153,7 @@ void FFillContentTask::RunTask(Value::ConstValueIterator& InDoc, string& InOutCo
 
 					InOutContent += (string)"\t\t\t" + ";\\\n";
 
-					InOutContent += (string)"\t\t});\\\n";
+					//InOutContent += (string)"\t\t});\\\n";
 				}
 
 				InOutContent += (string)"\t" + "}\\\n";
@@ -196,7 +196,6 @@ void FFillContentTask::RunTask(Value::ConstValueIterator& InDoc, string& InOutCo
 					+ "\t\t&" + ParentClassName + "::StaticClass, \\\n"
 					//+ "\t\t&" + ThisClassName + "::" + ParentClassName + "::StaticClass, \\\n"
 					+ "\t\t" + ThisClassName + "::Reflection" + " \\\n"
-					+ "\t\t" + "nullptr" + " \\\n"
 					+ "\t" + ");\\\n";
 				InOutContent += RegisterClass;
 			}

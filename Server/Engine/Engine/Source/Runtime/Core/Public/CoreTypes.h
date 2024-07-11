@@ -43,3 +43,23 @@ using FStringView = wstring_view;
 #include "inicpp.h"
 #include "Reflection/meta.hpp"
 #include "Reflection/factory.hpp"
+
+using namespace meta;
+
+enum EPropertyType : uint8
+{
+	T_NONE,
+	T_POINTER,
+	T_SHARED_PTR,
+	T_ENGINE_WEAK_PTR,
+	T_WEAK_PTR,
+	T_INT,
+	T_FLOAT,
+};
+
+struct FProperty
+{
+	EPropertyType PropertyType = EPropertyType::T_NONE;
+	string Name;
+	FString ClassName;
+};

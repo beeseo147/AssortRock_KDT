@@ -10,8 +10,8 @@ class ENGINE_API UGameInstance : public UObject
 {
 	GENERATED_BODY();
 public:
-	void Initialize();
-	void StartGameInstance();
+	virtual void Initialize();
+	virtual void StartGameInstance();
 
 	UEngine* GetEngine();
 public:
@@ -19,5 +19,6 @@ public:
 	~UGameInstance();
 
 	// weak_ptr<World>
+	UPROPERTY()
 	engine_weak_ptr<class UWorld> World;
 };
