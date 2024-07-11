@@ -1,11 +1,14 @@
 #pragma once
 #include "CoreMinimal.h"
+#include "Engine/GameInstance.h"
+#include "Engine/World.h"
 #include "Engine.generated.h"
 
 UCLASS()
 class ENGINE_API UEngine : public UObject
 {
 	GENERATED_BODY()
+	friend class UGameInstance;
 public:
 	/*DEFINE_DEFAULT_CONSTRUCTOR_CALL(UEngine);
 	static UClass* StaticClass() {
@@ -24,5 +27,8 @@ public:
 	void PreExit();
 
 protected:
+	//GameInstance
+	shared_ptr<UGameInstance> GameInstance;
 	//World
+	shared_ptr <UWorld> World;
 };

@@ -12,6 +12,6 @@ public class EngineConsole : CommonProject
         conf.Output = Configuration.OutputType.Exe;
 
         conf.AddPublicDependency<Launch>(target);
-        //conf.EventPreBuild.Add("msbuild EngineConfig.vcxproj /p:platform=x64 /p:configuration=\"Debug Client\"");
+        conf.EventPreBuild.Add("msbuild EngineConfig.vcxproj /p:platform=x64 /p:configuration=\"Debug Client\"");
     }
 }

@@ -14,6 +14,7 @@ public class Engine : CommonProject
         base.ConfigureAll(conf, target);
         conf.SolutionFolder = @"Engine/Source/Runtime";
         conf.AddPublicDependency<Core>(target);
+
         //conf.AddPublicDependency<Engine>(target);
         //conf.AddPublicDependency<EngineSettings>(target);
         //if (target.LaunchType == ELaunchType.Editor)

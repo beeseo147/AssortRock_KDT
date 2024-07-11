@@ -1,7 +1,19 @@
 #include "UObject/Class.h"
 #include "UObject/UObjectArray.h"
-
+#include "Logging/Logger.h"
 CORE_API map<FString, UClass*> MapClass;
+
+CORE_API UClass* UClass::FindClass(FStringView InClassName)
+{
+    auto It = MapClass.find(InClassName.data());
+    if (It == MapClass.end())
+    {
+        E_Log(error, "Failed {}", to_string(InClassName));
+        return nullptr;
+    }
+
+    return It->second;
+}
 
 UClass::UClass(FString InClassName,const type_info& InClassTypeInfo,
             const uint64 InClassSize,ClassConstructorType InClassConstructor,

@@ -57,6 +57,21 @@ shared_ptr<T> NewObject(UObject* Outer, UClass* InClass = nullptr, FString Name 
 
     return Cast<T>(StaticConstructorObject_Internal(Params));
 }
+
+// wstring -> UTF8
+CORE_API string to_string(const FString& InString);
+// wstring -> UTF8
+CORE_API string to_string(FStringView InString);
+// UTF8 -> wstring
+CORE_API FString to_wstring(const string& InString);
+// UTF8 -> wstring
+CORE_API FString to_wstring(string_view InString);
+
+CORE_API uint64 operator""_hash(const ANSICHAR * NewString, size_t);
+CORE_API uint64 operator""_hash(const WIDECHAR * NewString, size_t);
+CORE_API uint64 Hash(const ANSICHAR* NewString);
+CORE_API uint64 Hash(const WIDECHAR* NewString);
+
 template< class T >
 inline const T* GetDefault()
 {

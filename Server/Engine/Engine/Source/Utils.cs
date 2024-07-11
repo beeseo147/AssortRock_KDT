@@ -64,7 +64,7 @@ public class Utils
         // Defines
         {
             conf.Defines.Add("SOLUTION_NAME=\"$(SolutionName)\"");
-
+			conf.Defines.Add("_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING");
             if (target.Name == "Release")
             {
                 conf.Defines.Add("WITH_DEBUG=0");

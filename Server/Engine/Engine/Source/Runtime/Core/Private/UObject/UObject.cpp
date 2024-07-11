@@ -5,7 +5,7 @@
 
 UObjectBase::UObjectBase(UClass* InClass,EObjectFlags InObjectFlags,UObject* InOuter)
     : ObjectFlags(InObjectFlags)
-    , Class(InClass)
+    , ClassPrivate(InClass)
     , OuterPrivate(InOuter)
 {
 

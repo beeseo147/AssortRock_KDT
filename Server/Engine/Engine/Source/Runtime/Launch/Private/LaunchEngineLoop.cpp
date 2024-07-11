@@ -8,9 +8,21 @@ extern CORE_API map<FString, UClass*> MapClass;
 int32 FEngineLoop::PreInit(const TCHAR* /*CmdLine*/)
 {
 	// 설정 파일 로드
+	FConfigCacheIni::InitializeConfigSystem();
 
 	//User DLL을 Load
+	const FString& ProjectDllDir = FPaths::ProjectDllDir();
+	if (filesystem::is_directory(ProjectDllDir))
+	{
+		for (const auto& It : filesystem::directory_iterator(ProjectDllDir))
+		{
+			if (It.path().extension() == TEXT(".dll"))
+			{
+				LoadLibrary(It.path().c_str());
+			}
 
+		}
+	}
 
 	//Create CDO
 	for (auto& It : MapClass)
@@ -59,4 +71,5 @@ void FEngineLoop::Exit()
 	}
 	MapClass.clear();
 
+	FConfigCacheIni::DestroyConfigSystem();
 }

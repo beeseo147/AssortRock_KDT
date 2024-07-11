@@ -60,13 +60,11 @@ public:
 	}
 	_CONSTEXPR20 ~FAllocator() = default;
 	_CONSTEXPR20 FAllocator& operator=(const FAllocator&) = default;
-	//1. allocate -> 클래스에 대한 시작 주소 
-	//2. construct-> 실제 클래스 생성과 주소
-	//3. 
+
 	_NODISCARD_RAW_PTR_ALLOC _CONSTEXPR20 __declspec(allocator) _Ty* allocate(_CRT_GUARDOVERFLOW const size_t /*_Count*/) {
 		static_assert(sizeof(value_type) > 0, "value_type must be complete before calling allocate.");
 		_Ty* Pointer = (_Ty*)GUObjectArray.Malloc(Data.ObjectInitializer->Class->ClassTypeInfo);
-		return Pointer; 
+		return Pointer;
 	}
 
 	template <class _Objty, class... _Types>
@@ -74,8 +72,9 @@ public:
 	{
 		Data.ObjectInitializer->Obj = _Ptr;
 		new(Data.ObjectInitializer->GetObj())UObjectBase(Data.ObjectInitializer->Class,
-			Data.ObjectInitializer->ObjectFlags, Data.ObjectInitializer->OuterPrivate/*Data.ObjectInitializer->Name*/);
+			Data.ObjectInitializer->ObjectFlags, Data.ObjectInitializer->OuterPrivate);
 		_Objty::__DefaultConstructor(*Data.ObjectInitializer);
+		Data.ObjectInitializer->Obj->NamePrivate = Data.ObjectInitializer->Name;
 	}
 
 	template< class U >
@@ -84,12 +83,11 @@ public:
 		UClass* Class = p->GetClass();
 		Data.DestructorClass = Class;
 		_ASSERT(Class);
-		p->~U(); 
+		p->~U();
 	}
 	_CONSTEXPR20 void deallocate(_Ty* const _Ptr, const size_t _Count) {
 		_STL_ASSERT(_Ptr != nullptr || _Count == 0, "null pointer cannot point to a block of non-zero size");
 		_STL_ASSERT(_Count == 1, "error");
-		
 		GUObjectArray.Free(Data.DestructorClass->ClassTypeInfo, _Ptr);
 	}
 

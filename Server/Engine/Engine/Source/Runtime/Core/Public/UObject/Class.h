@@ -7,6 +7,9 @@
 
 class UClass : public UObject
 {
+public:
+    CORE_API static UClass* FindClass(FStringView InClassName);
+
 private:
     UClass* SuperClass;
     shared_ptr<UObject> ClassDefaultObject;
