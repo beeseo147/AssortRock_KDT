@@ -1,13 +1,13 @@
 ﻿#include "Engine/GameInstance.h"
 #include "Engine/Engine.h"
 
-void UGameInstance::Initialize()
+void UGameInstance::Initailize()
 {
 	// World 생성
 	UEngine* Engine = GetEngine();
 	Engine->World = NewObject<UWorld>(this);
+	World = Engine->World;
 	Engine->World->SetGameInstance(Cast<UGameInstance>(this));
-	UGameInstance;
 }
 
 void UGameInstance::StartGameInstance()

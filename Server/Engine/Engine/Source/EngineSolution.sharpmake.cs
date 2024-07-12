@@ -43,7 +43,7 @@ public class EngineSolution : Solution
             conf.AddProject<Core>(target);
             conf.AddProject<Engine>(target);
             conf.AddProject<Launch>(target);
-            //conf.AddProject<Network>(target);
+            conf.AddProject<Network>(target);
 
             // config
             conf.AddProject<EngineConfig>(target);

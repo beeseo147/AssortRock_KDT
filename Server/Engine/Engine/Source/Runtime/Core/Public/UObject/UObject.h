@@ -74,9 +74,6 @@ public:
 
 	const FString& GetName() const { return NamePrivate; }
 
-	// Temp code
-	CORE_API static void LogReflectionData(UObject* InObject);
-
 private:
 	friend class UClass;
 	template<typename> friend class FAllocator;

@@ -8,7 +8,7 @@ UEngine::UEngine(const FObjectInitializer& X)
 void UEngine::Init()
 {
 	GameInstance = NewObject<UGameInstance>(this, GetDefault<UGameMapsSettings>()->GameInstanceClass);
-	GameInstance->Initialize();
+	GameInstance->Initailize();
 }
 
 void UEngine::Start()

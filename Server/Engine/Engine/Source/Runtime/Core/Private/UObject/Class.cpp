@@ -107,3 +107,54 @@ CORE_API UClass* RegisterEngineClass(FString InClassName,
 
     return NewClass;
 }
+
+CORE_API void UClass::LogReflectionData(UObject* InObject)
+{
+    UClass* Class = InObject->GetClass();
+    E_Log(trace, "Class: {}, Object: {}", to_string(Class->GetName()), to_string(InObject->GetName()));
+
+    type Type = resolve(Hash(Class->ClassName.data()));
+    Type.data([&](meta::data Data)
+        {
+            Data.prop([&](meta::prop p)
+                {
+                    FProperty Prop = p.value().cast<FProperty>();
+                    switch (Prop.PropertyType)
+                    {
+                    case T_POINTER:
+                    {
+                        void* Address = Data.get(handle(Type.GetNode(), InObject)).data();
+
+                        break;
+                    }
+                    case T_SHARED_PTR:
+                    {
+                        engine_weak_ptr<UObject> actual = *(shared_ptr<UObject>*)Data.get(handle(Type.GetNode(), InObject)).data();
+                        E_Log(trace, "{} [shared_ptr] class {}", Prop.Name, to_string(Class->ClassName));
+                        break;
+                    }
+                    case T_WEAK_PTR:
+                    {
+                        weak_ptr<UObject> actual = *(weak_ptr<UObject>*)Data.get(handle(Type.GetNode(), InObject)).data();
+                        E_Log(trace, "{} [weak_ptr] class {}", Prop.Name, to_string(Class->ClassName));
+                        break;
+                    }
+                    case T_ENGINE_WEAK_PTR:
+                    {
+                        engine_weak_ptr<UObject> actual = *(engine_weak_ptr<UObject>*)Data.get(handle(Type.GetNode(), InObject)).data();
+                        E_Log(trace, "{} [engine_weak_ptr] class {}", Prop.Name, to_string(Class->ClassName));
+                        break;
+                    }
+                    case T_INT:
+                        E_Log(trace, "{} [int] {}", Prop.Name, Data.get(handle(Type.GetNode(), InObject)).cast<int>());
+                        break;
+                    case T_FLOAT:
+                        E_Log(trace, "{} [float] {}", Prop.Name, Data.get(handle(Type.GetNode(), InObject)).cast<float>());
+                        break;
+                    default:
+                        break;
+                    }
+                });
+        }
+    );
+}

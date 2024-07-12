@@ -10,7 +10,7 @@ class ENGINE_API UGameInstance : public UObject
 {
 	GENERATED_BODY();
 public:
-	virtual void Initialize();
+	virtual void Initailize();
 	virtual void StartGameInstance();
 
 	UEngine* GetEngine();
