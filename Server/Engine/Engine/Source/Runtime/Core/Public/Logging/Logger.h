@@ -10,11 +10,18 @@ public:
 	FLogger(std::string_view InLogFileName);
 	FLogger(const FLogger&) = delete;
 	FLogger& operator=(const FLogger&) = delete;
+	~FLogger();
 
 	void Log(FLogLevel InLogLevel, std::string_view InMessage);
 
 private:
 	const std::string LogFileName;
+
+
+	bool bTerminate = false;
+	jthread Thread;
+	mutex Mutex;
+	queue<string> MessageQueue;
 };
 
 extern CORE_API FLogger GLogger;

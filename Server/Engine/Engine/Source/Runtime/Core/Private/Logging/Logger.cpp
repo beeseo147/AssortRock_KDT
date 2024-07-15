@@ -46,10 +46,43 @@ FLogger::FLogger(std::string_view InLogFileName)
 		));
 
 	Log(FLogLevel::trace, LogFileName);
+
+	/*Thread = jthread([this]
+		{
+			unique_lock Lock{ Mutex, defer_lock};
+
+			while (!bTerminate)
+			{
+				Lock.lock();
+
+				CV.wait(Lock);
+
+				queue<string> LocalQueue;
+				LocalQueue.swap(MessageQueue);
+				Lock.unlock();
+
+				while (!LocalQueue.empty())
+				{
+					cout << LocalQueue.front() << endl;
+					LocalQueue.pop();
+				}
+			}
+		}
+	);*/
+}
+
+FLogger::~FLogger()
+{
+	bTerminate = true;
 }
 
 void FLogger::Log(FLogLevel InLogLevel, std::string_view InMessage)
 {
+	//unique_lock lock{ Mutex };
+	////Mutex.lock();
+	//MessageQueue.push((string)InMessage);
+	//CV.notify_all();
+	////Mutex.unlock();
 	switch (InLogLevel)
 	{
 	case boost::log::trivial::trace:

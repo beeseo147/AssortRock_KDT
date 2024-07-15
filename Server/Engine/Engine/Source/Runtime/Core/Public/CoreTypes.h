@@ -8,6 +8,7 @@
 #include <codecvt>
 #include <filesystem>
 #include <chrono>
+
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -25,6 +26,8 @@
 // Boost --------------------------------------------------------------------
 #include <boost/log/trivial.hpp>
 #include <boost/pool/pool.hpp>
+#include <boost/asio/post.hpp>
+#include <boost/asio/thread_pool.hpp>
 
 namespace boost
 {
