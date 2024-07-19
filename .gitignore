@@ -389,3 +389,8 @@ Server/ServerProject/Server/intermediate
 Server/ServerProject/Server/*.sln
 Server/ServerProject/Client/intermediate
 Server/ServerProject/Client/*.sln
+/Unreal/TeamA/Content/__ExternalActors__
+/Unreal/TeamA/Content/__ExternalObjects__
+/Unreal/TeamA/Content/Sample
+/Unreal/TeamA/Intermediate
+/Unreal/TeamA/Plugins/AssortRock/Intermediate

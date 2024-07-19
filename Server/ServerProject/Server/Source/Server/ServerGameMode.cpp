@@ -8,12 +8,17 @@ void AServerGameMode::BeginPlay()
 
 	FNetworkNotify NetworkNotify = FNetworkNotify
 	(
-		[this](UNetDriver*, UNetConnection*) {},
-		[this](UNetDriver*, UNetConnection*) {},
-		[this](UNetDriver*, UNetConnection*, FPacketHeader*) {}
+		[this](UNetDriver*, UNetConnection*)
+		{
+		},
+		[this](UNetDriver*, UNetConnection* NetConnection) // Connection Closed
+		{
+		},
+		bind(&ThisClass::OnRecv, this, placeholders::_1, placeholders::_2, placeholders::_3)
 	);
 
 	FURL URL;
+
 	NetDriver->InitListen(NetworkNotify, URL, true, 5);
 
 	auto& Vector = ObjectMap[UNetDriver::StaticClass()];
@@ -25,45 +30,44 @@ void AServerGameMode::BeginPlay()
 
 void AServerGameMode::OnRecv(UNetDriver* InNetDriver, UNetConnection* InNetConnection, FPacketHeader* InPacketHeader)
 {
+	EARPacketType PacketType = (EARPacketType)InPacketHeader->GetPacketID();
+	switch (PacketType)
+	{
+	case EARPacketType::EMessage:
+	{
+		FMessagePacket* MessagePacket = (FMessagePacket*)InPacketHeader;
+		string Message = string(MessagePacket->Buffer.begin(), MessagePacket->Buffer.end());
+		E_Log(trace, "{}", Message);
 
-	//EARPacketType PacketType = (EARPacketType)InPacketHeader->GetPacketID();
-	//switch (PacketType)
-	//{
-	//case EARPacketType::EMessage:
-	//{
-	//	FMessagePacket* MessagePacket = (FMessagePacket*)InPacketHeader;
-	//	string Message = string(MessagePacket->Buffer.begin(), MessagePacket->Buffer.end());
-	//	E_LOG(trace, "{}", Message);
+		MessagePacket->Buffer[12] = '2';
 
-	//	MessagePacket->Buffer[12] = '2';
+		NetDriver->Send(InNetConnection, InPacketHeader);
+		break;
+	}
+	case EARPacketType::ELogin:
+	{
+		/*struct FCreateAccountPacket : public FAccountPacket
+		{
+			FCreateAccountPacket() {}
+		};
+		FCreateAccountPacket* Packet = (FCreateAccountPacket*)InPacketHeader;
 
-	//	NetDriver->Send(InNetConnection, InPacketHeader);
-	//	break;
-	//}
-	//case EARPacketType::ELogin:
-	//{
-	//	struct FCreateAccountPacket : public FAccountPacket
-	//	{
-	//		FCreateAccountPacket() {}
-	//	};
-	//	FCreateAccountPacket* Packet = (FCreateAccountPacket*)InPacketHeader;
+		E_Log(trace, "ID: {}, Password: {}", Packet->ID.data(), Packet->Password.data());
+		if (Packet->ID.empty() || Packet->Password.empty())
+		{
+			E_Log(error, "ID or Password is empty");
+			InNetDriver->KickNetConnection(InNetConnection);
+			break;
+		}*/
 
-	//	E_LOG(trace, "ID: {}, Password: {}", Packet->ID.data(), Packet->Password.data());
-	//	if (Packet->ID.empty() || Packet->Password.empty())
-	//	{
-	//		E_LOG(error, "ID or Password is empty");
-	//		InNetDriver->KickNetConnection(InNetConnection);
-	//		break;
-	//	}
+		// 회원가입 처리
 
-	//	// 회원가입 처리
-
-	//	break;
-	//}
-	//default:
-	//	E_LOG(error, "Unsupport packet type.");
-	//	break;
-	//}
+		break;
+	}
+	default:
+		E_Log(error, "Unsupport packet type.");
+		break;
+	}
 }
 
 void AServerGameMode::Tick(float DeltaSeconds)

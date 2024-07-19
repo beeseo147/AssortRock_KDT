@@ -28,7 +28,8 @@ UCLASS()
 class NETWORK_API UNetDriver : public UObject
 {
 	GENERATED_BODY();
-//-------------- Server 
+	friend struct FPendingConnectionTimeOutTask;
+//-------------- Serve r 
 public:
 	/**
 	 * Initialize the network driver in server mode (listener)
@@ -87,6 +88,7 @@ protected:
 	TSubclassOf<UNetConnection> NetConnectionClass;
 	FURL URL;
 	FNetworkNotify NetworkNotify;
+
 	//SERVER
 	boost::asio::io_context Context;
 	shared_ptr<boost::asio::ip::tcp::acceptor> Acceptor;

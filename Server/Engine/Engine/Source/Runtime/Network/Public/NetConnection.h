@@ -44,14 +44,14 @@ UCLASS()
 class NETWORK_API UNetConnection : public UObject
 {
 	GENERATED_BODY();
+	friend struct FPendingConnectionTimeOutTask;
 	friend class UNetDriver;
-
-
 protected:
 	void Send(FPacketHeader* Packet);
 	void Send(const uint32 PacketID, void* PacketBody, const uint32 BodySize);
 	void LowLevelSend(void* Data, const uint64 Size);
-public:
+
+protected:
 	bool InitRemoteConnection(
 		const bool bServer,
 		const FURL& InURL,
@@ -60,11 +60,10 @@ public:
 		function<void(UNetConnection*)> InConnectFunction, // Hello Packet을 받은 시점
 		function<void(UNetConnection*)> InConnectionClosedFunction,
 		function<void(UNetConnection*, FPacketHeader*)> InRecvFunction);
-
+	
 	FSocket* GetSocket()const { return Socket.get(); }
-
+public:
 	void OnAccept();
-	void OnConnect();
 	// 재사용 직전에 CleanUp
 	void CleanUp();
 protected:
@@ -72,6 +71,7 @@ protected:
 	virtual void Shutdown();
 	void OnPendingConnect();
 	void OnConnect();
+
 	void InitBase(const FURL& InURL, boost::asio::io_context& InContext);
 
 	EConnectionState GetConnectionState() const { return ConnectionState; }
@@ -79,14 +79,15 @@ protected:
 
 	void ReadPacketHeader();
 	void ReadPacketBody(const FPacketHeader& InPacketHeader);
+
+	const chrono::system_clock::time_point& GetPendingConnectTime() const { return PendingConnectTime; }
 public:
 	UNetConnection();
    	~UNetConnection();
 private:
 	FPacketHeader RecvPacketHeaderBuffer;
 	boost::pool<> BufferPool{ 1460 * 2 }; // TCP MTU Payload size * 2
-private:
-	FPacketHeader RecvPacketHeaderBuffer;
+
 private:
 	bool bNetDriverIsServer = false;
 	FURL URL;

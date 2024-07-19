@@ -5,27 +5,27 @@
 #include "NetworkMinimal.h"
 #include "ServerGameMode.generated.h"
 
-//enum class EARPacketType : uint32
-//{
-//	EStart = FPacketHeader::EEnd,
-//	EMessage,
-//
-//	ELogin,
-//};
+enum class EARPacketType : uint32
+{
+	EStart = FPacketHeader::EEnd,
+	EMessage,
 
-//struct FMessagePacket : public FPacketHeader
-//{
-//	FMessagePacket() :
-//		FPacketHeader((uint32)EARPacketType::EMessage, sizeof(FMessagePacket) - sizeof(FPacketHeader)) {}
-//	array<char, 1024> Buffer = {};
-//};
+	ELogin,
+};
+
+struct FMessagePacket : public FPacketHeader
+{
+	FMessagePacket() :
+		FPacketHeader((uint32)EARPacketType::EMessage, sizeof(FMessagePacket) - sizeof(FPacketHeader)) {}
+	array<char, 1024> Buffer = {};
+};
 
 
-//struct FAccountPacket : public FPacketHeader
-//{
-//	std::array<char, 20> ID = {};
-//	std::array<char, 20> Password = {};
-//};
+struct FAccountPacket : public FPacketHeader
+{
+	std::array<char, 20> ID = {};
+	std::array<char, 20> Password = {};
+};
 
 UCLASS()
 class SERVERPROJECT_API AServerGameMode : public AGameModeBase

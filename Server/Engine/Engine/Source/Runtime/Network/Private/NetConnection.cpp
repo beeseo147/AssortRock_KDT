@@ -23,13 +23,15 @@ bool UNetConnection::InitRemoteConnection(const bool bServer,
 		boost::system::error_code ErrorCode;
 		boost::asio::connect(*GetSocket(), Resolver.resolve(EndPoint), ErrorCode);
 
+		
 		if (ErrorCode)
 		{
 			E_Log(error, "connect failed: {}", ErrorCode.message());
 			return false;
 		}
-
+		
 		OnPendingConnect();
+		//Send(FPacketHeader::EHelloPacket,nullptr,0);
 	}
 
 
@@ -58,7 +60,7 @@ void UNetConnection::CleanUp()
 	if (Socket->is_open())
 	{
 		Socket->close();
-		ConnectionCloseFunction(this);
+		//ConnectionCloseFunction(this);
 
 		SetConnectionState(EConnectionState::USOCK_Closed);
 	}
@@ -71,11 +73,13 @@ void UNetConnection::Send(FPacketHeader* Packet)
 void UNetConnection::Send(const uint32 PacketID, void* PacketBody, const uint32 BodySize)
 {
 	const size_t SendBufferSize = BufferPool.get_requested_size();
+
 	if (BodySize + sizeof(FPacketHeader) > SendBufferSize)
 	{
 		E_Log(error, "Send Buffer overflow! BodySize: {} / {}", BodySize, SendBufferSize);
 		return;
 	}
+
 	FPacketHeader* Header = (FPacketHeader*)BufferPool.malloc();
 	new(Header)FPacketHeader(PacketID, BodySize);
 
@@ -130,6 +134,15 @@ void UNetConnection::Shutdown()
 
 void UNetConnection::OnPendingConnect()
 {
+	E_Log(info, "{}", to_string(GetName()));
+	SetConnectionState(EConnectionState::USOCK_Pending);
+
+	//Packet읽기
+	ReadPacketHeader();
+
+	PendingConnectFunction(this);
+
+	PendingConnectTime = chrono::system_clock::now();
 }
 
 void UNetConnection::InitBase(const FURL& InURL, boost::asio::io_context& InContext)
@@ -188,18 +201,27 @@ void UNetConnection::ReadPacketBody(const FPacketHeader& InPacketHeader)
 		CleanUp();
 		return;
 	}
+
 	FPacketHeader* PacketHeader = (FPacketHeader*)BufferPool.malloc();
 	new(PacketHeader)FPacketHeader(InPacketHeader);
 
 	if (PayloadSize == 0)
 	{
 		RecvFunction(this, PacketHeader);
+
+		// 명시적으로 소멸할 필요가 없는 기본 자료형만 있음
+		//PacketHeader->~FPacketHeader();
+		BufferPool.free(PacketHeader);
+	}
+	else
+	{
+
 	}
 }
 
 UNetConnection::UNetConnection()
 {
-
+	 
 }
 
 UNetConnection::~UNetConnection()
